@@ -4,7 +4,8 @@ namespace AssetManager;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface,
     Zend\Mvc\ModuleRouteListener,
-    Zend\ModuleManager\ModuleManager;
+    Zend\ModuleManager\ModuleManager,
+    Zend\ModuleManager\ModuleEvent;
 
 class Module implements AutoloaderProviderInterface
 {
@@ -13,9 +14,9 @@ class Module implements AutoloaderProviderInterface
         $moduleManager->getEventManager()->attach('loadModules.post', array($this, 'modulesLoaded'));
     }
 
-    public function modulesLoaded($event)
+    public function modulesLoaded(ModuleEvent $event)
     {
-
+        // $event->getParam('ServiceManager')->get('asset_manager')
     }
 
     public function getAutoloaderConfig()
