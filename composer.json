@@ -18,7 +18,8 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zendframework": "dev-master"
+        "zendframework/zendframework": "dev-master",
+        "kriswallsmith/assetic": "*"
     },
     "autoload": {
         "psr-0": {
