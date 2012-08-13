@@ -2,10 +2,9 @@
 
 namespace AssetManager;
 
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface,
-    Zend\Mvc\ModuleRouteListener,
-    Zend\ModuleManager\ModuleManager,
-    Zend\ModuleManager\ModuleEvent;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\ModuleEvent;
 
 class Module implements AutoloaderProviderInterface
 {
