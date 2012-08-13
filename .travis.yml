@@ -11,7 +11,7 @@ before_script:
   - cp ../AssetManager/.travis/composer.json ./
   - curl -s http://getcomposer.org/installer | php
   - php composer.phar install --dev
-  - rm -rf vendor/ocramius/ocra-lorem-module
+  - rm -rf vendor/rwoverdijk/assetmanager
   - cp -r ../AssetManager vendor/rwoverdijk/assetmanager
 
 script:
