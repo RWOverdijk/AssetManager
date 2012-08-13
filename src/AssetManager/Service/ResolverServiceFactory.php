@@ -21,7 +21,7 @@ class ResolverServiceFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      *
-     * @return
+     * @return AggregateResolver
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {

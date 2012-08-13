@@ -14,6 +14,11 @@
             "name": "Wesley Overdijk",
             "email": "r.w.overdijk@gmail.com",
             "homepage": "http://blog.spoonx.nl/"
+        },
+        {
+            "name": "Marco Pivetta",
+            "email": "ocramius@gmail.com",
+            "homepage": "http://ocramius.github.com/"
         }
     ],
     "require": {
@@ -23,9 +28,6 @@
     "autoload": {
         "psr-0": {
             "AssetManager": "src/"
-        },
-        "classmap": [
-            "./Module.php"
-        ]
+        }
     }
 }
