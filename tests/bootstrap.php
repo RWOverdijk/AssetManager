@@ -1,103 +1,67 @@
 <?php
-/**
- * Zend Framework (http://framework.zend.com/)
+/*
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @link      http://github.com/zendframework/ZendSkeletonModule for the canonical source repository
- * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
- * @license   http://framework.zend.com/license/new-bsd New BSD License
+ * This software consists of voluntary contributions made by many individuals
+ * and is licensed under the MIT license.
  */
 
-$additionalNamespaces = $additionalModulePaths = $moduleDependencies = null;
-
-$rootPath = realpath(dirname(__DIR__));
-$testsPath = "$rootPath/tests";
-
-if (is_readable($testsPath . '/TestConfiguration.php')) {
-    require_once $testsPath . '/TestConfiguration.php';
-} else {
-    require_once $testsPath . '/TestConfiguration.php.dist';
-}
-
-$path = array(
-    ZF2_PATH,
-    get_include_path(),
-);
-set_include_path(implode(PATH_SEPARATOR, $path));
-
-require_once  'Zend/Loader/AutoloaderFactory.php';
-require_once  'Zend/Loader/StandardAutoloader.php';
-
-use Zend\Loader\AutoloaderFactory;
+use Zend\ServiceManager\ServiceManager;
+use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\Loader\StandardAutoloader;
 
-// setup autoloader
-AutoloaderFactory::factory(
-    array(
-    	'Zend\Loader\StandardAutoloader' => array(
-            StandardAutoloader::AUTOREGISTER_ZF => true,
-            StandardAutoloader::ACT_AS_FALLBACK => false,
-            StandardAutoloader::LOAD_NS => $additionalNamespaces,
-        )
-    )
-);
+chdir(__DIR__);
 
-// The module name is obtained using directory name or constant
-$moduleName = pathinfo($rootPath, PATHINFO_BASENAME);
-if (defined('MODULE_NAME')) {
-    $moduleName = MODULE_NAME;
-}
+$previousDir = '.';
 
-// A locator will be set to this class if available
-$moduleTestCaseClassname = '\\'.$moduleName.'Test\\Framework\\TestCase';
+while (!file_exists('config/application.config.php')) {
+    $dir = dirname(getcwd());
 
-// This module's path plus additionally defined paths are used $modulePaths
-$modulePaths = array(dirname($rootPath));
-if (isset($additionalModulePaths)) {
-    $modulePaths = array_merge($modulePaths, $additionalModulePaths);
-}
-
-// Load this module and defined dependencies
-$modules = array($moduleName);
-if (isset($moduleDependencies)) {
-    $modules = array_merge($modules, $moduleDependencies);
-}
-
-$listenerOptions = new Zend\ModuleManager\Listener\ListenerOptions(array('module_paths' => $modulePaths));
-$defaultListeners = new Zend\ModuleManager\Listener\DefaultListenerAggregate($listenerOptions);
-$moduleManager = new \Zend\ModuleManager\ModuleManager($modules);
-$moduleManager->getEventManager()->attachAggregate($defaultListeners);
-$moduleManager->loadModules();
-
-if (method_exists($moduleTestCaseClassname, 'setLocator')) {
-    $config = $defaultListeners->getConfigListener()->getMergedConfig();
-
-    $di = new \Zend\Di\Di;
-    $di->instanceManager()->addTypePreference('Zend\Di\LocatorInterface', $di);
-
-    if (isset($config['di'])) {
-        $diConfig = new \Zend\Di\Config($config['di']);
-        $diConfig->configure($di);
+    if ($previousDir === $dir) {
+        throw new RuntimeException(
+            'Unable to locate "config/application.config.php":'
+                . ' is AssetManager in a sub-directory of your application skeleton?'
+        );
     }
 
-    $routerDiConfig = new \Zend\Di\Config(
-        array(
-            'definition' => array(
-                'class' => array(
-                    'Zend\Mvc\Router\RouteStackInterface' => array(
-                        'instantiator' => array(
-                            'Zend\Mvc\Router\Http\TreeRouteStack',
-                            'factory'
-                        ),
-                    ),
-                ),
-            ),
-        )
-    );
-    $routerDiConfig->configure($di);
-
-    call_user_func_array($moduleTestCaseClassname.'::setLocator', array($di));
+    $previousDir = $dir;
+    chdir($dir);
 }
 
-// When this is in global scope, PHPUnit catches exception:
-// Exception: Zend\Stdlib\PriorityQueue::serialize() must return a string or NULL
-unset($moduleManager);
+// @todo hotfix for now!
+require_once __DIR__ . '/../../../vendor/autoload.php';
+/*
+if  (
+    !(@include_once __DIR__ . '/../../vendor/autoload.php')
+    && !@(include_once __DIR__ . '/../../../autoload.php')
+) {
+    throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
+}*/
+
+if (!$configuration = @include __DIR__ . '/TestConfiguration.php') {
+    $configuration = require __DIR__ . '/TestConfiguration.php.dist';
+}
+
+$loader = new StandardAutoloader();
+$loader->registerNamespace('AssetManager', __DIR__ . '/../src/AssetManager');
+$loader->registerNamespace('AssetManagerTest', __DIR__ . '/AssetManagerTest');
+$loader->register();
+
+$serviceManager = new ServiceManager(new ServiceManagerConfig(
+    isset($configuration['service_manager']) ? $configuration['service_manager'] : array()
+));
+$serviceManager->setService('ApplicationConfig', $configuration);
+
+/** @var $moduleManager \Zend\ModuleManager\ModuleManager */
+$moduleManager = $serviceManager->get('ModuleManager');
+$moduleManager->loadModules();

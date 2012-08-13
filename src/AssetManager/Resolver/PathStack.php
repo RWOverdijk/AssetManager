@@ -163,6 +163,6 @@ class PathStack implements ResolverInterface
             }
         }
 
-        return false;
+        return null;
     }
 }
