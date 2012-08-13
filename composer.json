@@ -1,0 +1,31 @@
+{
+    "name": "rwoverdijk/assetmanager",
+    "description": "An assetmanager module for Zend Framework 2.",
+    "type": "library",
+    "keywords": [
+        "asset",
+        "asset manager",
+        "zf2",
+        "zend framework 2"
+    ],
+    "homepage": "https://github.com/RWOverdijk/AssetManager",
+    "authors": [
+        {
+            "name": "Wesley Overdijk",
+            "email": "r.w.overdijk@gmail.com",
+            "homepage": "http://blog.spoonx.nl/"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "AssetManager": "src/"
+        },
+        "classmap": [
+            "./Module.php"
+        ]
+    }
+}
