@@ -2,9 +2,9 @@
 
 namespace AssetManager\Service;
 
-use Zend\ServiceManager\ServiceLocatorInterface,
-    \finfo,
-    \SplFileInfo;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use \finfo;
+use \SplFileInfo;
 
 class AssetManager
 {
