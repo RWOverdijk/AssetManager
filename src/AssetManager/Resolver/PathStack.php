@@ -158,7 +158,7 @@ class PathStack implements ResolverInterface
         foreach ($this->paths as $path) {
             $file = new SplFileInfo($path . $name);
 
-            if ($file->isReadable()) {
+            if ($file->isReadable() && !$file->isDir()) {
                 if ($filePath = $file->getRealPath()) {
                     return $filePath;
                 }
