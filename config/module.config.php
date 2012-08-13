@@ -4,5 +4,9 @@ return array(
         'factories' => array (
             'asset_manager' => 'AssetManager\Service\AssetManagerServiceFactory'
         )
-    )
+    ),
+
+    'asset_manager' => array(
+
+    ),
 );
