@@ -2,7 +2,9 @@
 
 namespace AssetManager\Service;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorInterface,
+    \finfo,
+    \SplFileInfo;
 
 class AssetManager
 {
@@ -25,6 +27,20 @@ class AssetManager
     {
         $this->basePath = $basePath;
         return $this;
+    }
+
+    public function send($file)
+    {
+        $finfo      = new finfo(FILEINFO_MIME);
+        $mimeType   = $finfo->file($file);
+        $fileinfo   = new SplFileInfo($file);
+        $file       = $fileinfo->openFile('rb');
+
+        header("Content-Type: $mimeType");
+        header("Content-Length: " . $file->getSize());
+
+        $file->fpassthru();
+        exit;
     }
 
     public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
