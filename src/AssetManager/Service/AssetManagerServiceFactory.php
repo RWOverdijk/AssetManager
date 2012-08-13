@@ -22,7 +22,6 @@ class AssetManagerServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        
         $config         = $serviceLocator->get('config');
         $assetManager   = new AssetManager($config['asset_manager']);
         $basePath       = $serviceLocator->get('request')->getBasePath();
