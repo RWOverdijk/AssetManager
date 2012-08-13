@@ -1,4 +1,1 @@
-AssetManager
-============
-
-An asset manager module for zend framework 2
+Sample, skeleton module for use with the ZF2 MVC layer.
