@@ -6,18 +6,39 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ModuleManager\ModuleEvent;
 
+/**
+ * Module class
+ *
+ * @category   AssetManager
+ * @package    AssetManager
+ */
 class Module implements AutoloaderProviderInterface
 {
+    /**
+     * Init method for module init.
+     *
+     * @param ModuleManager $moduleManager
+     */
     public function init(ModuleManager $moduleManager)
     {
         $moduleManager->getEventManager()->attach('loadModules.post', array($this, 'modulesLoaded'));
     }
 
+    /**
+     * Callback for event loadModules.post
+     *
+     * @param ModuleEvent $event
+     */
     public function modulesLoaded(ModuleEvent $event)
     {
         // $event->getParam('ServiceManager')->get('asset_manager')
     }
 
+    /**
+     * Get the configuration for the autoloader
+     *
+     * @return array config array
+     */
     public function getAutoloaderConfig()
     {
         return array(
@@ -32,6 +53,11 @@ class Module implements AutoloaderProviderInterface
         );
     }
 
+    /**
+     * Get the configuration from this module.
+     *
+     * @return array config array
+     */
     public function getConfig()
     {
         return include __DIR__ . '/config/module.config.php';
