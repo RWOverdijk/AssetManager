@@ -25,8 +25,8 @@ class ResolverServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config         = $serviceLocator->get('Config');
-        $resolver       = new AggregateResolver();
+        $config   = $serviceLocator->get('Config');
+        $resolver = new AggregateResolver();
 
         if (isset($config['asset_manager']['map'])) {
             $mapResolver = new MapResolver($config['asset_manager']['map']);
