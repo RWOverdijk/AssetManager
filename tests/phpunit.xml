@@ -1,7 +1,41 @@
-<phpunit bootstrap="./bootstrap.php" colors="true">
-    <testsuites>
-        <testsuite name="ZendSkeletonModule Test Suite">
-            <directory>./</directory>
-        </testsuite>
-    </testsuites>
+<?xml version="1.0"?>
+<!-- works fine with PHPUnit-3.6.10 -->
+<phpunit
+        bootstrap="./Bootstrap.php"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        verbose="true"
+        stopOnFailure="false"
+        processIsolation="false"
+        backupGlobals="false"
+        syntaxCheck="true"
+        >
+    <testsuite name="AssetManager tests">
+        <directory>./</directory>
+    </testsuite>
+    <logging>
+        <!--
+        <log
+            type="coverage-html"
+            target="../build/coverage"
+            title="AssetManager"
+            charset="UTF-8"
+            yui="true"
+            highlight="true"
+            lowUpperBound="35"
+            highLowerBound="70"
+        />
+        <log
+            type="coverage-clover"
+            target="../build/clover.xml"
+        />
+        <log
+            type="junit"
+            target="../build/junit.xml"
+            logIncompleteSkipped="false"
+        />
+        -->
+    </logging>
 </phpunit>

@@ -1,23 +1,50 @@
-AssetManager
-=======================
-Version 0.0.1 Created by Wesley Overdijk and Marco Pivetta
+# AssetManager
+By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius.github.com/)
 
-Introduction
-------------
-Currently, the module, in its current state, is nothing. It's under heavy development right now and should be in a useful state pretty soon.
-The module is an Asset Manager module for [Zend Framework 2 (from here referred to as ZF2)](https://github.com/zendframework/zf2),
-which allows you to find assets, filter assets and cache them the way you want to.
-This offers great flexibility to hook in and supply your own resolvers, filters and caching methods.
-Depending heavily on Assetic this module already supplies a lot of proven to work functionality.
+## Introduction
+This module is intended for usage with a default directory structure of a
+[ZendSkeletonApplication](https://github.com/zendframework/ZendSkeletonApplication/). It provides functionality to load
+assets and generally static files from your modules' directories as of your configuration.
+This allows you to avoid having to copy your files over to the `public/` directory, and makes usage of assets very
+similar to what already is possible with view scripts, which can be overridden by other modules.
 
-Installation
+## Installation
 ------------
-Coming soon
+ 1.  Add `"minimum-stability": "dev"` to your `composer.json`
+ 2.  Require assetmanager:
 
-Usage and configuration
-------------
-Coming soon
+```sh
+./composer.phar require rwoverdijk/assetmanager
+#when asked for a version, type "dev-master"
+```
 
-Todo
-------------
-* Pretty much everything
+## Usage
+
+In your module's config, define following:
+
+```php
+<?php
+return array(
+    'asset_manager' => array(
+        // adding MyModule/public to the asset directories
+        'paths' => __DIR__ . '/public',
+
+        'map' => array(
+            // overrides (with high priority) used when we want to
+            // expose single particular files
+            'specific-path.css' => __DIR__ . '/some/particular/file.css',
+        ),
+    ),
+);
+```
+
+*Please be careful, since this module will serve every file as-is, including PHP code*
+
+## Todo
+The task list is still long, but the module provides useful functionality for dev environments for now.
+
+ * Caching of responses to avoid having the PHP interpreter and the application being bootstrapped each time
+ * Compiling assets into a publicly available directory via CLI command
+ * Integration with [Assetic](https://github.com/kriswallsmith/assetic) to provide not only links to asset files, but
+   also to asset collections and respective filters/caching settings
+ * Routing (to allow obtaining paths to compiled/cached assets)
