@@ -17,7 +17,7 @@ class MapResolver implements ResolverInterface
      *
      * Instantiate and optionally populate template map.
      *
-     * @param  array|Traversable $map
+     * @param array|Traversable $map
      */
     public function __construct($map = array())
     {

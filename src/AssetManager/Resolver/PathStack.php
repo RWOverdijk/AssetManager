@@ -45,7 +45,7 @@ class PathStack implements ResolverInterface
     /**
      * Rest the path stack to the paths provided
      *
-     * @param  SplStack|array $paths
+     * @param  SplStack|array            $paths
      * @return self
      * @throws \InvalidArgumentException
      */
@@ -78,13 +78,14 @@ class PathStack implements ResolverInterface
         $path = rtrim($path, '/');
         $path = rtrim($path, '\\');
         $path .= DIRECTORY_SEPARATOR;
+
         return $path;
     }
 
     /**
      * Add a single path to the stack
      *
-     * @param  string $path
+     * @param  string                    $path
      * @return self
      * @throws \InvalidArgumentException
      */
@@ -131,6 +132,7 @@ class PathStack implements ResolverInterface
     public function setLfiProtection($flag)
     {
         $this->lfiProtectionOn = (bool) $flag;
+
         return $this;
     }
 

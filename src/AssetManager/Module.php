@@ -15,7 +15,7 @@ use Zend\ModuleManager\Feature\BootstrapListenerInterface;
  * @category   AssetManager
  * @package    AssetManager
  */
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface
+class Module implements AutoloaderProviderInterface, ConfigProviderInterface, BootstrapListenerInterface
 {
     /**
      * {@inheritDoc}

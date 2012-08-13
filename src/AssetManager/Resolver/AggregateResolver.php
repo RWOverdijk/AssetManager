@@ -2,8 +2,6 @@
 
 namespace AssetManager\Resolver;
 
-use Countable;
-use IteratorAggregate;
 use Zend\Stdlib\PriorityQueue;
 
 class AggregateResolver implements ResolverInterface
@@ -27,7 +25,7 @@ class AggregateResolver implements ResolverInterface
      * Attach a resolver
      *
      * @param  ResolverInterface $resolver
-     * @param  int $priority
+     * @param  int               $priority
      * @return self
      */
     public function attach(ResolverInterface $resolver, $priority = 1)

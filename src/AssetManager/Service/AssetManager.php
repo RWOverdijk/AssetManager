@@ -36,7 +36,7 @@ class AssetManager
     /**
      * Set the basePath
      *
-     * @param string $basePath
+     * @param  string       $basePath
      * @return AssetManager
      */
     public function setBasePath($basePath)
