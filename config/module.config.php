@@ -3,7 +3,7 @@ return array(
     'service_manager' => array (
         'factories' => array (
             'AssetManager\Service\AssetManager'      => 'AssetManager\Service\AssetManagerServiceFactory',
-            'AssetManager\Service\ResolverInterface' => 'AssetManager\Service\ResolverServiceFactory'
+            'AssetManager\Service\AggregateResolver' => 'AssetManager\Service\AggregateResolverServiceFactory'
         )
     ),
 
