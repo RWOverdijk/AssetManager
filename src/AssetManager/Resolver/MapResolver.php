@@ -4,6 +4,7 @@ namespace AssetManager\Resolver;
 
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
+use AssetManager\Exception;
 
 class MapResolver implements ResolverInterface
 {
@@ -35,7 +36,7 @@ class MapResolver implements ResolverInterface
     public function setMap($map)
     {
         if (!is_array($map) && !$map instanceof Traversable) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new Exception\InvalidArgumentException(sprintf(
                 '%s: expects an array or Traversable, received "%s"',
                 __METHOD__,
                 (is_object($map) ? get_class($map) : gettype($map))

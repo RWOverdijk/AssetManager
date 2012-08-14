@@ -16,11 +16,6 @@ use SplFileInfo;
 class AssetManager
 {
     /**
-     * @var string The asset basePath
-     */
-    protected $basePath = '';
-
-    /**
      * @var ResolverInterface
      */
     protected $resolver;
@@ -34,35 +29,23 @@ class AssetManager
     }
 
     /**
-     * Set the basePath
+     * Serve the asset for the supplied asset
      *
-     * @param  string       $basePath
-     * @return AssetManager
-     */
-    public function setBasePath($basePath)
-    {
-        $this->basePath = (string) $basePath;
-
-        return $this;
-    }
-
-    /**
-     * @param UriInterface $uri
-     *
+     * @param RequestInterface
      * @todo not sure this fits the asset manager directly. This may instead be handled directly in the lifecycle event
      */
     public function serveAsset(RequestInterface $request)
     {
         if (!$request instanceof Request) {
+
             return;
         }
 
         /* @var $request Request */
         /* @var $uri \Zend\Uri\UriInterface */
-        $uri = $request->getUri();
-        $fullPath = $uri->getPath();
-
-        $path = substr($fullPath, strlen($this->basePath) + 1);
+        $uri        = $request->getUri();
+        $fullPath   = $uri->getPath();
+        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
 
         if ($file = $this->resolver->resolve($path)) {
             $this->send($file);
