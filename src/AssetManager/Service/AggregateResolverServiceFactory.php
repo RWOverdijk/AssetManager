@@ -23,7 +23,7 @@ class AggregateResolverServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config   = $serviceLocator->get('Config');
-        $config   = $config['asset_manager'];
+        $config   = isset($config['asset_manager']) ? $config['asset_manager'] : array();
         $resolver = new AggregateResolver();
 
         if (empty($config['resolvers'])) {
