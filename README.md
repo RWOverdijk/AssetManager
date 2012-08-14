@@ -28,8 +28,11 @@ In your module's config, define the following:
 <?php
 return array(
     'asset_manager' => array(
+
         // adding MyModule/public to the asset directories
-        'paths' => __DIR__ . '/public',
+        'paths' => array(
+            __DIR__ . '/../public',
+        ),
 
         'map' => array(
             // overrides (with high priority) used when we want to
