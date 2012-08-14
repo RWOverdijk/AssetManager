@@ -3,17 +3,17 @@
 namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
-use AssetManager\Service\ResolverServiceFactory;
+use AssetManager\Service\AggregateResolverServiceFactory;
 use Zend\ServiceManager\ServiceManager;
 
-class ResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
+class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testWillInstantiateEmptyResolver()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('Config', array());
 
-        $factory = new ResolverServiceFactory();
+        $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
         $this->assertInstanceOf('AssetManager\Resolver\ResolverInterface', $resolver);
         $this->assertNull($resolver->resolve('/some-path'));
@@ -33,7 +33,7 @@ class ResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $factory = new ResolverServiceFactory();
+        $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
         $this->assertInstanceOf('AssetManager\Resolver\ResolverInterface', $resolver);
         $this->assertSame('awesome-asset.cool', $resolver->resolve('/some-path'));
@@ -54,7 +54,7 @@ class ResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $factory = new ResolverServiceFactory();
+        $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
         $this->assertInstanceOf('AssetManager\Resolver\ResolverInterface', $resolver);
         $this->assertSame(__FILE__, $resolver->resolve(basename(__FILE__)));
@@ -78,7 +78,7 @@ class ResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $factory = new ResolverServiceFactory();
+        $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
         $this->assertInstanceOf('AssetManager\Resolver\ResolverInterface', $resolver);
         $this->assertSame('i-will-win', $resolver->resolve(basename(__FILE__)));
