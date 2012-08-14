@@ -6,7 +6,7 @@ use SplFileInfo;
 use Zend\Stdlib\SplStack;
 use AssetManager\Exception;
 
-class PathStack implements ResolverInterface
+class PathStackResolver implements ResolverInterface
 {
     /**
      * @var SplStack

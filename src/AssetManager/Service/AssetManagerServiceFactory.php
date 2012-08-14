@@ -4,7 +4,6 @@ namespace AssetManager\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Http\PhpEnvironment\Request;
 
 /**
  * Factory class for AssetManagerService

@@ -7,7 +7,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use AssetManager\Resolver\AggregateResolver;
 use AssetManager\Resolver\PathStack;
 use AssetManager\Resolver\MapResolver;
-use AssetManager\Exception;
 
 /**
  * Factory class for AssetManagerService
@@ -15,7 +14,7 @@ use AssetManager\Exception;
  * @category   AssetManager
  * @package    AssetManager
  */
-class AggregateResolverServiceFactory implements FactoryInterface
+class ResolverServiceFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
@@ -25,19 +24,17 @@ class AggregateResolverServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config   = $serviceLocator->get('Config');
-        $config   = $config['asset_manager'];
-
-        if (empty($config['resolvers'])) {
-            throw new Exception\RuntimeException(
-                'Required configuration key "resolvers" does not exist or is empty.'
-            );
-        }
-
         $resolver = new AggregateResolver();
 
-        foreach ($config['resolvers'] as $resolverService => $priority) {
-            $resolverService = $serviceLocator->get($resolverService);
-            $resolver->attach($resolverService, $priority);
+        if (isset($config['asset_manager']['map'])) {
+            $mapResolver = new MapResolver($config['asset_manager']['map']);
+            $resolver->attach($mapResolver, 1000);
+        }
+
+        if (isset($config['asset_manager']['paths'])) {
+            $pathStackResolver = new PathStack();
+            $pathStackResolver->addPaths($config['asset_manager']['paths']);
+            $resolver->attach($pathStackResolver);
         }
 
         return $resolver;
