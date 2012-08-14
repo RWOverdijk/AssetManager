@@ -155,7 +155,7 @@ class PathStackResolver implements ResolverInterface
             return null;
         }
 
-        foreach ($this->paths as $path) {
+        foreach ($this->getPaths() as $path) {
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {
