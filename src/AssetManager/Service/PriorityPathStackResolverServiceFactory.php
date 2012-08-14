@@ -18,6 +18,10 @@ class PriorityPathStackResolverServiceFactory implements FactoryInterface
         $config                     = $serviceLocator->get('config');
         $priorityPathStackResolver  = new PriorityPathStackResolver();
 
+        if (empty($config['asset_manager']['prioritized_paths'])) {
+            $config['asset_manager']['prioritized_paths'] = array();
+        }
+
         $priorityPathStackResolver->addPaths($config['asset_manager']['prioritized_paths']);
 
         return $priorityPathStackResolver;
