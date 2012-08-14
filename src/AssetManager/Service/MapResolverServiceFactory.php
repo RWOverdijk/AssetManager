@@ -21,7 +21,6 @@ class MapResolverServiceFactory implements FactoryInterface
             $config['asset_manager']['map'] = array();
         }
 
-
         $patchStackResolver = new MapResolver($config['asset_manager']['map']);
 
         return $patchStackResolver;
