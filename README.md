@@ -1,6 +1,8 @@
 # AssetManager
 By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius.github.com/)
 
+[![Build Status](https://secure.travis-ci.org/RWOverdijk/AssetManager.png)](http://travis-ci.org/RWOverdijk/AssetManager)
+
 ## Introduction
 This module is intended for usage with a default directory structure of a
 [ZendSkeletonApplication](https://github.com/zendframework/ZendSkeletonApplication/). It provides functionality to load
