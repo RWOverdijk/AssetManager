@@ -22,12 +22,11 @@ class AssetManagerServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $assetManager   = new AssetManager($serviceLocator->get('AssetManager\Service\ResolverInterface'));
-
-        $request = $serviceLocator->get('request');
+        $request        = $serviceLocator->get('request');
 
         if ($request instanceof Request) {
             /* @var $request Request */
-            $assetManager->setBasePath($request->getBasePath());
+            $assetManager->setRequest($request);
         }
 
         return $assetManager;

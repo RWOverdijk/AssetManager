@@ -16,14 +16,14 @@ use SplFileInfo;
 class AssetManager
 {
     /**
-     * @var string The asset basePath
-     */
-    protected $basePath = '';
-
-    /**
      * @var ResolverInterface
      */
     protected $resolver;
+
+    /**
+    * @var RequestInterface
+    */
+    protected $request;
 
     /**
      * @param ResolverInterface $resolver
@@ -34,35 +34,56 @@ class AssetManager
     }
 
     /**
-     * Set the basePath
+     * Set the Request
      *
-     * @param  string       $basePath
+     * @param  RequestInterface       $basePath
      * @return AssetManager
      */
-    public function setBasePath($basePath)
+    public function setRequest(RequestInterface $request)
     {
-        $this->basePath = (string) $basePath;
+        $this->request = $request;
 
         return $this;
     }
 
     /**
-     * @param UriInterface $uri
-     *
+    * Get the request
+    *
+    * @return RequestInterface
+    */
+    protected function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+    * Get the base path
+    *
+    * @return string base path
+    */
+    protected function getBasePath()
+    {
+        return (string) $this->getRequest()->getBasePath();
+    }
+
+    /**
+     * Serve the asset
      * @todo not sure this fits the asset manager directly. This may instead be handled directly in the lifecycle event
      */
-    public function serveAsset(RequestInterface $request)
+    public function serveAsset()
     {
+        $request = $this->getRequest();
+
         if (!$request instanceof Request) {
+
             return;
         }
 
         /* @var $request Request */
         /* @var $uri \Zend\Uri\UriInterface */
-        $uri = $request->getUri();
-        $fullPath = $uri->getPath();
-
-        $path = substr($fullPath, strlen($this->basePath) + 1);
+        $uri        = $request->getUri();
+        $fullPath   = $uri->getPath();
+        $path       = substr($fullPath, strlen($this->getBasePath()) + 1);
 
         if ($file = $this->resolver->resolve($path)) {
             $this->send($file);

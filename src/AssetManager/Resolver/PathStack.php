@@ -75,8 +75,7 @@ class PathStack implements ResolverInterface
      */
     protected static function normalizePath($path)
     {
-        $path = rtrim($path, '/');
-        $path = rtrim($path, '\\');
+        $path = rtrim($path, '/\\');
         $path .= DIRECTORY_SEPARATOR;
 
         return $path;

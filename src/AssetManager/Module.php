@@ -15,7 +15,10 @@ use Zend\ModuleManager\Feature\BootstrapListenerInterface;
  * @category   AssetManager
  * @package    AssetManager
  */
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface, BootstrapListenerInterface
+class Module implements
+    AutoloaderProviderInterface,
+    ConfigProviderInterface,
+    BootstrapListenerInterface
 {
     /**
      * {@inheritDoc}
@@ -49,6 +52,6 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface, Bo
 
         /* @var $assetManager \AssetManager\Service\AssetManager */
         $assetManager = $application->getServiceManager()->get(__NAMESPACE__ . '\Service\AssetManager');
-        $assetManager->serveAsset($application->getRequest());
+        $assetManager->serveAsset();
     }
 }
