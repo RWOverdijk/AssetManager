@@ -32,6 +32,7 @@ class MapResolver implements ResolverInterface
      *
      * @param  array|Traversable $map
      * @return self
+     * @throws Exception\InvalidArgumentException
      */
     public function setMap($map)
     {
