@@ -24,14 +24,11 @@ class AggregateResolverServiceFactory implements FactoryInterface
     {
         $config   = $serviceLocator->get('Config');
         $config   = $config['asset_manager'];
+        $resolver = new AggregateResolver();
 
         if (empty($config['resolvers'])) {
-            throw new Exception\RuntimeException(
-                'Required configuration key "resolvers" does not exist or is empty.'
-            );
+            return $resolver;
         }
-
-        $resolver = new AggregateResolver();
 
         foreach ($config['resolvers'] as $resolverService => $priority) {
             $resolverService = $serviceLocator->get($resolverService);
