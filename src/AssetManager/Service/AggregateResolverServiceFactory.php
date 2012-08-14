@@ -5,8 +5,6 @@ namespace AssetManager\Service;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use AssetManager\Resolver\AggregateResolver;
-use AssetManager\Resolver\PathStack;
-use AssetManager\Resolver\MapResolver;
 use AssetManager\Exception;
 
 /**
