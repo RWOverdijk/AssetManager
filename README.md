@@ -11,7 +11,7 @@ This allows you to avoid having to copy your files over to the `public/` directo
 similar to what already is possible with view scripts, which can be overridden by other modules.
 
 ## Installation
-------------
+
  1.  Add `"minimum-stability": "dev"` to your `composer.json`
  2.  Require assetmanager:
 
@@ -22,7 +22,7 @@ similar to what already is possible with view scripts, which can be overridden b
 
 ## Usage
 
-In your module's config, define following:
+In your module's config, define the following:
 
 ```php
 <?php
