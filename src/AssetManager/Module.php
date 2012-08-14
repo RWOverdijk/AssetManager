@@ -52,6 +52,6 @@ class Module implements
 
         /* @var $assetManager \AssetManager\Service\AssetManager */
         $assetManager = $application->getServiceManager()->get(__NAMESPACE__ . '\Service\AssetManager');
-        $assetManager->serveAsset();
+        $assetManager->serveAsset($application->getRequest());
     }
 }

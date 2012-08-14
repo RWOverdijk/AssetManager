@@ -21,11 +21,6 @@ class AssetManager
     protected $resolver;
 
     /**
-    * @var RequestInterface
-    */
-    protected $request;
-
-    /**
      * @param ResolverInterface $resolver
      */
     public function __construct(ResolverInterface $resolver)
@@ -34,46 +29,13 @@ class AssetManager
     }
 
     /**
-     * Set the Request
+     * Serve the asset for the supplied asset
      *
-     * @param  RequestInterface       $basePath
-     * @return AssetManager
-     */
-    public function setRequest(RequestInterface $request)
-    {
-        $this->request = $request;
-
-        return $this;
-    }
-
-    /**
-    * Get the request
-    *
-    * @return RequestInterface
-    */
-    protected function getRequest()
-    {
-        return $this->request;
-    }
-
-    /**
-    * Get the base path
-    *
-    * @return string base path
-    */
-    protected function getBasePath()
-    {
-        return (string) $this->getRequest()->getBasePath();
-    }
-
-    /**
-     * Serve the asset
+     * @param RequestInterface
      * @todo not sure this fits the asset manager directly. This may instead be handled directly in the lifecycle event
      */
-    public function serveAsset()
+    public function serveAsset(RequestInterface $request)
     {
-        $request = $this->getRequest();
-
         if (!$request instanceof Request) {
 
             return;
@@ -83,7 +45,7 @@ class AssetManager
         /* @var $uri \Zend\Uri\UriInterface */
         $uri        = $request->getUri();
         $fullPath   = $uri->getPath();
-        $path       = substr($fullPath, strlen($this->getBasePath()) + 1);
+        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
 
         if ($file = $this->resolver->resolve($path)) {
             $this->send($file);

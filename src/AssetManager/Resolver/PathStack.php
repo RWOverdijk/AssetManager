@@ -4,6 +4,7 @@ namespace AssetManager\Resolver;
 
 use SplFileInfo;
 use Zend\Stdlib\SplStack;
+use AssetManager\Exception;
 
 class PathStack implements ResolverInterface
 {
@@ -62,7 +63,7 @@ class PathStack implements ResolverInterface
             return $this;
         }
 
-        throw new \InvalidArgumentException(
+        throw new Exception\InvalidArgumentException(
             "Invalid argument provided for \$paths, expecting either an array or SplStack object"
         );
     }
@@ -91,7 +92,7 @@ class PathStack implements ResolverInterface
     public function addPath($path)
     {
         if (!is_string($path)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid path provided; must be a string, received %s',
                 gettype($path)
             ));
@@ -159,6 +160,7 @@ class PathStack implements ResolverInterface
 
             if ($file->isReadable() && !$file->isDir()) {
                 if ($filePath = $file->getRealPath()) {
+
                     return $filePath;
                 }
             }
