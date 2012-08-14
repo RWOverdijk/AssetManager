@@ -160,7 +160,6 @@ class PathStackResolver implements ResolverInterface
 
             if ($file->isReadable() && !$file->isDir()) {
                 if ($filePath = $file->getRealPath()) {
-
                     return $filePath;
                 }
             }
