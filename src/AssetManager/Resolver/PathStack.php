@@ -48,7 +48,7 @@ class PathStack implements ResolverInterface
      *
      * @param  SplStack|array            $paths
      * @return self
-     * @throws \InvalidArgumentException
+     * @throws Exception\InvalidArgumentException
      */
     public function setPaths($paths)
     {
@@ -87,7 +87,7 @@ class PathStack implements ResolverInterface
      *
      * @param  string                    $path
      * @return self
-     * @throws \InvalidArgumentException
+     * @throws Exception\InvalidArgumentException
      */
     public function addPath($path)
     {
