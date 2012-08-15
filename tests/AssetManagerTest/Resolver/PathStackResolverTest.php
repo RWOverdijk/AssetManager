@@ -3,13 +3,13 @@
 namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
-use AssetManager\Resolver\PathStack;
+use AssetManager\Resolver\PathStackResolver;
 
-class PathStackTest extends PHPUnit_Framework_TestCase
+class PathStackResolverTest extends PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $resolver = new PathStack();
+        $resolver = new PathStackResolver();
         $this->assertEmpty($resolver->getPaths()->toArray());
 
         $resolver->addPaths(array(__DIR__));
@@ -21,7 +21,7 @@ class PathStackTest extends PHPUnit_Framework_TestCase
 
     public function testMap()
     {
-        $resolver = new PathStack();
+        $resolver = new PathStackResolver();
         $resolver->addPath(__DIR__);
 
         $this->assertEquals(__FILE__, $resolver->resolve(basename(__FILE__)));
@@ -30,7 +30,7 @@ class PathStackTest extends PHPUnit_Framework_TestCase
 
     public function testLfiProtection()
     {
-        $resolver = new PathStack();
+        $resolver = new PathStackResolver();
         // should be on by default
         $this->assertTrue($resolver->isLfiProtectionOn());
         $resolver->addPath(__DIR__);

@@ -3,13 +3,13 @@
 namespace AssetManager\Resolver;
 
 use SplFileInfo;
-use Zend\Stdlib\SplStack;
+use Zend\Stdlib\PriorityQueue;
 use AssetManager\Exception;
 
-class PathStack implements ResolverInterface
+class PrioritizedPathsResolver implements ResolverInterface
 {
     /**
-     * @var SplStack
+     * @var PriorityQueue|ResolverInterface[]
      */
     protected $paths;
 
@@ -21,14 +21,48 @@ class PathStack implements ResolverInterface
     protected $lfiProtectionOn = true;
 
     /**
-     * Constructor
-     */
+    * Constructor.
+    * Construct object and set a new PriorityQueue.
+    */
     public function __construct()
     {
-        $this->paths = new SplStack();
+        $this->clearPaths();
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function addPath($path)
+    {
+        $priority = 1;
+
+        if (is_array($path)) {
+            $priority   = $path['priority'];
+            $path       = $path['path'];
+        }
+
+        $this->paths->insert(static::normalizePath($path), $priority);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPaths()
+    {
+        return $this->paths;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function clearPaths()
+    {
+        $this->paths = new PriorityQueue();
+    }
+
+     /**
      * Add many paths to the stack at once
      *
      * @param  array $paths
@@ -83,47 +117,6 @@ class PathStack implements ResolverInterface
     }
 
     /**
-     * Add a single path to the stack
-     *
-     * @param  string                    $path
-     * @return self
-     * @throws Exception\InvalidArgumentException
-     */
-    public function addPath($path)
-    {
-        if (!is_string($path)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid path provided; must be a string, received %s',
-                gettype($path)
-            ));
-        }
-
-        $this->paths[] = static::normalizePath($path);
-
-        return $this;
-    }
-
-    /**
-     * Clear all paths
-     *
-     * @return void
-     */
-    public function clearPaths()
-    {
-        $this->paths = new SplStack();
-    }
-
-    /**
-     * Returns stack of paths
-     *
-     * @return SplStack
-     */
-    public function getPaths()
-    {
-        return $this->paths;
-    }
-
-    /**
      * Set LFI protection flag
      *
      * @param  bool $flag
@@ -155,12 +148,11 @@ class PathStack implements ResolverInterface
             return null;
         }
 
-        foreach ($this->paths as $path) {
+        foreach ($this->getPaths() as $path) {
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {
                 if ($filePath = $file->getRealPath()) {
-
                     return $filePath;
                 }
             }
