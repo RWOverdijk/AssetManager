@@ -2,11 +2,11 @@
 return array(
     'service_manager' => array (
         'factories' => array (
-            'AssetManager\Service\AssetManager'                 => 'AssetManager\Service\AssetManagerServiceFactory',
-            'AssetManager\Service\AggregateResolver'            => 'AssetManager\Service\AggregateResolverServiceFactory',
-            'AssetManager\Resolver\MapResolver'                 => 'AssetManager\Service\MapResolverServiceFactory',
-            'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
-            'AssetManager\Resolver\PriorityPathStackResolver'   => 'AssetManager\Service\PriorityPathStackResolverServiceFactory',
+            'AssetManager\Service\AssetManager'             => 'AssetManager\Service\AssetManagerServiceFactory',
+            'AssetManager\Service\AggregateResolver'        => 'AssetManager\Service\AggregateResolverServiceFactory',
+            'AssetManager\Resolver\MapResolver'             => 'AssetManager\Service\MapResolverServiceFactory',
+            'AssetManager\Resolver\PathStackResolver'       => 'AssetManager\Service\PathStackResolverServiceFactory',
+            'AssetManager\Resolver\PriorityPathResolver'    => 'AssetManager\Service\PriorityPathResolverServiceFactory',
 
             //'AssetManager\Resolver\AssetCollectionResolver'  => 'AssetManager\Service\AssetCollectionResolverServiceFactory',
 
@@ -18,9 +18,9 @@ return array(
         //'paths' => array('/my/module/assets', '/my/other/directory/public'),
 
         'resolvers' => array(
-            'AssetManager\Resolver\MapResolver'                 => 2000,
-            'AssetManager\Resolver\PriorityPathStackResolver'   => 1000,
-            'AssetManager\Resolver\PathStackResolver'           => 1,
+            'AssetManager\Resolver\MapResolver'             => 2000,
+            'AssetManager\Resolver\PriorityPathResolver'    => 1000,
+            'AssetManager\Resolver\PathStackResolver'            => 1,
             //'AssetManager\Resolver\AssetCollectionResolver' => 500,
         ),
     ),
