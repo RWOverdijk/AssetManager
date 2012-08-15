@@ -4,9 +4,9 @@ namespace AssetManager\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use AssetManager\Resolver\PriorityPathResolver;
+use AssetManager\Resolver\PrioritizedPathsResolver;
 
-class PriorityPathResolverServiceFactory implements FactoryInterface
+class PrioritizedPathsResolverServiceFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
@@ -16,14 +16,14 @@ class PriorityPathResolverServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config                     = $serviceLocator->get('config');
-        $priorityPathResolver       = new PriorityPathResolver();
+        $prioritizedPathsResolver   = new PrioritizedPathsResolver();
 
         if (empty($config['asset_manager']['prioritized_paths'])) {
             $config['asset_manager']['prioritized_paths'] = array();
         }
 
-        $priorityPathResolver->addPaths($config['asset_manager']['prioritized_paths']);
+        $prioritizedPathsResolver->addPaths($config['asset_manager']['prioritized_paths']);
 
-        return $priorityPathResolver;
+        return $prioritizedPathsResolver;
     }
 }

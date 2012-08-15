@@ -6,7 +6,7 @@ use SplFileInfo;
 use Zend\Stdlib\PriorityQueue;
 use AssetManager\Exception;
 
-class PriorityPathResolver implements ResolverInterface
+class PrioritizedPathsResolver implements ResolverInterface
 {
     /**
      * @var PriorityQueue|ResolverInterface[]
