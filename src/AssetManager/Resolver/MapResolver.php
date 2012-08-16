@@ -30,7 +30,7 @@ class MapResolver implements ResolverInterface
      *
      * Maps should be arrays or Traversable objects with name => path pairs
      *
-     * @param  array|Traversable $map
+     * @param  array|Traversable                  $map
      * @return self
      * @throws Exception\InvalidArgumentException
      */
@@ -49,8 +49,6 @@ class MapResolver implements ResolverInterface
         }
 
         $this->map = $map;
-
-        return $this;
     }
 
     /**

@@ -31,8 +31,6 @@ class AggregateResolver implements ResolverInterface
     public function attach(ResolverInterface $resolver, $priority = 1)
     {
         $this->queue->insert($resolver, $priority);
-
-        return $this;
     }
 
     /**
