@@ -15,27 +15,15 @@
     <testsuite name="AssetManager tests">
         <directory>./tests/AssetManagerTest</directory>
     </testsuite>
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
     <logging>
-        <!--
-        <log
-            type="coverage-html"
-            target="../build/coverage"
-            title="AssetManager"
-            charset="UTF-8"
-            yui="true"
-            highlight="true"
-            lowUpperBound="35"
-            highLowerBound="70"
-        />
         <log
             type="coverage-clover"
-            target="../build/clover.xml"
+            target="./clover.xml"
         />
-        <log
-            type="junit"
-            target="../build/junit.xml"
-            logIncompleteSkipped="false"
-        />
-        -->
     </logging>
 </phpunit>

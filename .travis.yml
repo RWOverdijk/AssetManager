@@ -13,8 +13,10 @@ before_script:
   - php composer.phar install --dev
   - rm -rf vendor/rwoverdijk/assetmanager
   - cp -r ../AssetManager vendor/rwoverdijk/assetmanager
+  - cd vendor/rwoverdijk/assetmanager
+  - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
 
 script:
-  - cd vendor/rwoverdijk/assetmanager
   - phpunit
+  - php coverage-checker.php clover.xml 95
   - output=$(php php-cs-fixer.phar fix -v --dry-run --level=psr2 .); if [[ $output ]]; then while read -r line; do echo -e "\e[00;31m$line\e[00m"; done <<< "$output"; false; fi;
