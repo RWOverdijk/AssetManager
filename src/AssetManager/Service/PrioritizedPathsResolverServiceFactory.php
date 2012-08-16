@@ -11,18 +11,16 @@ class PrioritizedPathsResolverServiceFactory implements FactoryInterface
     /**
      * {@inheritDoc}
      *
-     * @return PriorityPathStackResolver
+     * @return PrioritizedPathsResolver
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config                     = $serviceLocator->get('config');
-        $prioritizedPathsResolver   = new PrioritizedPathsResolver();
-
-        if (empty($config['asset_manager']['prioritized_paths'])) {
-            $config['asset_manager']['prioritized_paths'] = array();
-        }
-
-        $prioritizedPathsResolver->addPaths($config['asset_manager']['prioritized_paths']);
+        $config                   = $serviceLocator->get('config');
+        $prioritizedPathsResolver = new PrioritizedPathsResolver();
+        $paths                    = isset($config['asset_manager']['prioritized_paths'])
+            ? $config['asset_manager']['prioritized_paths']
+            : array();
+        $prioritizedPathsResolver->addPaths($paths);
 
         return $prioritizedPathsResolver;
     }

@@ -19,69 +19,103 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertNull($resolver->resolve('/some-path'));
     }
 
-    public function testWillInstantiateMapResolver()
+    public function testWillAttachResolver()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Config',
             array(
                 'asset_manager' => array(
-                    'map' => array(
-                        '/some-path' => 'awesome-asset.cool',
+                    'resolvers' => array(
+                        'mocked_resolver' => 1234,
                     ),
                 ),
             )
         );
 
+        $mockedResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $mockedResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('test-path')
+            ->will($this->returnValue('test-resolved-path'));
+        $serviceManager->setService('mocked_resolver', $mockedResolver);
+
         $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
-        $this->assertInstanceOf('AssetManager\Resolver\ResolverInterface', $resolver);
-        $this->assertSame('awesome-asset.cool', $resolver->resolve('/some-path'));
-        $this->assertNull($resolver->resolve('/i-do-not-exist'));
+
+        $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
 
-    public function testWillInstantiatePathStackResolver()
+    public function testWillPrioritizeResolversCorrectly()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Config',
             array(
                 'asset_manager' => array(
-                    'paths' => array(
-                        __DIR__,
+                    'resolvers' => array(
+                        'mocked_resolver_1' => 1000,
+                        'mocked_resolver_2' => 500,
                     ),
                 ),
             )
         );
 
+        $mockedResolver1 = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $mockedResolver1
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('test-path')
+            ->will($this->returnValue('test-resolved-path'));
+        $serviceManager->setService('mocked_resolver_1', $mockedResolver1);
+
+        $mockedResolver2 = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $mockedResolver2
+            ->expects($this->never())
+            ->method('resolve');
+        $serviceManager->setService('mocked_resolver_2', $mockedResolver2);
+
         $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
-        $this->assertInstanceOf('AssetManager\Resolver\ResolverInterface', $resolver);
-        $this->assertSame(__FILE__, $resolver->resolve(basename(__FILE__)));
-        $this->assertNull($resolver->resolve('/i-do-not-exist'));
+
+        $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
 
-    public function testWillPrioritizeMapResolver()
+    public function testWillFallbackToLowerPriorityRoutes()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'Config',
             array(
                 'asset_manager' => array(
-                    'map' => array(
-                        basename(__FILE__) => 'i-will-win',
-                    ),
-                    'paths' => array(
-                        __DIR__,
+                    'resolvers' => array(
+                        'mocked_resolver_1' => 1000,
+                        'mocked_resolver_2' => 500,
                     ),
                 ),
             )
         );
 
+        $mockedResolver1 = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $mockedResolver1
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('test-path')
+            ->will($this->returnValue(null));
+        $serviceManager->setService('mocked_resolver_1', $mockedResolver1);
+
+        $mockedResolver2 = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $mockedResolver2
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('test-path')
+            ->will($this->returnValue('test-resolved-path'));
+        $serviceManager->setService('mocked_resolver_2', $mockedResolver2);
+
         $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
-        $this->assertInstanceOf('AssetManager\Resolver\ResolverInterface', $resolver);
-        $this->assertSame('i-will-win', $resolver->resolve(basename(__FILE__)));
-        $this->assertNull($resolver->resolve('/i-do-not-exist'));
+
+        $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
 }

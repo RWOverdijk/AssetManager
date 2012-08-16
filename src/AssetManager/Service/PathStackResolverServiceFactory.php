@@ -15,14 +15,10 @@ class PathStackResolverServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config             = $serviceLocator->get('config');
+        $config            = $serviceLocator->get('config');
         $pathStackResolver = new PathStackResolver();
-
-        if (!isset($config['asset_manager']['paths'])) {
-            $config['asset_manager']['paths'] = array();
-        }
-
-        $pathStackResolver->addPaths($config['asset_manager']['paths']);
+        $paths = isset($config['asset_manager']['paths']) ? $config['asset_manager']['paths'] : array();
+        $pathStackResolver->addPaths($paths);
 
         return $pathStackResolver;
     }

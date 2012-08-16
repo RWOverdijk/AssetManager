@@ -2,6 +2,8 @@
 
 namespace AssetManager\Resolver;
 
+use Traversable;
+use ArrayAccess;
 use SplFileInfo;
 use Zend\Stdlib\PriorityQueue;
 use AssetManager\Exception;
@@ -26,7 +28,7 @@ class PrioritizedPathsResolver implements ResolverInterface
     */
     public function __construct()
     {
-        $this->clearPaths();
+        $this->paths = new PriorityQueue();
     }
 
     /**
@@ -34,16 +36,26 @@ class PrioritizedPathsResolver implements ResolverInterface
      */
     public function addPath($path)
     {
-        $priority = 1;
+        if (is_string($path)) {
+            $this->paths->insert($this->normalizePath($path), 1);
 
-        if (is_array($path)) {
-            $priority   = $path['priority'];
-            $path       = $path['path'];
+            return;
         }
 
-        $this->paths->insert(static::normalizePath($path), $priority);
+        if (!is_array($path) && !$path instanceof ArrayAccess) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Provided path must be an array or an instance of ArrayAccess, %s given',
+                is_object($path) ? get_class($path) : gettype($path)
+            ));
+        }
 
-        return $this;
+        if (isset($path['priority']) && isset($path['path'])) {
+            $this->paths->insert($this->normalizePath($path['path']), $path['priority']);
+
+            return;
+        }
+
+        throw new Exception\InvalidArgumentException('Provided array must contain both keys "priority" and "path"');
     }
 
     /**
@@ -65,41 +77,33 @@ class PrioritizedPathsResolver implements ResolverInterface
      /**
      * Add many paths to the stack at once
      *
-     * @param  array $paths
+     * @param  array|Traversable $paths
      * @return self
      */
-    public function addPaths(array $paths)
+    public function addPaths($paths)
     {
         foreach ($paths as $path) {
             $this->addPath($path);
         }
-
-        return $this;
     }
 
     /**
      * Rest the path stack to the paths provided
      *
-     * @param  SplStack|array            $paths
-     * @return self
+     * @param  Traversable|array $paths
      * @throws Exception\InvalidArgumentException
      */
     public function setPaths($paths)
     {
-        if ($paths instanceof SplStack) {
-            $this->paths = $paths;
-
-            return $this;
-        } elseif (is_array($paths)) {
-            $this->clearPaths();
-            $this->addPaths($paths);
-
-            return $this;
+        if (!is_array($paths) && !$paths instanceof Traversable) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Invalid argument provided for $paths, expecting either an array or Traversable object, "%s" given',
+                is_object($paths) ? get_class($paths) : gettype($paths)
+            ));
         }
 
-        throw new Exception\InvalidArgumentException(
-            "Invalid argument provided for \$paths, expecting either an array or SplStack object"
-        );
+        $this->clearPaths();
+        $this->addPaths($paths);
     }
 
     /**
@@ -108,7 +112,7 @@ class PrioritizedPathsResolver implements ResolverInterface
      * @param  string $path
      * @return string
      */
-    protected static function normalizePath($path)
+    protected function normalizePath($path)
     {
         $path = rtrim($path, '/\\');
         $path .= DIRECTORY_SEPARATOR;
@@ -125,8 +129,6 @@ class PrioritizedPathsResolver implements ResolverInterface
     public function setLfiProtection($flag)
     {
         $this->lfiProtectionOn = (bool) $flag;
-
-        return $this;
     }
 
     /**
@@ -152,9 +154,7 @@ class PrioritizedPathsResolver implements ResolverInterface
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {
-                if ($filePath = $file->getRealPath()) {
-                    return $filePath;
-                }
+                return $file->getRealPath();
             }
         }
 
