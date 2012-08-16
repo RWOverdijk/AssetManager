@@ -3,6 +3,7 @@
 namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
+use ArrayObject;
 use AssetManager\Resolver\MapResolver;
 
 class MapResolverTest extends PHPUnit_Framework_TestCase
@@ -51,5 +52,26 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
             ),
             $resolver->getMap()
         );
+
+        $resolver->setMap(new ArrayObject(array(
+            'key3' => 'value3',
+            'key4' => 'value4',
+        )));
+
+        $this->assertSame(
+            array(
+                'key3' => 'value3',
+                'key4' => 'value4',
+            ),
+            $resolver->getMap()
+        );
+
+    }
+
+    public function testWillRefuseInvalidMap()
+    {
+        $resolver = new MapResolver();
+        $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
+        $resolver->setMap('invalid');
     }
 }

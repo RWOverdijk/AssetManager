@@ -3,10 +3,11 @@
 namespace AssetManager\Resolver;
 
 use SplFileInfo;
+use Traversable;
 use Zend\Stdlib\SplStack;
 use AssetManager\Exception;
 
-class PathStack implements ResolverInterface
+class PathStackResolver implements ResolverInterface
 {
     /**
      * @var SplStack
@@ -31,41 +32,32 @@ class PathStack implements ResolverInterface
     /**
      * Add many paths to the stack at once
      *
-     * @param  array $paths
-     * @return self
+     * @param array|Traversable $paths
      */
-    public function addPaths(array $paths)
+    public function addPaths($paths)
     {
         foreach ($paths as $path) {
             $this->addPath($path);
         }
-
-        return $this;
     }
 
     /**
      * Rest the path stack to the paths provided
      *
-     * @param  SplStack|array            $paths
-     * @return self
+     * @param  Traversable|array                  $paths
      * @throws Exception\InvalidArgumentException
      */
     public function setPaths($paths)
     {
-        if ($paths instanceof SplStack) {
-            $this->paths = $paths;
-
-            return $this;
-        } elseif (is_array($paths)) {
-            $this->clearPaths();
-            $this->addPaths($paths);
-
-            return $this;
+        if (!is_array($paths) && !$paths instanceof Traversable) {
+            throw new Exception\InvalidArgumentException(sprintf(
+                'Invalid argument provided for $paths, expecting either an array or Traversable object, "%s" given',
+                is_object($paths) ? get_class($paths) : gettype($paths)
+            ));
         }
 
-        throw new Exception\InvalidArgumentException(
-            "Invalid argument provided for \$paths, expecting either an array or SplStack object"
-        );
+        $this->clearPaths();
+        $this->addPaths($paths);
     }
 
     /**
@@ -74,7 +66,7 @@ class PathStack implements ResolverInterface
      * @param  string $path
      * @return string
      */
-    protected static function normalizePath($path)
+    protected function normalizePath($path)
     {
         $path = rtrim($path, '/\\');
         $path .= DIRECTORY_SEPARATOR;
@@ -85,8 +77,7 @@ class PathStack implements ResolverInterface
     /**
      * Add a single path to the stack
      *
-     * @param  string                    $path
-     * @return self
+     * @param  string                             $path
      * @throws Exception\InvalidArgumentException
      */
     public function addPath($path)
@@ -98,9 +89,7 @@ class PathStack implements ResolverInterface
             ));
         }
 
-        $this->paths[] = static::normalizePath($path);
-
-        return $this;
+        $this->paths[] = $this->normalizePath($path);
     }
 
     /**
@@ -132,8 +121,6 @@ class PathStack implements ResolverInterface
     public function setLfiProtection($flag)
     {
         $this->lfiProtectionOn = (bool) $flag;
-
-        return $this;
     }
 
     /**
@@ -155,14 +142,11 @@ class PathStack implements ResolverInterface
             return null;
         }
 
-        foreach ($this->paths as $path) {
+        foreach ($this->getPaths() as $path) {
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {
-                if ($filePath = $file->getRealPath()) {
-
-                    return $filePath;
-                }
+                return $file->getRealPath();
             }
         }
 

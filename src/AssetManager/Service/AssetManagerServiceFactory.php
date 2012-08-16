@@ -4,7 +4,6 @@ namespace AssetManager\Service;
 
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Http\PhpEnvironment\Request;
 
 /**
  * Factory class for AssetManagerService
@@ -21,7 +20,7 @@ class AssetManagerServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $assetManager = new AssetManager($serviceLocator->get('AssetManager\Service\ResolverInterface'));
+        $assetManager = new AssetManager($serviceLocator->get('AssetManager\Service\AggregateResolver'));
 
         return $assetManager;
     }
