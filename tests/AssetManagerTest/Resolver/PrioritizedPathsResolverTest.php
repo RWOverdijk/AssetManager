@@ -3,7 +3,6 @@
 namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
-use ArrayObject;
 use AssetManager\Resolver\PrioritizedPathsResolver;
 
 class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase

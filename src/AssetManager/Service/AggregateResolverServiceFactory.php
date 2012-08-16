@@ -5,7 +5,6 @@ namespace AssetManager\Service;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use AssetManager\Resolver\AggregateResolver;
-use AssetManager\Exception;
 
 /**
  * Factory class for AssetManagerService

@@ -32,7 +32,7 @@ class PathStackResolver implements ResolverInterface
     /**
      * Add many paths to the stack at once
      *
-     * @param  array|Traversable $paths
+     * @param array|Traversable $paths
      */
     public function addPaths($paths)
     {
@@ -44,7 +44,7 @@ class PathStackResolver implements ResolverInterface
     /**
      * Rest the path stack to the paths provided
      *
-     * @param  Traversable|array            $paths
+     * @param  Traversable|array                  $paths
      * @throws Exception\InvalidArgumentException
      */
     public function setPaths($paths)
@@ -77,7 +77,7 @@ class PathStackResolver implements ResolverInterface
     /**
      * Add a single path to the stack
      *
-     * @param  string                    $path
+     * @param  string                             $path
      * @throws Exception\InvalidArgumentException
      */
     public function addPath($path)

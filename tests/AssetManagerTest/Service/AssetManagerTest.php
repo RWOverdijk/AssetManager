@@ -4,7 +4,6 @@ namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetManager;
-use Zend\ServiceManager\ServiceManager;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Stdlib\ErrorHandler;

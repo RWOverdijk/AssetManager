@@ -90,7 +90,7 @@ class PrioritizedPathsResolver implements ResolverInterface
     /**
      * Rest the path stack to the paths provided
      *
-     * @param  Traversable|array $paths
+     * @param  Traversable|array                  $paths
      * @throws Exception\InvalidArgumentException
      */
     public function setPaths($paths)
