@@ -5,7 +5,6 @@ namespace AssetManagerTest;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Module;
 use Zend\Http\Response;
-use Zend\EventManager\EventInterface;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
 use Zend\Mvc\MvcEvent;
@@ -34,12 +33,12 @@ class ModuleTest extends PHPUnit_Framework_TestCase
      */
     public function testDispatchListenerIgnoresOtherResponseCodes()
     {
-        $event = new MvcEvent();
-        $response = new Response();
+        $event      = new MvcEvent();
+        $response   = new Response();
+        $module     = new Module();
+
         $response->setStatusCode(500);
         $event->setResponse($response);
-
-        $module = new Module();
 
         $response = $module->onDispatch($event);
 
