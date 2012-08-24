@@ -85,7 +85,7 @@ class AssetManager
     *
     * @param RequestInterface $request
     *
-    * @return false when not found, string when succesfully resolved.
+    * @return mixed false when not found, string when succesfully resolved.
     */
     protected function resolve(RequestInterface $request)
     {
