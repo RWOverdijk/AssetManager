@@ -14,6 +14,17 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
 
         $resolver->addPaths(array(__DIR__));
         $this->assertEquals(array(__DIR__ . DIRECTORY_SEPARATOR), $resolver->getPaths()->toArray());
+    }
+
+    public function testClearPaths()
+    {
+        $resolver = new PrioritizedPathsResolver();
+        $resolver->addPath('someDir');
+
+        $paths = $resolver->getPaths();
+
+
+        $this->assertEquals('someDir' . DIRECTORY_SEPARATOR, $paths->top());
 
         $resolver->clearPaths();
         $this->assertEquals(array(), $resolver->getPaths()->toArray());
@@ -54,6 +65,91 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
 
         $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
         $resolver->setPaths('invalid');
+    }
+
+    public function testAddPaths()
+    {
+        $resolver = new PrioritizedPathsResolver();
+        $resolver->setPaths(array(
+            array(
+                'path' => 'dir3',
+                'priority' => 750,
+            ),
+            array(
+                'path' => 'dir2',
+                'priority' => 1000,
+            ),
+            array(
+                'path' => 'dir1',
+                'priority' => 500,
+            ),
+        ));
+
+        $resolver->addPaths(array(
+            'dir4',
+            array(
+                'path' => 'dir5',
+                'priority' => -5,
+            )
+        ));
+
+        $fetched = array();
+
+        foreach ($resolver->getPaths() as $path) {
+            $fetched[] = $path;
+        }
+
+        // order inverted because of how a stack is traversed
+        $this->assertSame(
+            array(
+                'dir2' . DIRECTORY_SEPARATOR,
+                'dir3' . DIRECTORY_SEPARATOR,
+                'dir1' . DIRECTORY_SEPARATOR,
+                'dir4' . DIRECTORY_SEPARATOR,
+                'dir5' . DIRECTORY_SEPARATOR,
+            ),
+            $fetched
+        );
+    }
+
+    public function testAddPath()
+    {
+        $resolver = new PrioritizedPathsResolver();
+        $resolver->setPaths(array(
+            array(
+                'path' => 'dir3',
+                'priority' => 750,
+            ),
+            array(
+                'path' => 'dir2',
+                'priority' => 1000,
+            ),
+            array(
+                'path' => 'dir1',
+                'priority' => 500,
+            ),
+        ));
+
+        $resolver->addPath('dir4');
+        $resolver->addPath(array('path'=>'dir5', 'priority'=>-5));
+
+        $fetched = array();
+
+        foreach ($resolver->getPaths() as $path) {
+            $fetched[] = $path;
+        }
+
+        // order inverted because of how a stack is traversed
+        $this->assertSame(
+            array(
+                'dir2' . DIRECTORY_SEPARATOR,
+                'dir3' . DIRECTORY_SEPARATOR,
+                'dir1' . DIRECTORY_SEPARATOR,
+                'dir4' . DIRECTORY_SEPARATOR,
+                'dir5' . DIRECTORY_SEPARATOR,
+            ),
+            $fetched
+        );
     }
 
     public function testSetPathsAllowsStringPaths()
