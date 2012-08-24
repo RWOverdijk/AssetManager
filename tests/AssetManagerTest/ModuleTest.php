@@ -10,6 +10,9 @@ use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
 use Zend\Mvc\MvcEvent;
 
+/**
+* @covers AssetManager\Module
+*/
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
     public function testGetAutoloaderConfig()
@@ -41,5 +44,46 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $response = $module->onDispatch($event);
 
         $this->assertNull($response);
+    }
+
+    public function testOnBootstrap()
+    {
+        $applicationEventManager = new EventManager();
+
+        $application = $this->getMock('Zend\Mvc\ApplicationInterface');
+        $application
+            ->expects($this->any())
+            ->method('getEventManager')
+            ->will($this->returnValue($applicationEventManager));
+
+        $event = new Event();
+        $event->setTarget($application);
+
+        $module = new Module();
+        $module->onBootstrap($event);
+
+        $dispatchListeners = $applicationEventManager->getListeners(MvcEvent::EVENT_DISPATCH);
+
+        foreach ($dispatchListeners as $listener) {
+            $metaData = $listener->getMetadata();
+            $callback = $listener->getCallback();
+
+            $this->assertEquals('onDispatch', $callback[1]);
+            $this->assertEquals(-9999999, $metaData['priority']);
+            $this->assertTrue($callback[0] instanceof Module);
+
+        }
+
+        $dispatchListeners = $applicationEventManager->getListeners(MvcEvent::EVENT_DISPATCH_ERROR);
+
+        foreach ($dispatchListeners as $listener) {
+            $metaData = $listener->getMetadata();
+            $callback = $listener->getCallback();
+
+            $this->assertEquals('onDispatch', $callback[1]);
+            $this->assertEquals(-9999999, $metaData['priority']);
+            $this->assertTrue($callback[0] instanceof Module);
+
+        }
     }
 }

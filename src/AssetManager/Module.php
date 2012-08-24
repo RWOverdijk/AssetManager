@@ -52,16 +52,21 @@ class Module implements
     {
         $response   = $event->getResponse();
 
-        if ($response->getStatusCode() === 404) {
-            $request        = $event->getRequest();
-            $serviceManager = $event->getApplication()->getServiceManager();
-            $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
-
-            if ($assetManager->resolvesToAsset($request)) {
-                $response->setStatusCode(200);
-                return $assetManager->setAssetOnResponse($response);
-            }
+        if ($response->getStatusCode() !== 404) {
+            return;
         }
+
+        $request        = $event->getRequest();
+        $serviceManager = $event->getApplication()->getServiceManager();
+        $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
+
+        if (!$assetManager->resolvesToAsset($request)) {
+            return;
+        }
+
+        $response->setStatusCode(200);
+
+        return $assetManager->setAssetOnResponse($response);
     }
 
     /**
