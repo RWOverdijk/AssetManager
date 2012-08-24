@@ -69,7 +69,7 @@ class Module implements
      */
     public function onBootstrap(EventInterface $e)
     {
-        // Attch for dispatch, and dispatch.error (with low priority to make sure statusCode gets set)
+        // Attach for dispatch, and dispatch.error (with low priority to make sure statusCode gets set)
         $evm = $e->getTarget()->getEventManager();
         $evm->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), -9999999);
         $evm->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatch'), -9999999);
