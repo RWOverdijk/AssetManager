@@ -3,15 +3,16 @@
 namespace AssetManager\Service;
 
 use AssetManager\Resolver\ResolverInterface;
-use Zend\Uri\UriInterface;
+use AssetManager\Exception;
 use Zend\Stdlib\RequestInterface;
+use Zend\Stdlib\ResponseInterface;
 use Zend\Http\PhpEnvironment\Request;
 use finfo;
-use SplFileInfo;
 
 /**
  * @category    AssetManager
  * @package     AssetManager
+ * @todo        Add filtering and caching.
  */
 class AssetManager
 {
@@ -19,6 +20,12 @@ class AssetManager
      * @var ResolverInterface
      */
     protected $resolver;
+
+    /**
+    * Null when not resolved, false when not found, string when succesfully resolved.
+    * @var mixed $resolved
+    */
+    protected $resolved;
 
     /**
      * @param ResolverInterface $resolver
@@ -29,13 +36,58 @@ class AssetManager
     }
 
     /**
-     * Serve the asset for the supplied asset
-     *
-     * @param  RequestInterface
-     * @return bool true if the asset was sent to the client, false otherwise
-     * @todo not sure this fits the asset manager directly. This may instead be handled directly in the lifecycle event
-     */
-    public function serveAsset(RequestInterface $request)
+    * Check if the request resolves to an asset.
+    *
+    * @param    RequestInterface $request
+    * @return   boolean
+    */
+    public function resolvesToAsset(RequestInterface $request)
+    {
+        if (null === $this->resolved) {
+            $this->resolved = $this->resolve($request);
+        }
+
+        return (bool)$this->resolved;
+    }
+
+    /**
+    * Set the asset on the response, including headers and content.
+    *
+    * @param    ResponseInterface $response
+    * @return   ResponseInterface
+    * @throws   Exception\RuntimeException
+    */
+    public function setAssetOnResponse(ResponseInterface $response)
+    {
+        if (!is_string(($file = $this->resolved))) {
+            throw new Exception\RuntimeException(
+                'Unable to set asset on response. Request has not been resolved to an asset.'
+            );
+        }
+
+        $finfo      = new finfo(FILEINFO_MIME);
+        $mimeType   = $finfo->file($file);
+        $fileSize   = filesize($file);
+        $content    = file_get_contents($file);
+
+        $response->getHeaders()
+                 ->addHeaderLine('Content-Transfer-Encoding', 'binary')
+                 ->addHeaderLine('Content-Type', $mimeType)
+                 ->addHeaderLine('Content-Length', $fileSize);
+
+        $response->setContent($content);
+
+        return $response;
+    }
+
+    /**
+    * Resolve the request to a file.
+    *
+    * @param RequestInterface $request
+    *
+    * @return mixed false when not found, string when succesfully resolved.
+    */
+    protected function resolve(RequestInterface $request)
     {
         if (!$request instanceof Request) {
             return false;
@@ -47,20 +99,10 @@ class AssetManager
         $fullPath   = $uri->getPath();
         $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
 
-        if (!$file = $this->resolver->resolve($path)) {
+        if (null === ($file = $this->resolver->resolve($path))) {
             return false;
         }
 
-        // @todo add filtering at this level
-        $finfo      = new finfo(FILEINFO_MIME);
-        $mimeType   = $finfo->file($file);
-        $fileinfo   = new SplFileInfo($file);
-        $file       = $fileinfo->openFile('rb');
-
-        header('Content-Type: ' . $mimeType);
-        header('Content-Length: ' . $file->getSize());
-        $file->fpassthru();
-
-        return true;
+        return $file;
     }
 }

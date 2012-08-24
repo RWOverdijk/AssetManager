@@ -44,25 +44,39 @@ class Module implements
     }
 
     /**
+    * Callback method for dispatch and dispatch.error events.
+    *
+    * @param EventInterface $event
+    */
+    public function onDispatch(EventInterface $event)
+    {
+        $response = $event->getResponse();
+
+        if ($response->getStatusCode() !== 404) {
+            return;
+        }
+
+        $request        = $event->getRequest();
+        $serviceManager = $event->getApplication()->getServiceManager();
+        $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
+
+        if (!$assetManager->resolvesToAsset($request)) {
+            return;
+        }
+
+        $response->setStatusCode(200);
+
+        return $assetManager->setAssetOnResponse($response);
+    }
+
+    /**
      * {@inheritDoc}
      */
-    public function onBootstrap(EventInterface $e)
+    public function onBootstrap(EventInterface $event)
     {
-        /* @var $application \Zend\Mvc\ApplicationInterface */
-        $application = $e->getTarget();
-        /* @var $assetManager \AssetManager\Service\AssetManager */
-        $assetManager = $application->getServiceManager()->get(__NAMESPACE__ . '\Service\AssetManager');
-
-        if ($assetManager->serveAsset($application->getRequest())) {
-            // enforcing application stop - does still allow EVENT_FINISH
-            $evm = $application->getEventManager();
-            $evm->clearListeners(MvcEvent::EVENT_DISPATCH);
-            $evm->clearListeners(MvcEvent::EVENT_DISPATCH_ERROR);
-            $evm->clearListeners(MvcEvent::EVENT_ROUTE);
-            $evm->clearListeners(MvcEvent::EVENT_RENDER);
-
-            // @todo also detach from shared event manager?
-            // @todo this could also be avoided if we move the asset manager to a controller and use the standard MVC
-        }
+        // Attach for dispatch, and dispatch.error (with low priority to make sure statusCode gets set)
+        $eventManager = $event->getTarget()->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), -9999999);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatch'), -9999999);
     }
 }
