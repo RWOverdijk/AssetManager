@@ -41,7 +41,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($resolvesToAsset);
     }
 
-    public function testSetAssetOnResponseContent()
+    public function testSetAssetOnResponse()
     {
         $assetManager    = $this->getTestAssetManager();
         $request         = $this->getTestRequest();
@@ -64,5 +64,15 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $response        = new Response();
 
         $response = $assetManager->setAssetOnResponse($response);
+    }
+
+    public function testResolvesToAssetNotFound()
+    {
+        $resolver        = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $assetManager    = new AssetManager($resolver);
+
+        $resolvesToAsset = $assetManager->resolvesToAsset(new Request());
+
+        $this->assertFalse($resolvesToAsset);
     }
 }
