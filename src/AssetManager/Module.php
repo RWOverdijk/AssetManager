@@ -54,8 +54,8 @@ class Module implements
 
         if ($response->getStatusCode() === 404) {
             $request        = $event->getRequest();
-            $sm             = $event->getApplication()->getServiceManager();
-            $assetManager   = $sm->get(__NAMESPACE__ . '\Service\AssetManager');
+            $serviceManager = $event->getApplication()->getServiceManager();
+            $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
 
             if ($assetManager->resolvesToAsset($request)) {
                 $response->setStatusCode(200);
@@ -67,11 +67,11 @@ class Module implements
     /**
      * {@inheritDoc}
      */
-    public function onBootstrap(EventInterface $e)
+    public function onBootstrap(EventInterface $event)
     {
         // Attach for dispatch, and dispatch.error (with low priority to make sure statusCode gets set)
-        $evm = $e->getTarget()->getEventManager();
-        $evm->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), -9999999);
-        $evm->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatch'), -9999999);
+        $eventManager = $event->getTarget()->getEventManager();
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), -9999999);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatch'), -9999999);
     }
 }
