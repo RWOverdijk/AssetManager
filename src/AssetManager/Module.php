@@ -50,7 +50,7 @@ class Module implements
     */
     public function onDispatch(EventInterface $event)
     {
-        $response   = $event->getResponse();
+        $response = $event->getResponse();
 
         if ($response->getStatusCode() !== 404) {
             return;
