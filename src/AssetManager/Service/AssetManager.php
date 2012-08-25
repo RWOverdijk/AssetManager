@@ -28,6 +28,16 @@ class AssetManager
     protected $resolved;
 
     /**
+     * An array of static mimetypes to force, as the finfo extension is not always
+     * 100% correct.
+     * @var array $staticMimeTypes
+     */
+    protected $staticMimeTypes = array(
+        'css' => 'text/css',
+        'js'  => 'application/x-javascript',
+    );
+
+    /**
      * @param ResolverInterface $resolver
      */
     public function __construct(ResolverInterface $resolver)
@@ -65,8 +75,13 @@ class AssetManager
             );
         }
 
-        $finfo      = new finfo(FILEINFO_MIME);
-        $mimeType   = $finfo->file($file);
+        $extension  = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        if (isset($this->staticMimeTypes[$extension])) {
+            $mimeType = $this->staticMimeTypes[$extension];
+        } else {
+            $finfo      = new finfo(FILEINFO_MIME_TYPE);
+            $mimeType   = $finfo->file($file);
+        }
         $fileSize   = filesize($file);
         $content    = file_get_contents($file);
 
