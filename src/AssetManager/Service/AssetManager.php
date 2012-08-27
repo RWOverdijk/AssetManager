@@ -129,8 +129,6 @@ class AssetManager
         if (is_array($this->resolved)) {
             $this->loadAssets($this->resolved);
         }
-
-        return;
     }
 
     /**
