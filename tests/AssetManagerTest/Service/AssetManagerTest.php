@@ -142,17 +142,20 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $request         = $this->getTestRequest();
         $resolvesToAsset = $assetManager->resolvesToAsset($request);
         $response        = new Response();
-
-        $response = $assetManager->setAssetOnResponse($response);
-        $thisFile = file_get_contents(__FILE__);
+        $response        = $assetManager->setAssetOnResponse($response);
+        $thisFile        = file_get_contents(__FILE__);
 
         if (function_exists('mb_strlen')) {
             $fileSize = mb_strlen($thisFile, '8bit');
         } else {
             $fileSize = strlen($thisFile);
         }
+
+        $finfo      = new \finfo(FILEINFO_MIME);
+        $mimeType   = $finfo->file(__FILE__);
+
         $headers = 'Content-Transfer-Encoding: binary' . "\r\n";
-        $headers .= 'Content-Type: text/x-php; charset=us-ascii' . "\r\n";
+        $headers .= 'Content-Type: '.$mimeType . "\r\n";
         $headers .= 'Content-Length: ' . $fileSize . "\r\n";
 
         $this->assertSame($headers, $response->getHeaders()->toString());
