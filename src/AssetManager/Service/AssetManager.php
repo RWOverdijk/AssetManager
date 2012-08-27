@@ -60,11 +60,21 @@ class AssetManager
         return (bool)$this->resolved;
     }
 
+    /**
+    * Set the resolver to use in the asset manager
+    *
+    * @param ResolverInterface $resolver
+    */
     public function setResolver(ResolverInterface $resolver)
     {
         $this->resolver = $resolver;
     }
 
+    /**
+    * Get the resolver used by the asset manager
+    *
+    * @return ResolerInterface
+    */
     public function getResolver()
     {
         return $this->resolver;
