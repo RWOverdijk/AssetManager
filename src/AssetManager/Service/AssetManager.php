@@ -73,7 +73,7 @@ class AssetManager
     /**
     * Get the resolver used by the asset manager
     *
-    * @return ResolerInterface
+    * @return ResolverInterface
     */
     public function getResolver()
     {
