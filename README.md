@@ -22,22 +22,54 @@ similar to what already is possible with view scripts, which can be overridden b
 
 ## Usage
 
-In your module's config, define the following:
+In your module's config, you can do the following:
 
 ```php
 <?php
 return array(
     'asset_manager' => array(
 
-        // adding MyModule/public to the asset directories
-        'paths' => array(
-            __DIR__ . '/../public',
-        ),
+        'resolver_configs' => array(
 
-        'map' => array(
+            /* collections. Will serve content of all files for
+             * "js/d.js". Entries will be resolved individually.
+             * You are adviced to try and keep them in the "map" entry.
+             */
+            'collections' => array(
+                'js/d.js' => array(
+                    'js/a.js',
+                    'js/b.js',
+                    'js/c.js',
+                ),
+            ),
+
+            // adding MyModule/public to the asset directories
+            'paths' => array(
+                __DIR__ . '/../public',
+            ),
+
+
             // overrides (with high priority) used when we want to
             // expose single particular files
-            'specific-path.css' => __DIR__ . '/some/particular/file.css',
+            'map' => array(
+                'specific-path.css' => __DIR__ . '/some/particular/file.css',
+            ),
+
+            // Used when you want to define a priority per path.
+            'prioritized_paths' => array(
+                array(
+                    'path'      => __DIR__ . '/../public_assets',
+                    'priority'  => 100,
+                ),
+                array(
+                    'path'      => __DIR__ . '/../fallback_assets',
+                    'priority'  => 50,
+                ),
+                array(
+                    'path'      => __DIR__ . '/../assets',
+                    'priority'  => 10,
+                ),
+            ),
         ),
     ),
 );
