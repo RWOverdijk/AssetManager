@@ -31,7 +31,6 @@ class CollectionResolver implements ResolverInterface
      * Collectionss should be arrays or Traversable objects with name => path pairs
      *
      * @param  array|Traversable                  $collections
-     * @return self
      * @throws Exception\InvalidArgumentException
      */
     public function setCollections($collections)
