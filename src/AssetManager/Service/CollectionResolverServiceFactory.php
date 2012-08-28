@@ -15,12 +15,11 @@ class CollectionResolverServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
+        $config      = $serviceLocator->get('Config');
+        $collections = array();
 
         if (isset($config['asset_manager']['resolver_configs']['collections'])) {
             $collections = $config['asset_manager']['resolver_configs']['collections'];
-        } else {
-            $collections = array();
         }
 
         $collectionResolver = new CollectionResolver($collections);

@@ -134,9 +134,7 @@ class AssetManager
     {
         if (is_string($this->resolved)) {
             $this->addAsset($this->resolved);
-        }
-
-        if (is_array($this->resolved)) {
+        } elseif (is_array($this->resolved)) {
             $this->loadAssets($this->resolved);
         }
     }
