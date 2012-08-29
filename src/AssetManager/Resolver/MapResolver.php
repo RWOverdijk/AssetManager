@@ -16,7 +16,7 @@ class MapResolver implements ResolverInterface
     /**
      * Constructor
      *
-     * Instantiate and optionally populate template map.
+     * Instantiate and optionally populate map.
      *
      * @param array|Traversable $map
      */
@@ -26,12 +26,11 @@ class MapResolver implements ResolverInterface
     }
 
     /**
-     * Set (overwrite) template map
+     * Set (overwrite) map
      *
      * Maps should be arrays or Traversable objects with name => path pairs
      *
      * @param  array|Traversable                  $map
-     * @return self
      * @throws Exception\InvalidArgumentException
      */
     public function setMap($map)
@@ -52,7 +51,7 @@ class MapResolver implements ResolverInterface
     }
 
     /**
-     * Retrieve the template map
+     * Retrieve the map
      *
      * @return array
      */

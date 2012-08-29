@@ -18,18 +18,20 @@ class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestC
             'Config',
             array(
                 'asset_manager' => array(
-                    'prioritized_paths' => array(
-                        array(
-                            'path' => 'dir3',
-                            'priority' => 750,
-                        ),
-                        array(
-                            'path' => 'dir2',
-                            'priority' => 1000,
-                        ),
-                        array(
-                            'path' => 'dir1',
-                            'priority' => 500,
+                    'resolver_configs' => array(
+                        'prioritized_paths' => array(
+                            array(
+                                'path' => 'dir3',
+                                'priority' => 750,
+                            ),
+                            array(
+                                'path' => 'dir2',
+                                'priority' => 1000,
+                            ),
+                            array(
+                                'path' => 'dir1',
+                                'priority' => 500,
+                            ),
                         ),
                     ),
                 ),

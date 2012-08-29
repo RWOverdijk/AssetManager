@@ -17,8 +17,8 @@ class PrioritizedPathsResolverServiceFactory implements FactoryInterface
     {
         $config                   = $serviceLocator->get('config');
         $prioritizedPathsResolver = new PrioritizedPathsResolver();
-        $paths                    = isset($config['asset_manager']['prioritized_paths'])
-            ? $config['asset_manager']['prioritized_paths']
+        $paths                    = isset($config['asset_manager']['resolver_configs']['prioritized_paths'])
+            ? $config['asset_manager']['resolver_configs']['prioritized_paths']
             : array();
         $prioritizedPathsResolver->addPaths($paths);
 
