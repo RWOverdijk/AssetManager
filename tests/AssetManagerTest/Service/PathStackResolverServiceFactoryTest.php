@@ -18,9 +18,11 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             'Config',
             array(
                 'asset_manager' => array(
-                    'paths' => array(
-                        'path1/',
-                        'path2/',
+                    'resolver_configs' => array(
+                        'paths' => array(
+                            'path1/',
+                            'path2/',
+                        ),
                     ),
                 ),
             )

@@ -7,8 +7,7 @@ return array(
             'AssetManager\Resolver\MapResolver'                 => 'AssetManager\Service\MapResolverServiceFactory',
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
-
-            //'AssetManager\Resolver\AssetCollectionResolver'  => 'AssetManager\Service\AssetCollectionResolverServiceFactory',
+            'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
 
         ),
     ),
@@ -19,9 +18,9 @@ return array(
 
         'resolvers' => array(
             'AssetManager\Resolver\MapResolver'                 => 2000,
+            'AssetManager\Resolver\CollectionResolver'          => 1500,
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 1000,
             'AssetManager\Resolver\PathStackResolver'           => 1,
-            //'AssetManager\Resolver\AssetCollectionResolver' => 500,
         ),
     ),
 );

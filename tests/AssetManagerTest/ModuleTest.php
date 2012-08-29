@@ -5,6 +5,7 @@ namespace AssetManagerTest;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Module;
 use Zend\Http\Response;
+use Zend\Http\Request;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
 use Zend\Mvc\MvcEvent;
@@ -43,6 +44,87 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $response = $module->onDispatch($event);
 
         $this->assertNull($response);
+    }
+
+    public function testOnDispatchDoesntResolveToAsset()
+    {
+        $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $assetManager = $this->getMock('AssetManager\Service\AssetManager', array('resolvesToAsset'), array($resolver));
+        $assetManager
+            ->expects($this->once())
+            ->method('resolvesToAsset')
+            ->will($this->returnValue(false));
+
+        $serviceManager = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceManager
+            ->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($assetManager));
+
+        $application = $this->getMock('Zend\Mvc\ApplicationInterface');
+        $application
+            ->expects($this->once())
+            ->method('getServiceManager')
+            ->will($this->returnValue($serviceManager));
+
+        $event      = new MvcEvent();
+        $response   = new Response();
+        $request    = new Request();
+        $module     = new Module();
+
+        $event->setApplication($application);
+        $response->setStatusCode(404);
+        $event->setResponse($response);
+        $event->setRequest($request);
+
+        $return = $module->onDispatch($event);
+
+        $this->assertNull($return);
+    }
+
+    public function testOnDispatchStatus200()
+    {
+        $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $assetManager = $this->getMock('AssetManager\Service\AssetManager', array('resolvesToAsset', 'setAssetOnResponse'), array($resolver));
+        $assetManager
+            ->expects($this->once())
+            ->method('resolvesToAsset')
+            ->will($this->returnValue(true));
+
+
+        $amResponse = new Response();
+        $amResponse->setContent('bacon');
+
+        $assetManager
+            ->expects($this->once())
+            ->method('setAssetOnResponse')
+            ->will($this->returnValue($amResponse));
+
+        $serviceManager = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceManager
+            ->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($assetManager));
+
+        $application = $this->getMock('Zend\Mvc\ApplicationInterface');
+        $application
+            ->expects($this->once())
+            ->method('getServiceManager')
+            ->will($this->returnValue($serviceManager));
+
+        $event      = new MvcEvent();
+        $response   = new Response();
+        $request    = new Request();
+        $module     = new Module();
+
+        $event->setApplication($application);
+        $response->setStatusCode(404);
+        $event->setResponse($response);
+        $event->setRequest($request);
+
+        $return = $module->onDispatch($event);
+
+        $this->assertEquals(200, $return->getStatusCode());
     }
 
     public function testOnBootstrap()
