@@ -10,6 +10,9 @@ assets and generally static files from your modules' directories as of your conf
 This allows you to avoid having to copy your files over to the `public/` directory, and makes usage of assets very
 similar to what already is possible with view scripts, which can be overridden by other modules.
 
+## BC-breaks
+This version has BC-breaks. All that has changed, is that now the resolver configurations (map, paths etc) must be wrapped in a `resolver_configs` array (see [Usage](#usage)).
+
 ## Installation
 
  1.  Add `"minimum-stability": "dev"` to your `composer.json`
