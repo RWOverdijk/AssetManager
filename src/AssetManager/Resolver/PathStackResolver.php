@@ -5,6 +5,7 @@ namespace AssetManager\Resolver;
 use SplFileInfo;
 use Traversable;
 use Zend\Stdlib\SplStack;
+use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
 
 class PathStackResolver implements ResolverInterface
@@ -143,10 +144,11 @@ class PathStackResolver implements ResolverInterface
         }
 
         foreach ($this->getPaths() as $path) {
+
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {
-                return $file->getRealPath();
+                return new FileAsset($file->getRealPath());
             }
         }
 

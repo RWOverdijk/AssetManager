@@ -51,11 +51,9 @@ class Module implements
     public function onDispatch(EventInterface $event)
     {
         $response = $event->getResponse();
-
         if ($response->getStatusCode() !== 404) {
             return;
         }
-
         $request        = $event->getRequest();
         $serviceManager = $event->getApplication()->getServiceManager();
         $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');

@@ -4,10 +4,18 @@ namespace AssetManager\Resolver;
 
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
+use Assetic\Asset\AssetCollection;
+use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
+use AssetManager\Resolver\ResolverInterface;
 
-class CollectionResolver implements ResolverInterface
+class CollectionResolver implements ResolverInterface, AggregateResolverAwareInterface
 {
+    /**
+     * @var ResolverInterface
+     */
+    protected $aggregateResolver;
+
     /**
      * @var array
      */
@@ -28,7 +36,7 @@ class CollectionResolver implements ResolverInterface
     /**
      * Set (overwrite) collections
      *
-     * Collectionss should be arrays or Traversable objects with name => path pairs
+     * Collections should be arrays or Traversable objects with name => path pairs
      *
      * @param  array|Traversable                  $collections
      * @throws Exception\InvalidArgumentException
@@ -51,6 +59,26 @@ class CollectionResolver implements ResolverInterface
     }
 
     /**
+     * Set the aggregate resolver.
+     *
+     * @param ResolverInterface $aggregateResolver
+     */
+    public function setAggregateResolver(ResolverInterface $aggregateResolver)
+    {
+        $this->aggregateResolver = $aggregateResolver;
+    }
+
+    /**
+     * Get the aggregate resolver.
+     *
+     * @return ResolverInterface
+     */
+    public function getAggregateResolver()
+    {
+        return $this->aggregateResolver;
+    }
+
+    /**
      * Retrieve the collections
      *
      * @return array
@@ -65,6 +93,39 @@ class CollectionResolver implements ResolverInterface
      */
     public function resolve($name)
     {
-        return isset($this->collections[$name]) ? $this->collections[$name] : null;
+        if (!isset($this->collections[$name])) {
+            return null;
+        }
+
+        if (!is_array($this->collections[$name])) {
+            throw new Exception\RuntimeException(
+                "Collection with name $name is not an an array."
+            );
+        }
+
+        $collection = new AssetCollection;
+
+        foreach ($this->collections[$name] as $asset) {
+
+            if (!is_string($asset)) {
+                throw new Exception\RuntimeException(
+                    'Asset should be of type string. got ' . gettype($asset)
+                );
+            }
+
+            if (null === ($res = $this->getAggregateResolver()->resolve($asset))) {
+                throw new Exception\RuntimeException("Asset '$asset' could not be found.");
+            }
+
+            if (!$res instanceof AssetInterface) {
+                throw new Exception\RuntimeException(
+                    "Asset '$asset' does not implement Assetic\Asset\AssetInterface."
+                );
+            }
+
+            $collection->add($res);
+        }
+
+        return $collection;
     }
 }

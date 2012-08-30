@@ -2,12 +2,12 @@
 
 namespace AssetManager\Service;
 
+use Assetic\Asset\AssetInterface;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Exception;
 use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
 use Zend\Http\PhpEnvironment\Request;
-use finfo;
 
 /**
  * @category    AssetManager
@@ -91,7 +91,7 @@ class AssetManager
     {
         $asset = $this->getAsset();
 
-        if (!is_string($asset)) {
+        if (!$asset instanceof AssetInterface) {
             throw new Exception\RuntimeException(
                 'Unable to set asset on response. Request has not been resolved to an asset.'
             );
@@ -128,79 +128,11 @@ class AssetManager
     }
 
     /**
-    * Load the resolved asset.
-    */
-    protected function loadAsset()
-    {
-        if (is_string($this->resolved)) {
-            $this->addAsset($this->resolved);
-        } elseif (is_array($this->resolved)) {
-            $this->loadAssets($this->resolved);
-        }
-    }
-
-    /**
-    * (recursively) load assets.
-    *
-    * @param array $assets The assets to load.
-    * @throws Exception\RuntimeException
-    */
-    protected function loadAssets(array $assets)
-    {
-        foreach ($assets as $asset) {
-            if (!is_string($asset)) {
-                throw new Exception\RuntimeException(
-                    'Asset should be of type string. got ' . gettype($asset)
-                );
-            }
-
-            if (null === ($res = $this->getResolver()->resolve($asset))) {
-                throw new Exception\RuntimeException("Asset '$asset' could not be found.");
-            }
-
-            if (is_array($res)) {
-                $this->loadAssets($res);
-                continue;
-            }
-
-            $this->addAsset($res);
-        }
-    }
-
-    /**
-    * Add an asset to the asset string.
-    *
-    * @param string $file
-    * @throws Exception\RuntimeException
-    */
-    protected function addAsset($file)
-    {
-        if (!file_exists($file)) {
-            throw new Exception\RuntimeException(
-                "File '$file' could not be found."
-            );
-        }
-
-        $finfo      = new finfo(FILEINFO_MIME);
-        $mimeType   = $finfo->file($file);
-
-        if ($this->mimeType !== null && $this->mimeType !== $mimeType) {
-            throw new Exception\RuntimeException(
-                'Trying to combine files with different mimetypes.'
-            );
-        }
-
-        $this->mimeType = $mimeType;
-
-        $this->asset .= file_get_contents($file);
-    }
-
-    /**
      * Resolve the request to a file.
      *
      * @param RequestInterface $request
      *
-     * @return mixed false when not found, resolved value when succesfully resolved.
+     * @return mixed false when not found, AssetInterface when resolved.
      */
     protected function resolve(RequestInterface $request)
     {
@@ -213,11 +145,12 @@ class AssetManager
         $uri        = $request->getUri();
         $fullPath   = $uri->getPath();
         $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
+        $asset      = $this->getResolver()->resolve($path);
 
-        if (null === ($file = $this->getResolver()->resolve($path))) {
+        if (!$asset instanceof AssetInterface) {
             return false;
         }
 
-        return $file;
+        return $asset;
     }
 }
