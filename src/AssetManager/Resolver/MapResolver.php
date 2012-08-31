@@ -4,14 +4,23 @@ namespace AssetManager\Resolver;
 
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
+use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
+use AssetManager\Service\MimeResolver;
 
-class MapResolver implements ResolverInterface
+class MapResolver implements ResolverInterface, MimeResolverAwareInterface
 {
     /**
      * @var array
      */
     protected $map = array();
+
+    /**
+    * The mime resolver.
+    *
+    * @var MimeResolver
+    */
+    protected $mimeResolver;
 
     /**
      * Constructor
@@ -23,6 +32,26 @@ class MapResolver implements ResolverInterface
     public function __construct($map = array())
     {
         $this->setMap($map);
+    }
+
+    /**
+    * Set the mime resolver
+    *
+    * @param MimeResolver $resolver
+    */
+    public function setMimeResolver(MimeResolver $resolver)
+    {
+        $this->mimeResolver = $resolver;
+    }
+
+    /**
+    * Get the mime resolver
+    *
+    * @return MimeResolver
+    */
+    public function getMimeResolver()
+    {
+        return $this->mimeResolver;
     }
 
     /**
@@ -65,6 +94,15 @@ class MapResolver implements ResolverInterface
      */
     public function resolve($name)
     {
-        return isset($this->map[$name]) ? $this->map[$name] : null;
+        if (!isset($this->map[$name])) {
+            return null;
+        }
+
+        $file            = $this->map[$name];
+        $mimeType        = $this->getMimeResolver()->getMimeType($file);
+        $asset           = new FileAsset($file);
+        $asset->mimetype = $mimeType;
+
+        return $asset;
     }
 }

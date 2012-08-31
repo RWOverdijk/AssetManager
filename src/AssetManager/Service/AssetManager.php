@@ -3,8 +3,13 @@
 namespace AssetManager\Service;
 
 use Assetic\Asset\AssetInterface;
-use AssetManager\Resolver\ResolverInterface;
+use Assetic\Asset\AssetCache;
+use Assetic\Cache\CacheInterface;
+use Assetic\Filter;
+use Assetic\Cache;
+use AssetManager\Cache\FilePathCache;
 use AssetManager\Exception;
+use AssetManager\Resolver\ResolverInterface;
 use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
 use Zend\Http\PhpEnvironment\Request;
@@ -12,7 +17,7 @@ use Zend\Http\PhpEnvironment\Request;
 /**
  * @category    AssetManager
  * @package     AssetManager
- * @todo        Add filtering and caching.
+ * @todo        add Caching
  */
 class AssetManager
 {
@@ -22,27 +27,42 @@ class AssetManager
     protected $resolver;
 
     /**
-     * Null when not resolved, false when not found, string when succesfully resolved.
-     * @var mixed $resolved
-     */
-    protected $resolved;
-
-    /**
-     * @var string The asset loaded from file(s).
+     * @var AssetInterface The asset
      */
     protected $asset;
 
     /**
-    * @var string The mime type of the asset loaded.
-    */
-    protected $mimeType;
+     * @var string The requested path
+     */
+    protected $path;
 
     /**
-     * @param ResolverInterface $resolver
+     * @var array The asset_manager configuration
      */
-    public function __construct($resolver)
+    protected $config;
+
+    /**
+     * Constructor
+     *
+     * @param ResolverInterface $resolver
+     * @param array             $config
+     *
+     * @return AssetManager
+     */
+    public function __construct($resolver, $config = array())
     {
         $this->setResolver($resolver);
+        $this->setConfig($config);
+    }
+
+    /**
+     * Set the config
+     *
+     * @param array $config
+     */
+    protected function setConfig(array $config)
+    {
+        $this->config = $config;
     }
 
     /**
@@ -53,31 +73,139 @@ class AssetManager
      */
     public function resolvesToAsset(RequestInterface $request)
     {
-        if (null === $this->resolved) {
-            $this->resolved = $this->resolve($request);
+        if (null === $this->asset) {
+            $this->asset = $this->resolve($request);
         }
 
-        return (bool)$this->resolved;
+        return (bool)$this->asset;
     }
 
     /**
-    * Set the resolver to use in the asset manager
-    *
-    * @param ResolverInterface $resolver
-    */
+     * Set the resolver to use in the asset manager
+     *
+     * @param ResolverInterface $resolver
+     */
     public function setResolver(ResolverInterface $resolver)
     {
         $this->resolver = $resolver;
     }
 
     /**
-    * Get the resolver used by the asset manager
-    *
-    * @return ResolverInterface
-    */
+     * Get the resolver used by the asset manager
+     *
+     * @return ResolverInterface
+     */
     public function getResolver()
     {
         return $this->resolver;
+    }
+
+    /**
+     * See if there are filters for the asset, and if so, set them on the asset.
+     *
+     * @return void
+     */
+    protected function setFilters()
+    {
+        if (empty($this->config['filters'][$this->path])) {
+            return;
+        }
+
+        foreach ($this->config['filters'][$this->path] as $filter) {
+
+            if ($filter['filter'] instanceof Filter\FilterInterface) {
+                $filterInstance = $filter['filter'];
+                $this->asset->ensureFilter($filterInstance);
+                continue;
+            }
+
+            $filterClass = $filter['filter'];
+
+            if (!is_subclass_of($filterClass, 'Assetic\Filter\FilterInterface', true)) {
+                $filterClass .= (substr($filterClass, -6) === 'Filter') ? '' : 'Filter';
+                $filterClass  = 'Assetic\Filter\\' . $filterClass;
+            }
+
+            if (!class_exists($filterClass)) {
+                throw new Exception\RuntimeException(
+                    'No filter found for ' . $filter['filter']
+                );
+            }
+
+            $filterInstance = new $filterClass;
+
+            if (!$filterInstance instanceof Filter\FilterInterface) {
+                throw new Exception\RuntimeException(
+                    'supplied filter is not an instance of Assetic\Filter\FilterInterface.'
+                );
+            }
+
+            $this->asset->ensureFilter($filterInstance);
+        }
+    }
+
+    /**
+     * Set the cache (if any) on the asset
+     *
+     * @return void
+     */
+    protected function setCache()
+    {
+        $caching;
+
+        if (!empty($this->config['caching'][$this->path])) {
+            $caching =  $this->config['caching'][$this->path];
+        } elseif (!empty($this->config['caching']['default'])) {
+            $caching = $this->config['caching']['default'];
+        }
+
+        if (null === $caching) {
+            return;
+        }
+
+        if (empty($caching['cache'])) {
+            return;
+        }
+
+        $cacher;
+
+        if (is_callable($caching['cache'])) {
+            $cacher = $caching['cache']();
+        } else {
+            $filename   = $this->path;
+            $factories  = array(
+                'FilesystemCache' => function($options) {
+                    $dir = $options['dir'];
+                    return new Cache\FilesystemCache($dir);
+                },
+                'ApcCache' => function($options) {
+                    return new Cache\ApcCache();
+                },
+                'FilePathCache' => function($options) use ($filename) {
+                    $dir = $options['dir'];
+                    return new FilePathCache($dir, $filename);
+                }
+            );
+
+            $type = $caching['cache'];
+            $type .= (substr($type, -5) === 'Cache') ? '' : 'Cache';
+
+            if (!isset($factories[$type])) {
+                return;
+            }
+
+            $options = empty($caching['options']) ? array() : $caching['options'];
+
+            $cacher = $factories[$type]($options);
+        }
+
+        if (!$cacher instanceof CacheInterface) {
+            return;
+        }
+
+        $assetCache = new AssetCache($this->asset, $cacher);
+        $assetCache->mimetype = $this->asset->mimetype;
+        $this->asset = $assetCache;
     }
 
     /**
@@ -89,42 +217,37 @@ class AssetManager
      */
     public function setAssetOnResponse(ResponseInterface $response)
     {
-        $asset = $this->getAsset();
-
-        if (!$asset instanceof AssetInterface) {
+        if (!$this->asset instanceof AssetInterface) {
             throw new Exception\RuntimeException(
                 'Unable to set asset on response. Request has not been resolved to an asset.'
             );
         }
 
+        // @todo: Create Asset wrapper for mimetypes
+        if (empty($this->asset->mimetype)) {
+            throw new Exception\RuntimeException('Expected property "mimetype" on asset.');
+        }
+
+        $this->setFilters();
+        $this->setCache();
+
+        $mimeType       = $this->asset->mimetype;
+        $assetContents  = $this->asset->dump();
+
         if (function_exists('mb_strlen')) {
-            $fileSize = mb_strlen($asset, '8bit');
+            $contentLength = mb_strlen($assetContents, '8bit');
         } else {
-            $fileSize = strlen($asset);
+            $contentLength = strlen($assetContents);
         }
 
         $response->getHeaders()
                  ->addHeaderLine('Content-Transfer-Encoding', 'binary')
-                 ->addHeaderLine('Content-Type', $this->mimeType)
-                 ->addHeaderLine('Content-Length', $fileSize);
+                 ->addHeaderLine('Content-Type', $mimeType)
+                 ->addHeaderLine('Content-Length', $contentLength);
 
-        $response->setContent($asset);
+        $response->setContent($assetContents);
 
         return $response;
-    }
-
-    /**
-    * Get the asset value.
-    *
-    * @return string The asset.
-    */
-    public function getAsset()
-    {
-        if (null === $this->asset) {
-            $this->loadAsset();
-        }
-
-        return $this->asset;
     }
 
     /**
@@ -145,6 +268,7 @@ class AssetManager
         $uri        = $request->getUri();
         $fullPath   = $uri->getPath();
         $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
+        $this->path = $path;
         $asset      = $this->getResolver()->resolve($path);
 
         if (!$asset instanceof AssetInterface) {

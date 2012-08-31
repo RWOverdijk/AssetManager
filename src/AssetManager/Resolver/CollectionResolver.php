@@ -9,7 +9,9 @@ use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
 
-class CollectionResolver implements ResolverInterface, AggregateResolverAwareInterface
+class CollectionResolver implements
+    ResolverInterface,
+    AggregateResolverAwareInterface
 {
     /**
      * @var ResolverInterface
@@ -104,9 +106,9 @@ class CollectionResolver implements ResolverInterface, AggregateResolverAwareInt
         }
 
         $collection = new AssetCollection;
+        $mimeType;
 
         foreach ($this->collections[$name] as $asset) {
-
             if (!is_string($asset)) {
                 throw new Exception\RuntimeException(
                     'Asset should be of type string. got ' . gettype($asset)
@@ -119,12 +121,25 @@ class CollectionResolver implements ResolverInterface, AggregateResolverAwareInt
 
             if (!$res instanceof AssetInterface) {
                 throw new Exception\RuntimeException(
-                    "Asset '$asset' does not implement Assetic\Asset\AssetInterface."
+                    "Asset '$asset' does not implement Assetic\\Asset\\AssetInterface."
                 );
             }
 
+            if (null !== $mimeType && $res->mimetype !== $mimeType) {
+                throw new Exception\RuntimeException(sprintf(
+                    'Asset "%s" from collection "%s" doesn\'t have the expected mime-type "%s".',
+                    $asset,
+                    $name,
+                    $mimeType
+                ));
+            }
+
+            $mimeType = $res->mimetype;
+
             $collection->add($res);
         }
+
+        $collection->mimetype = $mimeType;
 
         return $collection;
     }

@@ -6,6 +6,7 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use AssetManager\Resolver\AggregateResolver;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
+use AssetManager\Resolver\MimeResolverAwareInterface;
 
 /**
  * Factory class for AssetManagerService
@@ -15,6 +16,7 @@ use AssetManager\Resolver\AggregateResolverAwareInterface;
  */
 class AggregateResolverServiceFactory implements FactoryInterface
 {
+
     /**
      * {@inheritDoc}
      *
@@ -22,9 +24,10 @@ class AggregateResolverServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config   = $serviceLocator->get('Config');
-        $config   = isset($config['asset_manager']) ? $config['asset_manager'] : array();
-        $resolver = new AggregateResolver();
+        $config         = $serviceLocator->get('Config');
+        $config         = isset($config['asset_manager']) ? $config['asset_manager'] : array();
+        $resolver       = new AggregateResolver();
+        $mimeResolver   = $serviceLocator->get('mime_resolver');
 
         if (empty($config['resolvers'])) {
             return $resolver;
@@ -36,6 +39,10 @@ class AggregateResolverServiceFactory implements FactoryInterface
 
             if ($resolverService instanceof AggregateResolverAwareInterface) {
                 $resolverService->setAggregateResolver($resolver);
+            }
+
+            if ($resolverService instanceof MimeResolverAwareInterface) {
+                $resolverService->setMimeResolver($serviceLocator->get('mime_resolver'));
             }
 
             $resolver->attach($resolverService, $priority);

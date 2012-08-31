@@ -8,19 +8,17 @@ return array(
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
             'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
-
+        ),
+        'invokables' => array(
+            'mime_resolver' => 'AssetManager\Service\MimeResolver',
         ),
     ),
-
     'asset_manager' => array(
-        //'map' => array('my.js' => '/path/to/file.js'),
-        //'paths' => array('/my/module/assets', '/my/other/directory/public'),
-
         'resolvers' => array(
             'AssetManager\Resolver\MapResolver'                 => 2000,
             'AssetManager\Resolver\CollectionResolver'          => 1500,
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 1000,
-            'AssetManager\Resolver\PathStackResolver'           => 1,
+            'AssetManager\Resolver\PathStackResolver'           => 500,
         ),
     ),
 );

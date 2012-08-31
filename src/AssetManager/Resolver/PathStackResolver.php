@@ -7,8 +7,9 @@ use Traversable;
 use Zend\Stdlib\SplStack;
 use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
+use AssetManager\Service\MimeResolver;
 
-class PathStackResolver implements ResolverInterface
+class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
 {
     /**
      * @var SplStack
@@ -23,11 +24,38 @@ class PathStackResolver implements ResolverInterface
     protected $lfiProtectionOn = true;
 
     /**
+    * The mime resolver.
+    *
+    * @var MimeResolver
+    */
+    protected $mimeResolver;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->paths = new SplStack();
+    }
+
+    /**
+    * Set the mime resolver
+    *
+    * @param MimeResolver $resolver
+    */
+    public function setMimeResolver(MimeResolver $resolver)
+    {
+        $this->mimeResolver = $resolver;
+    }
+
+    /**
+    * Get the mime resolver
+    *
+    * @return MimeResolver
+    */
+    public function getMimeResolver()
+    {
+        return $this->mimeResolver;
     }
 
     /**
@@ -148,7 +176,13 @@ class PathStackResolver implements ResolverInterface
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {
-                return new FileAsset($file->getRealPath());
+                $filePath = $file->getRealPath();
+                $mimeType = $this->getMimeResolver()->getMimeType($filePath);
+                $asset    = new FileAsset($filePath);
+
+                $asset->mimetype = $mimeType;
+
+                return $asset;
             }
         }
 

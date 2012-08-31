@@ -1,0 +1,102 @@
+<?php
+
+namespace AssetManager\Cache;
+
+use Assetic\Cache\CacheInterface;
+
+/**
+ * A file path cache. Same as FilesystemCache, except for the fact that this will create the
+ * directories recursively, in stead of using a hash.
+ */
+class FilePathCache implements CacheInterface
+{
+    /**
+     * @var string Holds the cache directory.
+     */
+    protected $dir;
+
+    /**
+     * @var string The filename we'll be caching for.
+     */
+    protected $filename;
+
+    /**
+     * @var string Holds the cachedFile string
+     */
+    protected $cachedFile;
+
+    /**
+     * Constructor
+     *
+     * @param string $dir       The directory to cache in
+     * @param string $filename  The filename we'll be caching for.
+     */
+    public function __construct($dir, $filename)
+    {
+        $this->dir      = $dir;
+        $this->filename = $filename;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function has($key)
+    {
+        return file_exists($this->cachedFile());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function get($key)
+    {
+        $path = $this->cachedFile();
+
+        if (!file_exists($path)) {
+            throw new \RuntimeException('There is no cached value for ' . $this->filename);
+        }
+
+        return file_get_contents($path);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function set($key, $value)
+    {
+        $cacheDir = dirname($this->cachedFile());
+
+        if (!is_dir($cacheDir) && false === mkdir($cacheDir, 0777, true)) {
+            throw new \RuntimeException('Unable to create directory ' . $cacheDir);
+        }
+
+        if (false === file_put_contents($this->cachedFile(), $value)) {
+            throw new \RuntimeException('Unable to write file ' . $this->cachedFile());
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function remove($key)
+    {
+        $path = $this->dir.'/'.$key;
+
+        if (file_exists($path) && false === unlink($path)) {
+            throw new \RuntimeException('Unable to remove file '.$path);
+        }
+    }
+
+    /**
+     * Get the path-to-file.
+     * @return string Cache path
+     */
+    protected function cachedFile()
+    {
+        if (null === $this->cachedFile) {
+            $this->cachedFile = rtrim($this->dir, '/') . '/' . ltrim($this->filename, '/');
+        }
+
+        return $this->cachedFile;
+    }
+}

@@ -40,7 +40,6 @@ class AggregateResolver implements ResolverInterface
     {
         foreach ($this->queue as $resolver) {
             $resource = $resolver->resolve($name);
-
             if (null !== $resource) {
                 return $resource;
             }
