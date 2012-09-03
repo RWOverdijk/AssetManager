@@ -83,8 +83,5 @@ return array(
 ## Todo
 The task list is still long, but the module provides useful functionality for dev environments for now.
 
- * Caching of responses to avoid having the PHP interpreter and the application being bootstrapped each time
  * Compiling assets into a publicly available directory via CLI command
- * Integration with [Assetic](https://github.com/kriswallsmith/assetic) to provide not only links to asset files, but
-   also to asset collections and respective filters/caching settings
  * Routing (to allow obtaining paths to compiled/cached assets)
