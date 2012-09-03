@@ -4,6 +4,10 @@ namespace AssetManager\Resolver;
 
 use Zend\Stdlib\PriorityQueue;
 
+/**
+ * The aggregate resolver consists out of a multitude of
+ * resolvers defined by the ResolverInterface.
+ */
 class AggregateResolver implements ResolverInterface
 {
     /**

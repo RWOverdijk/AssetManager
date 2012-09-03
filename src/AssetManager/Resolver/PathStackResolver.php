@@ -9,6 +9,9 @@ use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 
+/**
+ * This resolver allows you to resolve from a stack of paths.
+ */
 class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
 {
     /**
@@ -24,10 +27,10 @@ class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
     protected $lfiProtectionOn = true;
 
     /**
-    * The mime resolver.
-    *
-    * @var MimeResolver
-    */
+     * The mime resolver.
+     *
+     * @var MimeResolver
+     */
     protected $mimeResolver;
 
     /**
@@ -39,20 +42,20 @@ class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
     }
 
     /**
-    * Set the mime resolver
-    *
-    * @param MimeResolver $resolver
-    */
+     * Set the mime resolver
+     *
+     * @param MimeResolver $resolver
+     */
     public function setMimeResolver(MimeResolver $resolver)
     {
         $this->mimeResolver = $resolver;
     }
 
     /**
-    * Get the mime resolver
-    *
-    * @return MimeResolver
-    */
+     * Get the mime resolver
+     *
+     * @return MimeResolver
+     */
     public function getMimeResolver()
     {
         return $this->mimeResolver;

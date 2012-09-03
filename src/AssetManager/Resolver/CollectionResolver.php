@@ -9,6 +9,11 @@ use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
 
+/**
+ * This resolver allows the resolving of collections.
+ * Collections are strictly checked by mime-type,
+ * and added to an AssetCollection when all checks passed.
+ */
 class CollectionResolver implements
     ResolverInterface,
     AggregateResolverAwareInterface
@@ -19,7 +24,7 @@ class CollectionResolver implements
     protected $aggregateResolver;
 
     /**
-     * @var array
+     * @var array the collections
      */
     protected $collections = array();
 
@@ -106,7 +111,7 @@ class CollectionResolver implements
         }
 
         $collection = new AssetCollection;
-        $mimeType;
+        $mimeType = null;
 
         foreach ($this->collections[$name] as $asset) {
             if (!is_string($asset)) {

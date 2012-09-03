@@ -44,10 +44,10 @@ class Module implements
     }
 
     /**
-    * Callback method for dispatch and dispatch.error events.
-    *
-    * @param EventInterface $event
-    */
+     * Callback method for dispatch and dispatch.error events.
+     *
+     * @param EventInterface $event
+     */
     public function onDispatch(EventInterface $event)
     {
         $response = $event->getResponse();
@@ -74,7 +74,9 @@ class Module implements
     {
         // Attach for dispatch, and dispatch.error (with low priority to make sure statusCode gets set)
         $eventManager = $event->getTarget()->getEventManager();
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH, array($this, 'onDispatch'), -9999999);
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onDispatch'), -9999999);
+        $callback     = array($this, 'onDispatch');
+        $priority     = -9999999;
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH,       $callback, $priority);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $callback, $priority);
     }
 }

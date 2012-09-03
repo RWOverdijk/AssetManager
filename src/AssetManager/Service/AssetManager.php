@@ -17,7 +17,6 @@ use Zend\Http\PhpEnvironment\Request;
 /**
  * @category    AssetManager
  * @package     AssetManager
- * @todo        add Caching
  */
 class AssetManager
 {
@@ -154,7 +153,7 @@ class AssetManager
         $caching;
 
         if (!empty($this->config['caching'][$this->path])) {
-            $caching =  $this->config['caching'][$this->path];
+            $caching = $this->config['caching'][$this->path];
         } elseif (!empty($this->config['caching']['default'])) {
             $caching = $this->config['caching']['default'];
         }
@@ -167,7 +166,7 @@ class AssetManager
             return;
         }
 
-        $cacher;
+        $cacher = null;
 
         if (is_callable($caching['cache'])) {
             $cacher = $caching['cache']();
@@ -203,9 +202,9 @@ class AssetManager
             return;
         }
 
-        $assetCache = new AssetCache($this->asset, $cacher);
-        $assetCache->mimetype = $this->asset->mimetype;
-        $this->asset = $assetCache;
+        $assetCache             = new AssetCache($this->asset, $cacher);
+        $assetCache->mimetype   = $this->asset->mimetype;
+        $this->asset            = $assetCache;
     }
 
     /**

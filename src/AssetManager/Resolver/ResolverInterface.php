@@ -7,8 +7,9 @@ interface ResolverInterface
     /**
      * Resolve an Asset
      *
-     * @param  string                   $path
-     * @return ResolverInterface|null   the absolute path to the file
+     * @param  string  $path    The path to resolve.
+     *
+     * @return Assetic\Asset\AssetInterface|null   Asset instance when found, null when not.w
      */
     public function resolve($path);
 }

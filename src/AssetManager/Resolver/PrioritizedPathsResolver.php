@@ -10,6 +10,9 @@ use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 
+/**
+ * This resolver allows you to resolve from a multitude of prioritized paths.
+ */
 class PrioritizedPathsResolver implements ResolverInterface, MimeResolverAwareInterface
 {
     /**
@@ -25,36 +28,36 @@ class PrioritizedPathsResolver implements ResolverInterface, MimeResolverAwareIn
     protected $lfiProtectionOn = true;
 
     /**
-    * The mime resolver.
-    *
-    * @var MimeResolver
-    */
+     * The mime resolver.
+     *
+     * @var MimeResolver
+     */
     protected $mimeResolver;
 
     /**
-    * Constructor.
-    * Construct object and set a new PriorityQueue.
-    */
+     * Constructor.
+     * Construct object and set a new PriorityQueue.
+     */
     public function __construct()
     {
         $this->paths = new PriorityQueue();
     }
 
     /**
-    * Set the mime resolver
-    *
-    * @param MimeResolver $resolver
-    */
+     * Set the mime resolver
+     *
+     * @param MimeResolver $resolver
+     */
     public function setMimeResolver(MimeResolver $resolver)
     {
         $this->mimeResolver = $resolver;
     }
 
     /**
-    * Get the mime resolver
-    *
-    * @return MimeResolver
-    */
+     * Get the mime resolver
+     *
+     * @return MimeResolver
+     */
     public function getMimeResolver()
     {
         return $this->mimeResolver;
@@ -104,11 +107,11 @@ class PrioritizedPathsResolver implements ResolverInterface, MimeResolverAwareIn
     }
 
      /**
-     * Add many paths to the stack at once
-     *
-     * @param  array|Traversable $paths
-     * @return self
-     */
+      * Add many paths to the stack at once
+      *
+      * @param  array|Traversable $paths
+      * @return self
+      */
     public function addPaths($paths)
     {
         foreach ($paths as $path) {

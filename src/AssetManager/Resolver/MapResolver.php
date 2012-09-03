@@ -8,6 +8,9 @@ use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 
+/**
+ * This resolver allows you to resolve using a 1 on 1 mapping to a file.
+ */
 class MapResolver implements ResolverInterface, MimeResolverAwareInterface
 {
     /**
@@ -16,10 +19,8 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
     protected $map = array();
 
     /**
-    * The mime resolver.
-    *
-    * @var MimeResolver
-    */
+     * @var MimeResolver The mime resolver.
+     */
     protected $mimeResolver;
 
     /**
@@ -35,20 +36,20 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
     }
 
     /**
-    * Set the mime resolver
-    *
-    * @param MimeResolver $resolver
-    */
+     * Set the mime resolver
+     *
+     * @param MimeResolver $resolver
+     */
     public function setMimeResolver(MimeResolver $resolver)
     {
         $this->mimeResolver = $resolver;
     }
 
     /**
-    * Get the mime resolver
-    *
-    * @return MimeResolver
-    */
+     * Get the mime resolver
+     *
+     * @return MimeResolver
+     */
     public function getMimeResolver()
     {
         return $this->mimeResolver;
