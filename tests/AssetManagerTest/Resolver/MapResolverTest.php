@@ -59,12 +59,6 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /*public function testSetMimeResolver()
-    {
-        $resolver = new MapResolver;
-
-    }*/
-
     public function testGetMimeResolver()
     {
         $resolver = new MapResolver;

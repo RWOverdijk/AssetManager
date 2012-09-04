@@ -81,7 +81,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     {
         $resolver        = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $assetManager    = new AssetManager($resolver);
-
+        var_dump($assetManager->getAsset());die();
         $this->assertNull($assetManager->getAsset());
     }
 

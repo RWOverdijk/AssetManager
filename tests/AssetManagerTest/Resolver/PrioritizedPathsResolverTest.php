@@ -3,7 +3,10 @@
 namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
+use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Resolver\PrioritizedPathsResolver;
+use AssetManager\Resolver\MimeResolverAwareInterface;
+use AssetManager\Service\MimeResolver;
 
 class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
 {
@@ -14,6 +17,8 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
 
         $resolver->addPaths(array(__DIR__));
         $this->assertEquals(array(__DIR__ . DIRECTORY_SEPARATOR), $resolver->getPaths()->toArray());
+        $this->assertTrue($resolver instanceof MimeResolverAwareInterface);
+        $this->assertTrue($resolver instanceof ResolverInterface);
     }
 
     public function testClearPaths()
@@ -174,10 +179,11 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
 
     public function testResolve()
     {
-        $resolver = new PrioritizedPathsResolver();
+        $resolver = new PrioritizedPathsResolver;
+        $resolver->setMimeResolver(new MimeResolver);
         $resolver->addPath(__DIR__);
 
-        $this->assertEquals(__FILE__, $resolver->resolve(basename(__FILE__)));
+        $this->assertEquals(file_get_contents(__FILE__), $resolver->resolve(basename(__FILE__))->dump());
         $this->assertNull($resolver->resolve('i-do-not-exist.php'));
     }
 
@@ -192,6 +198,7 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
     public function testLfiProtection()
     {
         $resolver = new PrioritizedPathsResolver();
+        $resolver->setMimeResolver(new MimeResolver);
         // should be on by default
         $this->assertTrue($resolver->isLfiProtectionOn());
         $resolver->addPath(__DIR__);
@@ -203,10 +210,10 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
         $resolver->setLfiProtection(false);
 
         $this->assertSame(
-            __FILE__,
+            file_get_contents(__FILE__),
             $resolver->resolve(
                 '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . basename(__FILE__)
-            )
+            )->dump()
         );
     }
 

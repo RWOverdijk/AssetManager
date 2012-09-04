@@ -4,7 +4,9 @@ namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
 use ArrayObject;
+use Assetic\Asset;
 use AssetManager\Resolver\PathStackResolver;
+use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
 
@@ -20,9 +22,35 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
 
         $resolver->clearPaths();
         $this->assertEquals(array(), $resolver->getPaths()->toArray());
+
+        $this->assertTrue($resolver instanceof MimeResolverAwareInterface);
+        $this->assertTrue($resolver instanceof ResolverInterface);
+        $mimeResolver = new MimeResolver;
+
+        $resolver->setMimeResolver($mimeResolver);
+
+        $this->assertEquals($mimeResolver, $resolver->getMimeResolver());
     }
 
-   public function testSetPaths()
+    /**
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testSetMimeResolverFailObject()
+    {
+        $resolver = new PathStackResolver();
+        $resolver->setMimeResolver(new \stdClass());
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testSetMimeResolverFailString()
+    {
+        $resolver = new PathStackResolver();
+        $resolver->setMimeResolver('invalid');
+    }
+
+    public function testSetPaths()
     {
         $resolver = new PathStackResolver();
         $resolver->setPaths(array('dir2', 'dir1'));
@@ -50,17 +78,20 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
     public function testResolve()
     {
         $resolver = new PathStackResolver();
-        $this->assertTrue($resolver instanceOf PathStackResolver);
+        $this->assertTrue($resolver instanceof PathStackResolver);
 
         $mimeResolver = new MimeResolver;
         $resolver->setMimeResolver($mimeResolver);
 
         $resolver->addPath(__DIR__);
 
-        $this->assertEquals(__FILE__, $resolver->resolve(basename(__FILE__)));
+        $fileAsset = new Asset\FileAsset(__FILE__);
+        $fileAsset->mimetype = $mimeResolver->getMimeType(__FILE__);
+
+        $this->assertEquals($fileAsset, $resolver->resolve(basename(__FILE__)));
         $this->assertNull($resolver->resolve('i-do-not-exist.php'));
     }
-/*
+
     public function testWillNotResolveDirectories()
     {
         $resolver = new PathStackResolver();
@@ -71,7 +102,10 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
 
     public function testLfiProtection()
     {
-        $resolver = new PathStackResolver();
+        $mimeResolver = new MimeResolver;
+        $resolver = new PathStackResolver;
+        $resolver->setMimeResolver($mimeResolver);
+
         // should be on by default
         $this->assertTrue($resolver->isLfiProtectionOn());
         $resolver->addPath(__DIR__);
@@ -82,11 +116,11 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
 
         $resolver->setLfiProtection(false);
 
-        $this->assertSame(
-            __FILE__,
+        $this->assertEquals(
+            file_get_contents(__FILE__),
             $resolver->resolve(
                 '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . basename(__FILE__)
-            )
+            )->dump()
         );
     }
 
@@ -96,5 +130,5 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
         $resolver->addPath(null);
     }
-*/
+
 }

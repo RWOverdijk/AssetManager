@@ -4,6 +4,7 @@ namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AggregateResolverServiceFactory;
+use AssetManager\Service\MimeResolver;
 use Zend\ServiceManager\ServiceManager;
 
 class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
@@ -12,6 +13,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('Config', array());
+        $serviceManager->setService('mime_resolver', new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
@@ -40,6 +42,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             ->with('test-path')
             ->will($this->returnValue('test-resolved-path'));
         $serviceManager->setService('mocked_resolver', $mockedResolver);
+        $serviceManager->setService('mime_resolver', new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
@@ -68,6 +71,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             ->method('resolve')
             ->with('test-path')
             ->will($this->returnValue('test-resolved-path'));
+        $serviceManager->setService('mime_resolver', new MimeResolver);
         $serviceManager->setService('mocked_resolver_1', $mockedResolver1);
 
         $mockedResolver2 = $this->getMock('AssetManager\Resolver\ResolverInterface');
@@ -104,6 +108,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             ->with('test-path')
             ->will($this->returnValue(null));
         $serviceManager->setService('mocked_resolver_1', $mockedResolver1);
+        $serviceManager->setService('mime_resolver', new MimeResolver);
 
         $mockedResolver2 = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $mockedResolver2
