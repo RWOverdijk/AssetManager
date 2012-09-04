@@ -111,15 +111,15 @@ class CollectionResolver implements
         }
 
         $collection = new AssetCollection;
-        $mimeType = null;
+        $mimeType   = null;
 
         foreach ($this->collections[$name] as $asset) {
+
             if (!is_string($asset)) {
                 throw new Exception\RuntimeException(
                     'Asset should be of type string. got ' . gettype($asset)
                 );
             }
-
             if (null === ($res = $this->getAggregateResolver()->resolve($asset))) {
                 throw new Exception\RuntimeException("Asset '$asset' could not be found.");
             }

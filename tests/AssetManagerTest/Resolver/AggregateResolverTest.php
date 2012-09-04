@@ -4,12 +4,15 @@ namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
 use AssetManager\Resolver\AggregateResolver;
+use AssetManager\Resolver\ResolverInterface;
 
 class AggregateResolverTest extends PHPUnit_Framework_TestCase
 {
     public function testResolve()
     {
         $resolver = new AggregateResolver();
+
+        $this->assertTrue($resolver instanceof ResolverInterface);
 
         $lowPriority = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $lowPriority

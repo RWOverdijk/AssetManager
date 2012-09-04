@@ -80,10 +80,10 @@ class FilePathCache implements CacheInterface
      */
     public function remove($key)
     {
-        $path = $this->dir.'/'.$key;
+        $path = $this->cachedFile();
 
         if (file_exists($path) && false === unlink($path)) {
-            throw new \RuntimeException('Unable to remove file '.$path);
+            throw new \RuntimeException('Unable to remove file ' . $path);
         }
     }
 
