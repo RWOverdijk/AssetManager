@@ -166,6 +166,7 @@ class AssetManager
             $cacher = $caching['cache']($this->path);
         } else {
             $filename   = $this->path;
+            // @codeCoverageIgnoreStart
             $factories  = array(
                 'FilesystemCache' => function($options) {
                     $dir = $options['dir'];
@@ -179,6 +180,7 @@ class AssetManager
                     return new FilePathCache($dir, $filename);
                 }
             );
+            // @codeCoverageIgnoreEnd
 
             $type = $caching['cache'];
             $type .= (substr($type, -5) === 'Cache') ? '' : 'Cache';
@@ -227,11 +229,13 @@ class AssetManager
         $mimeType       = $this->asset->mimetype;
         $assetContents  = $this->asset->dump();
 
+        // @codeCoverageIgnoreStart
         if (function_exists('mb_strlen')) {
             $contentLength = mb_strlen($assetContents, '8bit');
         } else {
             $contentLength = strlen($assetContents);
         }
+        // @codeCoverageIgnoreEnd
 
         $response->getHeaders()
                  ->addHeaderLine('Content-Transfer-Encoding', 'binary')
