@@ -2,6 +2,8 @@
 
 namespace AssetManagerTest\Service;
 
+require_once __DIR__ . '/../../_files/InterfaceTestResolver.php';
+
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AggregateResolverServiceFactory;
 use AssetManager\Service\MimeResolver;
@@ -122,5 +124,31 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $resolver = $factory->createService($serviceManager);
 
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
+    }
+
+    public function testWillSetForInterfaces()
+    {
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'Config',
+            array(
+                'asset_manager' => array(
+                    'resolvers' => array(
+                        'mocked_resolver' => 1000,
+                    ),
+                ),
+            )
+        );
+
+        $interfaceTestResolver = new \InterfaceTestResolver;
+
+        $serviceManager->setService('mime_resolver', new MimeResolver);
+        $serviceManager->setService('mocked_resolver', $interfaceTestResolver);
+
+        $factory = new AggregateResolverServiceFactory();
+        $resolver = $factory->createService($serviceManager);
+
+        $this->assertTrue($interfaceTestResolver->calledMime);
+        $this->assertTrue($interfaceTestResolver->calledAggregate);
     }
 }

@@ -66,11 +66,11 @@ class FilePathCache implements CacheInterface
     {
         $cacheDir = dirname($this->cachedFile());
 
-        if (!is_dir($cacheDir) && false === mkdir($cacheDir, 0777, true)) {
+        if (!is_dir($cacheDir) && false === @mkdir($cacheDir, 0777, true)) {
             throw new \RuntimeException('Unable to create directory ' . $cacheDir);
         }
 
-        if (false === file_put_contents($this->cachedFile(), $value)) {
+        if (false === @file_put_contents($this->cachedFile(), $value)) {
             throw new \RuntimeException('Unable to write file ' . $this->cachedFile());
         }
     }
@@ -82,9 +82,11 @@ class FilePathCache implements CacheInterface
     {
         $path = $this->cachedFile();
 
-        if (file_exists($path) && false === unlink($path)) {
+        if (file_exists($path) && false === @unlink($path)) {
             throw new \RuntimeException('Unable to remove file ' . $path);
         }
+
+        return true;
     }
 
     /**

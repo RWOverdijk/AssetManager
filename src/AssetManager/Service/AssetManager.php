@@ -133,12 +133,6 @@ class AssetManager
 
             $filterInstance = new $filterClass;
 
-            if (!$filterInstance instanceof Filter\FilterInterface) {
-                throw new Exception\RuntimeException(
-                    'supplied filter is not an instance of Assetic\Filter\FilterInterface.'
-                );
-            }
-
             $this->asset->ensureFilter($filterInstance);
         }
     }
@@ -169,7 +163,7 @@ class AssetManager
         $cacher = null;
 
         if (is_callable($caching['cache'])) {
-            $cacher = $caching['cache']();
+            $cacher = $caching['cache']($this->path);
         } else {
             $filename   = $this->path;
             $factories  = array(

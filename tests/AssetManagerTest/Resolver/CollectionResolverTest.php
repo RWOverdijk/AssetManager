@@ -136,7 +136,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException AssetManager\Exception\InvalidArgumentException
      */
-    public function setCollectionFailsObject()
+    public function testSetCollectionFailsObject()
     {
         $resolver = new CollectionResolver;
 
@@ -146,7 +146,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException AssetManager\Exception\InvalidArgumentException
      */
-    public function setCollectionFailsString()
+    public function testSetCollectionFailsString()
     {
         $resolver = new CollectionResolver;
 

@@ -52,6 +52,9 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(file_get_contents(__FILE__), $cache->get('bacon'));
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
     public function testSetMayNotWriteFile()
     {
         $time = time();
@@ -61,14 +64,12 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
         mkdir($base.'readonly', 0400, true);
 
         $cache = new FilePathCache($base.'readonly', 'bacon.'.$time.'.hammertime');
-        try {
-            $cache->set('bacon', $sentence);
-        } catch (\Exception $e) {
-            $error = "file_put_contents({$base}readonly/bacon.$time.hammertime): failed to open stream: Permission denied";
-            $this->assertEquals($e->getMessage(), $error);
-        }
+        $cache->set('bacon', $sentence);
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
     public function testSetMayNotWriteDir()
     {
         $time = time()+1;
@@ -78,13 +79,8 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
 
         $cache = new FilePathCache($base.'readonly', 'bacon.'.$time.'.hammertime');
 
-        try {
-            $cache->set('bacon', $sentence);
+        $cache->set('bacon', $sentence);
 
-        } catch (\Exception $e) {
-            $error = "mkdir(): Permission denied";
-            $this->assertEquals($e->getMessage(), $error);
-        }
     }
 
     public function testSetSuccess()
@@ -98,6 +94,9 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($sentence, file_get_contents($base.'bacon.'.$time));
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
     public function testRemoveFails()
     {
         $time       = time()+2;
@@ -106,11 +105,19 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
         $path       = $base.'bacon.'.$time;
         $cache      = new FilePathCache('/dev', 'null');
 
-        try {
-            $cache->remove('bacon');
-        } catch (\Exception $e) {
-            $this->assertEquals($e->getMessage(), 'unlink(/dev/null): Permission denied');
-        }
+        $cache->remove('bacon');
+    }
+
+    public function testRemoveSuccess()
+    {
+        $time       = time();
+        $sentence   = 'I am, what I am. Cached data, please don\'t hate, for we are all equals. Except you, you\'re a dick.';
+        $base       = '/tmp/_cachetest.' . $time . '/';
+        $cache      = new FilePathCache($base, 'bacon.'.$time);
+
+        $cache->set('bacon', $sentence);
+
+        $this->assertTrue($cache->remove('bacon'));
     }
 
     public function testCachedFile()

@@ -74,6 +74,28 @@ return array(
                 ),
             ),
         ),
+
+        'filters' => array(
+            'js/d.js' => array(
+                array(
+                    // Note: You will need to require the classes used for the filters yourself.
+                    'filter' => 'JSMin',
+                ),
+            ),
+        ),
+
+        'caching' => array(
+            'default' => array(
+                'cache'     => 'FilePath',
+                'options' => array(
+                    'dir' => 'cache'
+                ),
+            ),
+
+            'js/d.js' => array(
+                'cache'     => 'Apc',
+            ),
+        ),
     ),
 );
 ```
@@ -85,3 +107,5 @@ The task list is still long, but the module provides useful functionality for de
 
  * Compiling assets into a publicly available directory via CLI command
  * Routing (to allow obtaining paths to compiled/cached assets)
+ * Allowing mime-type filters and caching
+ * Allowing mime-type fallback checks (verify by sequences)
