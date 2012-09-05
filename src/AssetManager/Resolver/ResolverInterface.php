@@ -5,10 +5,11 @@ namespace AssetManager\Resolver;
 interface ResolverInterface
 {
     /**
-     * Resolve a given file name to a system path
+     * Resolve an Asset
      *
-     * @param  string      $path
-     * @return string|null the absolute path to the file
+     * @param  string  $path    The path to resolve.
+     *
+     * @return Assetic\Asset\AssetInterface|null   Asset instance when found, null when not.
      */
     public function resolve($path);
 }
