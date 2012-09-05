@@ -144,7 +144,7 @@ class AssetManager
      */
     protected function setCache()
     {
-        $caching;
+        $caching = null;
 
         if (!empty($this->config['caching'][$this->path])) {
             $caching = $this->config['caching'][$this->path];
