@@ -2,7 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
-require_once __DIR__ . '/../../_files/JSMin.php';
+require_once __DIR__ . '/../../_files/JSMin.inc';
 require_once __DIR__ . '/../../_files/CustomFilter.php';
 require_once __DIR__ . '/../../_files/BrokenFilter.php';
 
