@@ -53,7 +53,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \PHPUnit_Framework_Error_Warning
      */
     public function testSetMayNotWriteFile()
     {
@@ -68,7 +68,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \PHPUnit_Framework_Error_Warning
      */
     public function testSetMayNotWriteDir()
     {
@@ -95,7 +95,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \PHPUnit_Framework_Error_Warning
      */
     public function testRemoveFails()
     {
