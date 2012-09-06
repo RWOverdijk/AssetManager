@@ -164,7 +164,6 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
             ->with('say')
             ->will($this->returnValue('world'));
 
-
         $resolver->setAggregateResolver($aggregateResolver);
 
         $this->assertEquals('world', $resolver->getAggregateResolver()->resolve('say'));

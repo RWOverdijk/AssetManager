@@ -2,7 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
-require_once __DIR__ . '/../../_files/JSMin.php';
+require_once __DIR__ . '/../../_files/JSMin.inc';
 require_once __DIR__ . '/../../_files/CustomFilter.php';
 require_once __DIR__ . '/../../_files/BrokenFilter.php';
 
@@ -67,9 +67,9 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     public function testInvalidRequest()
     {
         $mimeResolver    = new MimeResolver;
-        $asset           = new Asset\FileAsset($resolveTo);
-        $asset->mimetype = $mimeResolver->getMimeType($resolveTo);
-        $resolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $asset           = new Asset\FileAsset(__FILE__);
+        $asset->mimetype = $mimeResolver->getMimeType(__FILE__);
+        $resolver        = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $resolver
             ->expects($this->any())
             ->method('resolve')
@@ -413,7 +413,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAssetOnResponseNoMimeType()
     {
-        $asset           = new Asset\FileAsset($resolveTo);
+        $asset           = new Asset\FileAsset(__FILE__);
         $resolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $resolver
             ->expects($this->once())
