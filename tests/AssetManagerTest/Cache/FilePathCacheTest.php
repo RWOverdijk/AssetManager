@@ -57,6 +57,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
      */
     public function testSetMayNotWriteFile()
     {
+        restore_error_handler(); // Previous test fails, so doesn't unset.
         $time = time();
         $sentence = 'I am, what I am. Cached data, please don\'t hate, for we are all equals. Except you, you\'re a dick.';
         $base = '/tmp/_cachetest.' . $time . '/';
@@ -72,6 +73,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
      */
     public function testSetMayNotWriteDir()
     {
+        restore_error_handler(); // Previous test fails, so doesn't unset.
         $time = time()+1;
         $sentence = 'I am, what I am. Cached data, please don\'t hate, for we are all equals. Except you, you\'re a dick.';
         $base = '/tmp/_cachetest.' . $time . '/';

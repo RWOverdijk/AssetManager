@@ -22,6 +22,7 @@ use Zend\Loader\StandardAutoloader;
 
 chdir(__DIR__);
 
+
 $previousDir = '.';
 
 while (!file_exists('config/application.config.php')) {
