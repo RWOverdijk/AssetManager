@@ -5,9 +5,14 @@ namespace AssetManager\Resolver;
 use SplFileInfo;
 use Traversable;
 use Zend\Stdlib\SplStack;
+use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
+use AssetManager\Service\MimeResolver;
 
-class PathStackResolver implements ResolverInterface
+/**
+ * This resolver allows you to resolve from a stack of paths.
+ */
+class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
 {
     /**
      * @var SplStack
@@ -22,11 +27,38 @@ class PathStackResolver implements ResolverInterface
     protected $lfiProtectionOn = true;
 
     /**
+     * The mime resolver.
+     *
+     * @var MimeResolver
+     */
+    protected $mimeResolver;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->paths = new SplStack();
+    }
+
+    /**
+     * Set the mime resolver
+     *
+     * @param MimeResolver $resolver
+     */
+    public function setMimeResolver(MimeResolver $resolver)
+    {
+        $this->mimeResolver = $resolver;
+    }
+
+    /**
+     * Get the mime resolver
+     *
+     * @return MimeResolver
+     */
+    public function getMimeResolver()
+    {
+        return $this->mimeResolver;
     }
 
     /**
@@ -143,10 +175,17 @@ class PathStackResolver implements ResolverInterface
         }
 
         foreach ($this->getPaths() as $path) {
+
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {
-                return $file->getRealPath();
+                $filePath = $file->getRealPath();
+                $mimeType = $this->getMimeResolver()->getMimeType($filePath);
+                $asset    = new FileAsset($filePath);
+
+                $asset->mimetype = $mimeType;
+
+                return $asset;
             }
         }
 

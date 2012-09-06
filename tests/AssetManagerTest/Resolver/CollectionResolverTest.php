@@ -5,73 +5,333 @@ namespace AssetManagerTest\Service;
 use PHPUnit_Framework_TestCase;
 use ArrayObject;
 use AssetManager\Resolver\CollectionResolver;
+use AssetManager\Resolver\AggregateResolverAwareInterface;
+use Assetic\Asset;
+use AssetManager\Service\AssetManager;
+use AssetManager\Resolver\ResolverInterface;
+
+class CollectionsIterable implements \IteratorAggregate
+{
+    public $collectionName1 = array(
+        'collection 1.1',
+        'collection 1.2',
+        'collection 1.3',
+        'collection 1.4',
+    );
+
+    public $collectionName2 = array(
+        'collection 2.1',
+        'collection 2.2',
+        'collection 2.3',
+        'collection 2.4',
+    );
+
+    public $collectionName3 = array(
+        'collection 3.1',
+        'collection 3.2',
+        'collection 3.3',
+        'collection 3.4',
+    );
+
+    public function getIterator()
+    {
+        return new \ArrayIterator($this);
+    }
+}
 
 class CollectionsResolverTest extends PHPUnit_Framework_TestCase
 {
+    public function getResolverMock()
+    {
+        $resolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('bacon')
+            ->will($this->returnValue(new Asset\FileAsset(__FILE__)));
+
+        return $resolver;
+    }
+
     public function testConstructor()
     {
-        $resolver = new CollectionResolver();
+        $resolver = new CollectionResolver;
+
+        // Check if valid instance
+        $this->assertTrue($resolver instanceof ResolverInterface);
+        $this->assertTrue($resolver instanceof AggregateResolverAwareInterface);
+
+        // Check if set to empty (null argument)
         $this->assertSame(array(), $resolver->getCollections());
+
         $resolver = new CollectionResolver(array(
-            'key1' => 'value1',
-            'key2' => 'value2',
+            'key1' => array('value1'),
+            'key2' => array('value2'),
         ));
         $this->assertSame(
             array(
-                'key1' => 'value1',
-                'key2' => 'value2',
+                'key1' => array('value1'),
+                'key2' => array('value2'),
             ),
             $resolver->getCollections()
         );
-    }
-
-    public function testCollections()
-    {
-        $resolver = new CollectionResolver(array(
-            'key1' => 'value1',
-            'key2' => 'value2',
-        ));
-
-        $this->assertSame('value1', $resolver->resolve('key1'));
-        $this->assertSame('value2', $resolver->resolve('key2'));
-        $this->assertNull($resolver->resolve('key3'));
     }
 
     public function testSetCollections()
     {
-        $resolver = new CollectionResolver();
-        $resolver->setCollections(array(
-            'key1' => 'value1',
-            'key2' => 'value2',
+        $resolver = new CollectionResolver;
+        $collArr  = array(
+            'key1' => array('value1'),
+            'key2' => array('value2'),
+        );
+
+        $resolver->setCollections($collArr);
+
+        $this->assertSame(
+            $collArr,
+            $resolver->getCollections()
+        );
+
+        // overwrite
+        $collArr = array(
+            'key3' => array('value3'),
+            'key4' => array('value4'),
+        );
+
+        $resolver->setCollections($collArr);
+
+        $this->assertSame(
+            $collArr,
+            $resolver->getCollections()
+        );
+
+
+        // Overwrite with traversable
+        $resolver->setCollections(new CollectionsIterable);
+
+        $collArr = array(
+            'collectionName1' => array(
+                'collection 1.1',
+                'collection 1.2',
+                'collection 1.3',
+                'collection 1.4',
+            ),
+            'collectionName2' => array(
+                'collection 2.1',
+                'collection 2.2',
+                'collection 2.3',
+                'collection 2.4',
+            ),
+            'collectionName3' => array(
+                'collection 3.1',
+                'collection 3.2',
+                'collection 3.3',
+                'collection 3.4',
+            )
+        );
+
+        $this->assertEquals($collArr, $resolver->getCollections());
+    }
+
+    /**
+     * @expectedException AssetManager\Exception\InvalidArgumentException
+     */
+    public function testSetCollectionFailsObject()
+    {
+        $resolver = new CollectionResolver;
+
+        $resolver->setCollections(new \stdClass);
+    }
+
+    /**
+     * @expectedException AssetManager\Exception\InvalidArgumentException
+     */
+    public function testSetCollectionFailsString()
+    {
+        $resolver = new CollectionResolver;
+
+        $resolver->setCollections('invalid');
+    }
+
+    public function testSetGetAggregateResolver()
+    {
+        $resolver = new CollectionResolver;
+
+        $aggregateResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $aggregateResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('say')
+            ->will($this->returnValue('world'));
+
+
+        $resolver->setAggregateResolver($aggregateResolver);
+
+        $this->assertEquals('world', $resolver->getAggregateResolver()->resolve('say'));
+    }
+
+    /**
+     * @expectedException PHPUnit_Framework_Error
+     */
+    public function testSetAggregateResolverFails()
+    {
+        $resolver = new CollectionResolver;
+
+        $resolver->setAggregateResolver(new \stdClass);
+    }
+
+    /*
+     * Resolve
+     */
+    public function testResolveNoArgsEqualsNull()
+    {
+        $resolver = new CollectionResolver;
+
+        $this->assertNull($resolver->resolve('bacon'));
+    }
+
+    /**
+     * @expectedException AssetManager\Exception\RuntimeException
+     */
+    public function testResolveNonArrayCollectionException()
+    {
+        $resolver = new CollectionResolver(array('bacon'=>'bueno'));
+
+        $resolver->resolve('bacon');
+    }
+
+    /**
+     * @expectedException AssetManager\Exception\RuntimeException
+     */
+    public function testCollectionItemNonString()
+    {
+        $resolver = new CollectionResolver(array(
+            'bacon' => array(new \stdClass())
         ));
 
-        $this->assertSame(
-            array(
-                'key1' => 'value1',
-                'key2' => 'value2',
-            ),
-            $resolver->getCollections()
-        );
-
-        $resolver->setCollections(new ArrayObject(array(
-            'key3' => 'value3',
-            'key4' => 'value4',
-        )));
-
-        $this->assertSame(
-            array(
-                'key3' => 'value3',
-                'key4' => 'value4',
-            ),
-            $resolver->getCollections()
-        );
+        $resolver->resolve('bacon');
 
     }
 
-    public function testWillRefuseInvalidCollections()
+    /**
+     * @expectedException AssetManager\Exception\RuntimeException
+     */
+    public function testCouldNotResolve()
     {
-        $resolver = new CollectionResolver();
-        $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
-        $resolver->setCollections('invalid');
+        $aggregateResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $aggregateResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('bacon')
+            ->will($this->returnValue(null));
+
+        $resolver = new CollectionResolver(array(
+            'myCollection' => array('bacon')
+        ));
+
+        $resolver->setAggregateResolver($aggregateResolver);
+
+        $resolver->resolve('myCollection');
+    }
+
+    /**
+     * @expectedException AssetManager\Exception\RuntimeException
+     */
+    public function testResolvesToNonAsset()
+    {
+        $aggregateResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $aggregateResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('bacon')
+            ->will($this->returnValue('invalid'));
+
+        $resolver = new CollectionResolver(array(
+            'myCollection' => array('bacon')
+        ));
+
+        $resolver->setAggregateResolver($aggregateResolver);
+
+        $resolver->resolve('myCollection');
+    }
+
+    /**
+     * @expectedException AssetManager\Exception\RuntimeException
+     */
+    public function testMimeTypesDontMatch()
+    {
+        $callbackInvocationCount = 0;
+        $callback = function() use (&$callbackInvocationCount) {
+
+            $asset1 = new Asset\StringAsset('bacon');
+            $asset2 = new Asset\StringAsset('eggs');
+            $asset3 = new Asset\StringAsset('Mud');
+
+            $asset1->mimetype = 'text/plain';
+            $asset2->mimetype = 'text/css';
+            $asset3->mimetype = 'text/javascript';
+
+            $callbackInvocationCount += 1;
+            $assetName = "asset$callbackInvocationCount";
+            return $$assetName;
+        };
+
+        $aggregateResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $aggregateResolver
+            ->expects($this->exactly(2))
+            ->method('resolve')
+            ->will($this->returnCallback($callback));
+
+        $resolver = new CollectionResolver(array(
+            'myCollection' => array(
+                'bacon',
+                'eggs',
+                'mud',
+            )
+        ));
+
+        $resolver->setAggregateResolver($aggregateResolver);
+
+        $resolver->resolve('myCollection');
+    }
+
+    public function testSuccessResolve()
+    {
+        $callbackInvocationCount = 0;
+        $callback = function() use (&$callbackInvocationCount) {
+
+            $asset1 = new Asset\StringAsset('bacon');
+            $asset2 = new Asset\StringAsset('eggs');
+            $asset3 = new Asset\StringAsset('Mud');
+
+            $asset1->mimetype = 'text/plain';
+            $asset2->mimetype = 'text/plain';
+            $asset3->mimetype = 'text/plain';
+
+            $callbackInvocationCount += 1;
+            $assetName = "asset$callbackInvocationCount";
+            return $$assetName;
+        };
+
+        $aggregateResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $aggregateResolver
+            ->expects($this->exactly(3))
+            ->method('resolve')
+            ->will($this->returnCallback($callback));
+
+        $resolver = new CollectionResolver(array(
+            'myCollection' => array(
+                'bacon',
+                'eggs',
+                'mud',
+            )
+        ));
+
+        $resolver->setAggregateResolver($aggregateResolver);
+
+        $collectionResolved = $resolver->resolve('myCollection');
+
+        $this->assertEquals($collectionResolved->mimetype, 'text/plain');
+        $this->assertTrue($collectionResolved instanceof Asset\AssetCollection);
     }
 }

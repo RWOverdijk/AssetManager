@@ -20,7 +20,13 @@ class AssetManagerServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $assetManager = new AssetManager($serviceLocator->get('AssetManager\Service\AggregateResolver'));
+        $config = $serviceLocator->get('Config');
+        $config = isset($config['asset_manager']) ? $config['asset_manager'] : array();
+
+        $assetManager = new AssetManager(
+            $serviceLocator->get('AssetManager\Service\AggregateResolver'),
+            $config
+        );
 
         return $assetManager;
     }

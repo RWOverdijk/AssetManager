@@ -8,9 +8,6 @@ use Zend\ServiceManager\ServiceManager;
 
 class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * Mainly to avoid regressions
-     */
     public function testCreateService()
     {
         $serviceManager = new ServiceManager();
@@ -18,6 +15,8 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
             'AssetManager\Service\AggregateResolver',
             $this->getMock('AssetManager\Resolver\ResolverInterface')
         );
+
+        $serviceManager->setService('Config', array());
 
         $factory = new AssetManagerServiceFactory();
         $this->assertInstanceOf('AssetManager\Service\AssetManager', $factory->createService($serviceManager));

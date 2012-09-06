@@ -6,9 +6,14 @@ use Traversable;
 use ArrayAccess;
 use SplFileInfo;
 use Zend\Stdlib\PriorityQueue;
+use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
+use AssetManager\Service\MimeResolver;
 
-class PrioritizedPathsResolver implements ResolverInterface
+/**
+ * This resolver allows you to resolve from a multitude of prioritized paths.
+ */
+class PrioritizedPathsResolver implements ResolverInterface, MimeResolverAwareInterface
 {
     /**
      * @var PriorityQueue|ResolverInterface[]
@@ -23,12 +28,39 @@ class PrioritizedPathsResolver implements ResolverInterface
     protected $lfiProtectionOn = true;
 
     /**
-    * Constructor.
-    * Construct object and set a new PriorityQueue.
-    */
+     * The mime resolver.
+     *
+     * @var MimeResolver
+     */
+    protected $mimeResolver;
+
+    /**
+     * Constructor.
+     * Construct object and set a new PriorityQueue.
+     */
     public function __construct()
     {
         $this->paths = new PriorityQueue();
+    }
+
+    /**
+     * Set the mime resolver
+     *
+     * @param MimeResolver $resolver
+     */
+    public function setMimeResolver(MimeResolver $resolver)
+    {
+        $this->mimeResolver = $resolver;
+    }
+
+    /**
+     * Get the mime resolver
+     *
+     * @return MimeResolver
+     */
+    public function getMimeResolver()
+    {
+        return $this->mimeResolver;
     }
 
     /**
@@ -75,11 +107,11 @@ class PrioritizedPathsResolver implements ResolverInterface
     }
 
      /**
-     * Add many paths to the stack at once
-     *
-     * @param  array|Traversable $paths
-     * @return self
-     */
+      * Add many paths to the stack at once
+      *
+      * @param  array|Traversable $paths
+      * @return self
+      */
     public function addPaths($paths)
     {
         foreach ($paths as $path) {
@@ -154,7 +186,13 @@ class PrioritizedPathsResolver implements ResolverInterface
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {
-                return $file->getRealPath();
+                $filePath = $file->getRealPath();
+                $mimeType = $this->getMimeResolver()->getMimeType($filePath);
+                $asset    = new FileAsset($filePath);
+
+                $asset->mimetype = $mimeType;
+
+                return $asset;
             }
         }
 
