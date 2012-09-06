@@ -409,12 +409,11 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error_Warning
+     * @expectedException AssetManager\Exception\RuntimeException
      */
     public function testSetAssetOnResponseNoMimeType()
     {
-        try{
-        $asset           = new Asset\FileAsset($resolveTo);
+        $asset           = new Asset\FileAsset(__FILE__);
         $resolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $resolver
             ->expects($this->once())
@@ -428,7 +427,6 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $response        = new Response();
 
         $response = $assetManager->setAssetOnResponse($response);
-        } catch(\Exception $e) {print($e->getMessage());}
     }
 
     public function testResponseHeadersForAsset()
