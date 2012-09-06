@@ -68,7 +68,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     {
         $mimeResolver    = new MimeResolver;
         $asset           = new Asset\FileAsset(__FILE__);
-        $asset->mimetype = $mimeResolver->getMimeType($resolveTo);
+        $asset->mimetype = $mimeResolver->getMimeType(__FILE__);
         $resolver        = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $resolver
             ->expects($this->any())
