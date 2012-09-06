@@ -67,9 +67,9 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     public function testInvalidRequest()
     {
         $mimeResolver    = new MimeResolver;
-        $asset           = new Asset\FileAsset($resolveTo);
+        $asset           = new Asset\FileAsset(__FILE__);
         $asset->mimetype = $mimeResolver->getMimeType($resolveTo);
-        $resolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $resolver        = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $resolver
             ->expects($this->any())
             ->method('resolve')
