@@ -10,9 +10,6 @@ assets and generally static files from your modules' directories as of your conf
 This allows you to avoid having to copy your files over to the `public/` directory, and makes usage of assets very
 similar to what already is possible with view scripts, which can be overridden by other modules.
 
-## BC-breaks
-This version has BC-breaks. All that has changed, is that now the resolver configurations (map, paths etc) must be wrapped in a `resolver_configs` array (see [Usage](#usage)).
-
 ## Installation
 
  1.  Add `"minimum-stability": "dev"` to your `composer.json`
@@ -20,12 +17,14 @@ This version has BC-breaks. All that has changed, is that now the resolver confi
 
 ```sh
 ./composer.phar require rwoverdijk/assetmanager
-#when asked for a version, type "dev-master"
+#when asked for a version, type "dev-master" or "1.*"
 ```
 
 ## Usage
 
-In your module's config, you can do the following:
+Take a look at the [wiki](https://github.com/RWOverdijk/AssetManager/wiki) for a quick start and more information.
+
+Sample module config:
 
 ```php
 <?php
@@ -103,9 +102,9 @@ return array(
 *Please be careful, since this module will serve every file as-is, including PHP code*
 
 ## Todo
-The task list is still long, but the module provides useful functionality for dev environments for now.
+The task list is still long, but the module provides useful functionality already.
 
  * Compiling assets into a publicly available directory via CLI command
  * Routing (to allow obtaining paths to compiled/cached assets)
- * Allowing mime-type filters and caching
+ * Allowing mime-type filters (as keys) and caching
  * Allowing mime-type fallback checks (verify by sequences)
