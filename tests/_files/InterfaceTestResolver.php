@@ -23,4 +23,8 @@ class InterfaceTestResolver implements
     {
         $this->calledMime = true;
     }
+
+    public function getMimeResolver() {
+        return $this->calledMime;
+    }
 }
