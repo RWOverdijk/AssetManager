@@ -222,6 +222,7 @@ class MimeResolver
         'kwd'      => 'application/x-kword',
         'kwt'      => 'application/x-kword',
         'latex'    => 'application/x-latex',
+        'less'     => 'text/css',
         'lha'      => 'application/x-lha',
         'lhs'      => 'text/x-literate-haskell',
         'lin'      => 'application/bbolin',
