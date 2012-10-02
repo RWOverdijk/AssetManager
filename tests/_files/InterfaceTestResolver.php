@@ -1,6 +1,7 @@
 <?php
 
 use AssetManager\Resolver;
+use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\MimeResolver;
 
 class InterfaceTestResolver implements
@@ -15,7 +16,12 @@ class InterfaceTestResolver implements
     {
     }
 
-    public function setAggregateResolver()
+    public function getAggregateResolver()
+    {
+
+    }
+
+    public function setAggregateResolver(ResolverInterface $resolver)
     {
         $this->calledAggregate = true;
     }

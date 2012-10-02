@@ -28,6 +28,8 @@ class AssetManagerServiceFactory implements FactoryInterface
             $config
         );
 
+        $assetManager->setMimeResolver($serviceLocator->get('mime_resolver'));
+
         return $assetManager;
     }
 }
