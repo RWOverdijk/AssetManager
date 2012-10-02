@@ -15,6 +15,11 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
             'AssetManager\Service\AggregateResolver',
             $this->getMock('AssetManager\Resolver\ResolverInterface')
         );
+        
+        $serviceManager->setService(
+            'mime_resolver',
+            $this->getMock('AssetManager\Service\MimeResolver')
+        );
 
         $serviceManager->setService('Config', array());
 

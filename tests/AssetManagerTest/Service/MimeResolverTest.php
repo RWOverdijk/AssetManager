@@ -8,11 +8,18 @@ class MimeResolverTest extends PHPUnit_Framework_TestCase
     public function testGetMimeType()
     {
         //Fails
-        $minetype = new MimeResolver();
-        $this->assertEquals('text/plain', $minetype->getMimeType('bacon.porn'));
+        $mimeResolver = new MimeResolver;
+        $this->assertEquals('text/plain', $mimeResolver->getMimeType('bacon.porn'));
 
         //Success
-        $minetype = new MimeResolver();
-        $this->assertEquals('application/x-httpd-php', $minetype->getMimeType(__FILE__));
+        $this->assertEquals('application/x-httpd-php', $mimeResolver->getMimeType(__FILE__));
+    }
+    
+    public function testGetExtension()
+    {
+        $mimeResolver = new MimeResolver;
+        
+        $this->assertEquals('css', $mimeResolver->getExtension('text/css'));
+        $this->assertEquals('js', $mimeResolver->getExtension('application/javascript'));
     }
 }

@@ -52,7 +52,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
 
         return $resolver;
     }
-
+    
     public function testConstructor()
     {
         $resolver = new CollectionResolver;
