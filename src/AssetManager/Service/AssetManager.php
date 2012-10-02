@@ -7,6 +7,8 @@ use Assetic\Asset\AssetCache;
 use Assetic\Cache\CacheInterface;
 use Assetic\Filter;
 use Assetic\Cache;
+use AssetManager\Resolver\MimeResolverAwareInterface;
+use AssetManager\Service\MimeResolver;
 use AssetManager\Cache\FilePathCache;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
@@ -18,12 +20,17 @@ use Zend\Http\PhpEnvironment\Request;
  * @category    AssetManager
  * @package     AssetManager
  */
-class AssetManager
+class AssetManager implements MimeResolverAwareInterface
 {
     /**
      * @var ResolverInterface
      */
     protected $resolver;
+
+    /**
+     * @var MimeResolver The mime resolver.
+     */
+    protected $mimeResolver;
 
     /**
      * @var AssetInterface The asset
@@ -106,11 +113,20 @@ class AssetManager
      */
     protected function setFilters()
     {
-        if (empty($this->config['filters'][$this->path])) {
-            return;
+        if (!empty($this->config['filters'][$this->path])) {
+            $filters = $this->config['filters'][$this->path];
+        } elseif (!empty($this->config['filters'][$this->asset->mimetype])) {
+            $filters = $this->config['filters'][$this->asset->mimetype];
+        } else {
+            $extension = $this->getMimeResolver()->getExtension($this->asset->mimetype);
+            if (!empty($this->config['filters'][$extension])) {
+                $filters = $this->config['filters'][$extension];
+            } else {
+                return;
+            }
         }
 
-        foreach ($this->config['filters'][$this->path] as $filter) {
+        foreach ($filters as $filter) {
 
             if ($filter['filter'] instanceof Filter\FilterInterface) {
                 $filterInstance = $filter['filter'];
@@ -273,5 +289,25 @@ class AssetManager
         }
 
         return $asset;
+    }
+
+    /**
+     * Set the mime resolver
+     *
+     * @param MimeResolver $resolver
+     */
+    public function setMimeResolver(MimeResolver $resolver)
+    {
+        $this->mimeResolver = $resolver;
+    }
+
+    /**
+     * Get the mime resolver
+     *
+     * @return MimeResolver
+     */
+    public function getMimeResolver()
+    {
+        return $this->mimeResolver;
     }
 }

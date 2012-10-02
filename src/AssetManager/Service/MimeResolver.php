@@ -537,8 +537,8 @@ class MimeResolver
     /**
      * Get the mime type from a file extension.
      *
-     * @param  string $filename
-     * @return string
+     * @param  string   $filename
+     * @return string   The mime type found. Falls back to text/plain.
      */
     public function getMimeType($filename)
     {
@@ -549,5 +549,18 @@ class MimeResolver
         }
 
         return 'text/plain';
+    }
+
+    /**
+     * Get the extension that matches given mimetype.
+     *
+     * @param   string  $mimetype
+     * @return  mixed   null when not found, extension (string) when found.
+     */
+    public function getExtension($mimetype)
+    {
+        $extension = array_search($mimetype, $this->mimeTypes);
+
+        return !$extension ? null : $extension;
     }
 }

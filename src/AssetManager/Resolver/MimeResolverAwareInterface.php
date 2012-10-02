@@ -4,9 +4,6 @@ namespace AssetManager\Resolver;
 
 use AssetManager\Service\MimeResolver;
 
-/**
- * Interface to be implemented in resolver, whenever it requires the mime-resolver.
- */
 interface MimeResolverAwareInterface
 {
     /**
