@@ -15,10 +15,10 @@ class InterfaceTestResolver implements
     public function resolve($path)
     {
     }
-    
+
     public function getAggregateResolver()
     {
-        
+
     }
 
     public function setAggregateResolver(ResolverInterface $resolver)

@@ -166,7 +166,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($minified, $response->getBody());
 
     }
-    
+
     public function testSetExtensionFilters()
     {
         $config = array(
@@ -192,7 +192,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($minified, $response->getBody());
 
     }
-    
+
     public function testSetMimeTypeFilters()
     {
         $config = array(

@@ -22,14 +22,14 @@ class AssetManagerServiceFactory implements FactoryInterface
     {
         $config = $serviceLocator->get('Config');
         $config = isset($config['asset_manager']) ? $config['asset_manager'] : array();
-        
+
         $assetManager = new AssetManager(
             $serviceLocator->get('AssetManager\Service\AggregateResolver'),
             $config
         );
 
         $assetManager->setMimeResolver($serviceLocator->get('mime_resolver'));
-        
+
         return $assetManager;
     }
 }

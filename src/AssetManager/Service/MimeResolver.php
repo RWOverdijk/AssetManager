@@ -23,7 +23,7 @@ class MimeResolver
         'alc'      => 'chemical/x-alchemy',
         'amr'      => 'audio/amr',
         'anx'      => 'application/annodex',
-        'apk'      => 'application/vnd.android.package-archive',
+        'apk'      => 'application/vnd.android.package -archive',
         'art'      => 'image/x-jg',
         'asc'      => 'text/plain',
         'asf'      => 'video/x-ms-asf',
@@ -550,17 +550,17 @@ class MimeResolver
 
         return 'text/plain';
     }
-    
+
     /**
      * Get the extension that matches given mimetype.
-     * 
+     *
      * @param   string  $mimetype
      * @return  mixed   null when not found, extension (string) when found.
      */
     public function getExtension($mimetype)
     {
         $extension = array_search($mimetype, $this->mimeTypes);
-        
+
         return !$extension ? null : $extension;
     }
 }
