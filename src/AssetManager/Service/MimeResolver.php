@@ -23,7 +23,7 @@ class MimeResolver
         'alc'      => 'chemical/x-alchemy',
         'amr'      => 'audio/amr',
         'anx'      => 'application/annodex',
-        'apk'      => 'application/vnd.android.package -archive',
+        'apk'      => 'application/vnd.android.package-archive',
         'art'      => 'image/x-jg',
         'asc'      => 'text/plain',
         'asf'      => 'video/x-ms-asf',
