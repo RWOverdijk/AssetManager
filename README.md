@@ -23,7 +23,7 @@ In a nutshell, this module allows you to package assets with your module working
 
 ## Usage
 
-Take a look at the [wiki](https://github.com/RWOverdijk/AssetManager/wiki) for a quick start and more information.
+Take a look at the **[wiki](https://github.com/RWOverdijk/AssetManager/wiki)** for a quick start and more information.
 A lot, if not all of the topics, have been covered in-dept there.
 
 **Sample module config:**
@@ -32,13 +32,7 @@ A lot, if not all of the topics, have been covered in-dept there.
 <?php
 return array(
     'asset_manager' => array(
-
         'resolver_configs' => array(
-
-            /* collections. Will serve content of all files for
-             * "js/d.js". Entries will be resolved individually.
-             * You are adviced to try and keep them in the "map" entry.
-             */
             'collections' => array(
                 'js/d.js' => array(
                     'js/a.js',
@@ -46,36 +40,10 @@ return array(
                     'js/c.js',
                 ),
             ),
-
-            // adding MyModule/public to the asset directories
-            'paths' => array(
-                __DIR__ . '/../public',
-            ),
-
-
-            // overrides (with high priority) used when we want to
-            // expose single particular files
             'map' => array(
                 'specific-path.css' => __DIR__ . '/some/particular/file.css',
             ),
-
-            // Used when you want to define a priority per path.
-            'prioritized_paths' => array(
-                array(
-                    'path'      => __DIR__ . '/../public_assets',
-                    'priority'  => 100,
-                ),
-                array(
-                    'path'      => __DIR__ . '/../fallback_assets',
-                    'priority'  => 50,
-                ),
-                array(
-                    'path'      => __DIR__ . '/../assets',
-                    'priority'  => 10,
-                ),
-            ),
         ),
-
         'filters' => array(
             'js/d.js' => array(
                 array(
@@ -84,17 +52,9 @@ return array(
                 ),
             ),
         ),
-
         'caching' => array(
-            'default' => array(
-                'cache'     => 'FilePath',
-                'options' => array(
-                    'dir' => 'cache'
-                ),
-            ),
-
             'js/d.js' => array(
-                'cache'     => 'Apc',
+                'cache'     => 'FilePath',
             ),
         ),
     ),
@@ -106,9 +66,9 @@ return array(
 ## Questions / support
 If you're having trouble with the asset manager there are a couple of resources that might be of help.
 * The [FAQ wiki page](https://github.com/RWOverdijk/AssetManager/wiki/FAQ), where you'll perhaps find your answer.
-* RWOverdijk at irc.freenode.net #zftalk.dev
-* Issue tracker. (Please try to not submit unrelated issues).
-* By email
+* [RWOverdijk at irc.freenode.net #zftalk.dev](http://webchat.freenode.net?channels=zftalk.dev%2Czftalk&uio=MTE9MTAz8d)
+* [Issue tracker](https://github.com/RWOverdijk/AssetManager/issues). (Please try to not submit unrelated issues).
+* By [mail](mailto:r.w.overdijk@gmail.com?Subject=AssetManager%20help)
 
 ## Todo
 The task list has been slimmed down a lot lately. However, there are still a couple of things that should be done.
