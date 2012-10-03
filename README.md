@@ -1,4 +1,4 @@
-# AssetManager
+# AssetManager 1.2.0
 By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius.github.com/)
 
 [![Build Status](https://secure.travis-ci.org/RWOverdijk/AssetManager.png?branch=master)](http://travis-ci.org/RWOverdijk/AssetManager)
@@ -6,9 +6,10 @@ By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius
 ## Introduction
 This module is intended for usage with a default directory structure of a
 [ZendSkeletonApplication](https://github.com/zendframework/ZendSkeletonApplication/). It provides functionality to load
-assets and generally static files from your modules' directories as of your configuration.
+assets and static files from your module directories through simple configuration.
 This allows you to avoid having to copy your files over to the `public/` directory, and makes usage of assets very
 similar to what already is possible with view scripts, which can be overridden by other modules.
+In a nutshell, this module allows you to package assets with your module working *out of the box*.
 
 ## Installation
 
@@ -17,14 +18,15 @@ similar to what already is possible with view scripts, which can be overridden b
 
 ```sh
 ./composer.phar require rwoverdijk/assetmanager
-#when asked for a version, type "dev-master" or "1.*"
+#when asked for a version, type "dev-master" or "1.*". The latter being prefered.
 ```
 
 ## Usage
 
 Take a look at the [wiki](https://github.com/RWOverdijk/AssetManager/wiki) for a quick start and more information.
+A lot, if not all of the topics, have been covered in-dept there.
 
-Sample module config:
+**Sample module config:**
 
 ```php
 <?php
@@ -99,12 +101,17 @@ return array(
 );
 ```
 
-*Please be careful, since this module will serve every file as-is, including PHP code*
+*Please be careful, since this module will serve every file as-is, including PHP code.*
+
+## Questions / support
+If you're having trouble with the asset manager there are a couple of resources that might be of help.
+* The [FAQ wiki page](https://github.com/RWOverdijk/AssetManager/wiki/FAQ), where you'll perhaps find your answer.
+* RWOverdijk at irc.freenode.net #zftalk.dev
+* Issue tracker. (Please try to not submit unrelated issues).
+* By email
 
 ## Todo
-The task list is still long, but the module provides useful functionality already.
+The task list has been slimmed down a lot lately. However, there are still a couple of things that should be done.
 
- * Compiling assets into a publicly available directory via CLI command
- * Routing (to allow obtaining paths to compiled/cached assets)
- * Allowing mime-type filters (as keys) and caching
- * Allowing mime-type fallback checks (verify by sequences)
+ * Warming up the cache
+ * Renewing the cache

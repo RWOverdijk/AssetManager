@@ -9,6 +9,8 @@ use Assetic\Filter;
 use Assetic\Cache;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
+use AssetManager\Service\AssetFilterManagerAwareInterface;
+use AssetManager\Service\AssetFilterManager;
 use AssetManager\Cache\FilePathCache;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
@@ -20,7 +22,7 @@ use Zend\Http\PhpEnvironment\Request;
  * @category    AssetManager
  * @package     AssetManager
  */
-class AssetManager implements MimeResolverAwareInterface
+class AssetManager implements MimeResolverAwareInterface, AssetFilterManagerAwareInterface
 {
     /**
      * @var ResolverInterface
@@ -31,6 +33,11 @@ class AssetManager implements MimeResolverAwareInterface
      * @var MimeResolver The mime resolver.
      */
     protected $mimeResolver;
+
+    /**
+     * @var AssetFilterManager The filterManager service.
+     */
+    protected $filterManager;
 
     /**
      * @var AssetInterface The asset
@@ -104,53 +111,6 @@ class AssetManager implements MimeResolverAwareInterface
     public function getResolver()
     {
         return $this->resolver;
-    }
-
-    /**
-     * See if there are filters for the asset, and if so, set them on the asset.
-     *
-     * @return void
-     */
-    protected function setFilters()
-    {
-        if (!empty($this->config['filters'][$this->path])) {
-            $filters = $this->config['filters'][$this->path];
-        } elseif (!empty($this->config['filters'][$this->asset->mimetype])) {
-            $filters = $this->config['filters'][$this->asset->mimetype];
-        } else {
-            $extension = $this->getMimeResolver()->getExtension($this->asset->mimetype);
-            if (!empty($this->config['filters'][$extension])) {
-                $filters = $this->config['filters'][$extension];
-            } else {
-                return;
-            }
-        }
-
-        foreach ($filters as $filter) {
-
-            if ($filter['filter'] instanceof Filter\FilterInterface) {
-                $filterInstance = $filter['filter'];
-                $this->asset->ensureFilter($filterInstance);
-                continue;
-            }
-
-            $filterClass = $filter['filter'];
-
-            if (!is_subclass_of($filterClass, 'Assetic\Filter\FilterInterface', true)) {
-                $filterClass .= (substr($filterClass, -6) === 'Filter') ? '' : 'Filter';
-                $filterClass  = 'Assetic\Filter\\' . $filterClass;
-            }
-
-            if (!class_exists($filterClass)) {
-                throw new Exception\RuntimeException(
-                    'No filter found for ' . $filter['filter']
-                );
-            }
-
-            $filterInstance = new $filterClass;
-
-            $this->asset->ensureFilter($filterInstance);
-        }
     }
 
     /**
@@ -239,7 +199,7 @@ class AssetManager implements MimeResolverAwareInterface
             throw new Exception\RuntimeException('Expected property "mimetype" on asset.');
         }
 
-        $this->setFilters();
+        $this->getAssetFilterManager()->setFilters($this->path, $this->asset);
         $this->setCache();
 
         $mimeType       = $this->asset->mimetype;
@@ -309,5 +269,25 @@ class AssetManager implements MimeResolverAwareInterface
     public function getMimeResolver()
     {
         return $this->mimeResolver;
+    }
+
+    /**
+     * Set the AssetFilterManager.
+     *
+     * @param AssetFilterManager $filterManager
+     */
+    public function setAssetFilterManager(AssetFilterManager $filterManager)
+    {
+        $this->filterManager = $filterManager;
+    }
+
+    /**
+     * Get the AssetFilterManager
+     *
+     * @return AssetFilterManager
+     */
+    public function getAssetFilterManager()
+    {
+        return $this->filterManager;
     }
 }
