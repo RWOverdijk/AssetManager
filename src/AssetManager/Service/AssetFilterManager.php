@@ -44,7 +44,7 @@ class AssetFilterManager implements MimeResolverAwareInterface
     /**
      * Set the filter configuration.
      *
-     * @param mixed $config
+     * @param array $config
      */
     protected function setConfig($config)
     {

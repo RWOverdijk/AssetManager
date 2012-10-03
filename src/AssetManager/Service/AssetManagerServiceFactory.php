@@ -30,6 +30,7 @@ class AssetManagerServiceFactory implements FactoryInterface
 
         $assetManager->setMimeResolver($serviceLocator->get('mime_resolver'));
         $assetManager->setAssetFilterManager($serviceLocator->get('AssetManager\Service\AssetFilterManager'));
+        $assetManager->setAssetCacheManager($serviceLocator->get('AssetManager\Service\AssetCacheManager'));
 
         return $assetManager;
     }

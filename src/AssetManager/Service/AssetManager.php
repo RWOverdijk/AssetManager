@@ -3,15 +3,10 @@
 namespace AssetManager\Service;
 
 use Assetic\Asset\AssetInterface;
-use Assetic\Asset\AssetCache;
-use Assetic\Cache\CacheInterface;
-use Assetic\Filter;
-use Assetic\Cache;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
-use AssetManager\Cache\FilePathCache;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
 use Zend\Stdlib\RequestInterface;
@@ -22,7 +17,10 @@ use Zend\Http\PhpEnvironment\Request;
  * @category    AssetManager
  * @package     AssetManager
  */
-class AssetManager implements MimeResolverAwareInterface, AssetFilterManagerAwareInterface
+class AssetManager implements
+    MimeResolverAwareInterface,
+    AssetFilterManagerAwareInterface,
+    AssetCacheManagerAwareInterface
 {
     /**
      * @var ResolverInterface
@@ -35,9 +33,14 @@ class AssetManager implements MimeResolverAwareInterface, AssetFilterManagerAwar
     protected $mimeResolver;
 
     /**
-     * @var AssetFilterManager The filterManager service.
+     * @var AssetFilterManager The AssetFilterManager service.
      */
     protected $filterManager;
+
+    /**
+     * @var AssetCacheManager The AssetCacheManager service.
+     */
+    protected $cacheManager;
 
     /**
      * @var AssetInterface The asset
@@ -114,72 +117,6 @@ class AssetManager implements MimeResolverAwareInterface, AssetFilterManagerAwar
     }
 
     /**
-     * Set the cache (if any) on the asset
-     *
-     * @return void
-     */
-    protected function setCache()
-    {
-        $caching = null;
-
-        if (!empty($this->config['caching'][$this->path])) {
-            $caching = $this->config['caching'][$this->path];
-        } elseif (!empty($this->config['caching']['default'])) {
-            $caching = $this->config['caching']['default'];
-        }
-
-        if (null === $caching) {
-            return;
-        }
-
-        if (empty($caching['cache'])) {
-            return;
-        }
-
-        $cacher = null;
-
-        if (is_callable($caching['cache'])) {
-            $cacher = $caching['cache']($this->path);
-        } else {
-            $filename   = $this->path;
-            // @codeCoverageIgnoreStart
-            $factories  = array(
-                'FilesystemCache' => function($options) {
-                    $dir = $options['dir'];
-                    return new Cache\FilesystemCache($dir);
-                },
-                'ApcCache' => function($options) {
-                    return new Cache\ApcCache();
-                },
-                'FilePathCache' => function($options) use ($filename) {
-                    $dir = $options['dir'];
-                    return new FilePathCache($dir, $filename);
-                }
-            );
-            // @codeCoverageIgnoreEnd
-
-            $type = $caching['cache'];
-            $type .= (substr($type, -5) === 'Cache') ? '' : 'Cache';
-
-            if (!isset($factories[$type])) {
-                return;
-            }
-
-            $options = empty($caching['options']) ? array() : $caching['options'];
-
-            $cacher = $factories[$type]($options);
-        }
-
-        if (!$cacher instanceof CacheInterface) {
-            return;
-        }
-
-        $assetCache             = new AssetCache($this->asset, $cacher);
-        $assetCache->mimetype   = $this->asset->mimetype;
-        $this->asset            = $assetCache;
-    }
-
-    /**
      * Set the asset on the response, including headers and content.
      *
      * @param    ResponseInterface $response
@@ -200,8 +137,8 @@ class AssetManager implements MimeResolverAwareInterface, AssetFilterManagerAwar
         }
 
         $this->getAssetFilterManager()->setFilters($this->path, $this->asset);
-        $this->setCache();
 
+        $this->asset    = $this->getAssetCacheManager()->setCache($this->path, $this->asset);
         $mimeType       = $this->asset->mimetype;
         $assetContents  = $this->asset->dump();
 
@@ -214,9 +151,9 @@ class AssetManager implements MimeResolverAwareInterface, AssetFilterManagerAwar
         // @codeCoverageIgnoreEnd
 
         $response->getHeaders()
-                 ->addHeaderLine('Content-Transfer-Encoding', 'binary')
-                 ->addHeaderLine('Content-Type', $mimeType)
-                 ->addHeaderLine('Content-Length', $contentLength);
+                 ->addHeaderLine('Content-Transfer-Encoding',   'binary')
+                 ->addHeaderLine('Content-Type',                $mimeType)
+                 ->addHeaderLine('Content-Length',              $contentLength);
 
         $response->setContent($assetContents);
 
@@ -289,5 +226,25 @@ class AssetManager implements MimeResolverAwareInterface, AssetFilterManagerAwar
     public function getAssetFilterManager()
     {
         return $this->filterManager;
+    }
+
+    /**
+     * Set the AssetCacheManager.
+     *
+     * @param AssetCacheManager $filterManager
+     */
+    public function setAssetCacheManager(AssetCacheManager $cacheManager)
+    {
+        $this->cacheManager = $cacheManager;
+    }
+
+    /**
+     * Get the AssetCacheManager
+     *
+     * @return AssetCacheManager
+     */
+    public function getAssetCacheManager()
+    {
+        return $this->cacheManager;
     }
 }
