@@ -67,7 +67,9 @@ class FilePathCache implements CacheInterface
         $cacheDir = dirname($this->cachedFile());
 
         set_error_handler(function($errno, $errstr) {
-            throw new \RuntimeException($errstr);
+            if ($errstr !== 'mkdir(): File exists') {
+                throw new \RuntimeException($errstr);
+            }
         });
 
         if (!is_dir($cacheDir)) {

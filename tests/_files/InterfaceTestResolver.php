@@ -3,12 +3,15 @@
 use AssetManager\Resolver;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\MimeResolver;
+use AssetManager\Service\AssetFilterManagerAwareInterface;
 
 class InterfaceTestResolver implements
     Resolver\ResolverInterface,
     Resolver\AggregateResolverAwareInterface,
-    Resolver\MimeResolverAwareInterface
+    Resolver\MimeResolverAwareInterface,
+    AssetFilterManagerAwareInterface
 {
+    public $calledFilterManager;
     public $calledMime;
     public $calledAggregate;
 
@@ -34,5 +37,15 @@ class InterfaceTestResolver implements
     public function getMimeResolver()
     {
         return $this->calledMime;
+    }
+
+    public function getAssetFilterManager()
+    {
+
+    }
+
+    public function setAssetFilterManager(\AssetManager\Service\AssetFilterManager $filterManager)
+    {
+        $this->calledFilterManager = true;
     }
 }
