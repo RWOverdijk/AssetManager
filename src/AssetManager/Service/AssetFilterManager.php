@@ -2,8 +2,8 @@
 
 namespace AssetManager\Service;
 
-use Assetic\Filter\FilterInterface;
 use Assetic\Asset\AssetInterface;
+use Assetic\Filter\FilterInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
@@ -26,9 +26,9 @@ class AssetFilterManager implements MimeResolverAwareInterface
      * @param   array $config
      * @return  AssetFilterManager
      */
-    public function __construct(array $config)
+    public function __construct(array $config = array())
     {
-        $this->config = $config;
+        $this->setConfig($config);
     }
 
     /**
@@ -76,7 +76,7 @@ class AssetFilterManager implements MimeResolverAwareInterface
 
         foreach ($filters as $filter) {
 
-            if ($filter['filter'] instanceof Filter\FilterInterface) {
+            if ($filter['filter'] instanceof FilterInterface) {
                 $filterInstance = $filter['filter'];
                 $asset->ensureFilter($filterInstance);
 

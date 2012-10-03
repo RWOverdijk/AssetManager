@@ -3,8 +3,6 @@
 namespace AssetManager\Service;
 
 use Assetic\Asset\AssetInterface;
-use AssetManager\Resolver\MimeResolverAwareInterface;
-use AssetManager\Service\MimeResolver;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Exception;
@@ -18,7 +16,6 @@ use Zend\Http\PhpEnvironment\Request;
  * @package     AssetManager
  */
 class AssetManager implements
-    MimeResolverAwareInterface,
     AssetFilterManagerAwareInterface,
     AssetCacheManagerAwareInterface
 {
@@ -26,11 +23,6 @@ class AssetManager implements
      * @var ResolverInterface
      */
     protected $resolver;
-
-    /**
-     * @var MimeResolver The mime resolver.
-     */
-    protected $mimeResolver;
 
     /**
      * @var AssetFilterManager The AssetFilterManager service.
@@ -186,26 +178,6 @@ class AssetManager implements
         }
 
         return $asset;
-    }
-
-    /**
-     * Set the mime resolver
-     *
-     * @param MimeResolver $resolver
-     */
-    public function setMimeResolver(MimeResolver $resolver)
-    {
-        $this->mimeResolver = $resolver;
-    }
-
-    /**
-     * Get the mime resolver
-     *
-     * @return MimeResolver
-     */
-    public function getMimeResolver()
-    {
-        return $this->mimeResolver;
     }
 
     /**

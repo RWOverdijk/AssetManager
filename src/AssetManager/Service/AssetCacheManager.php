@@ -22,9 +22,9 @@ class AssetCacheManager
      * @param   array $config
      * @return  AssetCacheManager
      */
-    public function __construct(array $config)
+    public function __construct(array $config = array())
     {
-        $this->config = $config;
+        $this->setConfig($config);
     }
 
     /**
@@ -58,7 +58,7 @@ class AssetCacheManager
     public function setCache($path, AssetInterface $asset)
     {
         $caching = null;
-        $config  = $this->config;
+        $config  = $this->getConfig();
 
         if (!empty($config[$path])) {
             $caching = $config[$path];

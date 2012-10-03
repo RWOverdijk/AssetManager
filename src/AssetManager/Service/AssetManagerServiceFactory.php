@@ -13,6 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class AssetManagerServiceFactory implements FactoryInterface
 {
+
     /**
      * {@inheritDoc}
      *
@@ -20,18 +21,27 @@ class AssetManagerServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('Config');
-        $config = isset($config['asset_manager']) ? $config['asset_manager'] : array();
+        $config             = $serviceLocator->get('Config');
+        $assetManagerConfig = array();
+
+        if (!empty($config['asset_manager'])) {
+            $assetManagerConfig = $config['asset_manager'];
+        }
 
         $assetManager = new AssetManager(
             $serviceLocator->get('AssetManager\Service\AggregateResolver'),
-            $config
+            $assetManagerConfig
         );
 
-        $assetManager->setMimeResolver($serviceLocator->get('mime_resolver'));
-        $assetManager->setAssetFilterManager($serviceLocator->get('AssetManager\Service\AssetFilterManager'));
-        $assetManager->setAssetCacheManager($serviceLocator->get('AssetManager\Service\AssetCacheManager'));
+        $assetManager->setAssetFilterManager(
+            $serviceLocator->get('AssetManager\Service\AssetFilterManager')
+        );
+
+        $assetManager->setAssetCacheManager(
+            $serviceLocator->get('AssetManager\Service\AssetCacheManager')
+        );
 
         return $assetManager;
     }
+
 }
