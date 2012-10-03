@@ -8,6 +8,8 @@ use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
+use AssetManager\Service\AssetFilterManagerAwareInterface;
+use AssetManager\Service\AssetFilterManager;
 
 /**
  * This resolver allows the resolving of collections.
@@ -16,12 +18,18 @@ use AssetManager\Resolver\ResolverInterface;
  */
 class CollectionResolver implements
     ResolverInterface,
-    AggregateResolverAwareInterface
+    AggregateResolverAwareInterface,
+    AssetFilterManagerAwareInterface
 {
     /**
      * @var ResolverInterface
      */
     protected $aggregateResolver;
+
+    /**
+     * @var AssetFilterManager The filterManager service.
+     */
+    protected $filterManager;
 
     /**
      * @var array the collections
@@ -141,11 +149,33 @@ class CollectionResolver implements
 
             $mimeType = $res->mimetype;
 
+            $this->getAssetFilterManager()->setFilters($name, $res);
+
             $collection->add($res);
         }
 
         $collection->mimetype = $mimeType;
 
         return $collection;
+    }
+
+    /**
+     * Set the AssetFilterManager.
+     *
+     * @param AssetFilterManager $filterManager
+     */
+    public function setAssetFilterManager(AssetFilterManager $filterManager)
+    {
+        $this->filterManager = $filterManager;
+    }
+
+    /**
+     * Get the AssetFilterManager
+     *
+     * @return AssetFilterManager
+     */
+    public function getAssetFilterManager()
+    {
+        return $this->filterManager;
     }
 }

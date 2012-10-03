@@ -3,11 +3,10 @@
 namespace AssetManagerTest\Service;
 
 use PHPUnit_Framework_TestCase;
-use ArrayObject;
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
 use Assetic\Asset;
-use AssetManager\Service\AssetManager;
+use AssetManager\Service\MimeResolver;
 use AssetManager\Resolver\ResolverInterface;
 
 class CollectionsIterable implements \IteratorAggregate
@@ -281,6 +280,12 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
             ->method('resolve')
             ->will($this->returnCallback($callback));
 
+        $assetFilterManager = $this->getMock('AssetManager\Service\AssetFilterManager');
+        $assetFilterManager
+            ->expects($this->once())
+            ->method('setFilters')
+            ->will($this->returnValue(null));
+
         $resolver = new CollectionResolver(array(
             'myCollection' => array(
                 'bacon',
@@ -290,6 +295,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
         ));
 
         $resolver->setAggregateResolver($aggregateResolver);
+        $resolver->setAssetFilterManager($assetFilterManager);
 
         $resolver->resolve('myCollection');
     }
@@ -326,7 +332,14 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
             )
         ));
 
+
+        $mimeResolver = new MimeResolver;
+        $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
+
+        $assetFilterManager->setMimeResolver($mimeResolver);
+
         $resolver->setAggregateResolver($aggregateResolver);
+        $resolver->setAssetFilterManager($assetFilterManager);
 
         $collectionResolved = $resolver->resolve('myCollection');
 

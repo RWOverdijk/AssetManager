@@ -10,6 +10,8 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testCreateService()
     {
+        $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
+        $assetCacheManager = new \AssetManager\Service\AssetCacheManager();
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'AssetManager\Service\AggregateResolver',
@@ -17,11 +19,21 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
         );
 
         $serviceManager->setService(
-            'mime_resolver',
-            $this->getMock('AssetManager\Service\MimeResolver')
+            'AssetManager\Service\AssetFilterManager',
+             $assetFilterManager
         );
 
-        $serviceManager->setService('Config', array());
+        $serviceManager->setService(
+            'AssetManager\Service\AssetCacheManager',
+             $assetCacheManager
+        );
+
+        $serviceManager->setService('Config', array(
+            'asset_manager' => array(
+                'Dummy data',
+                'Bacon',
+            ),
+        ));
 
         $factory = new AssetManagerServiceFactory();
         $this->assertInstanceOf('AssetManager\Service\AssetManager', $factory->createService($serviceManager));

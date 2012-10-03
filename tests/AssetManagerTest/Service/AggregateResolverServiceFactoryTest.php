@@ -5,6 +5,7 @@ namespace AssetManagerTest\Service;
 require_once __DIR__ . '/../../_files/InterfaceTestResolver.php';
 
 use PHPUnit_Framework_TestCase;
+use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AggregateResolverServiceFactory;
 use AssetManager\Service\MimeResolver;
 use Zend\ServiceManager\ServiceManager;
@@ -50,6 +51,31 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $resolver = $factory->createService($serviceManager);
 
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testInvalidCustomResolverFails()
+    {
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'Config',
+            array(
+                'asset_manager' => array(
+                    'resolvers' => array(
+                        'My\Resolver' => 1234,
+                    ),
+                ),
+            )
+        );
+        $serviceManager->setService(
+            'My\Resolver',
+            new \stdClass
+        );
+
+        $factory = new AggregateResolverServiceFactory();
+        $resolver = $factory->createService($serviceManager);
     }
 
     public function testWillPrioritizeResolversCorrectly()
@@ -144,11 +170,13 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $serviceManager->setService('mime_resolver', new MimeResolver);
         $serviceManager->setService('mocked_resolver', $interfaceTestResolver);
+        $serviceManager->setService('AssetManager\Service\AssetFilterManager', new AssetFilterManager);
 
         $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
 
         $this->assertTrue($interfaceTestResolver->calledMime);
         $this->assertTrue($interfaceTestResolver->calledAggregate);
+        $this->assertTrue($interfaceTestResolver->calledFilterManager);
     }
 }
