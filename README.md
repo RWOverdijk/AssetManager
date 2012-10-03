@@ -54,7 +54,7 @@ return array(
         ),
         'caching' => array(
             'js/d.js' => array(
-                'cache'     => 'FilePath',
+                'cache'     => 'Apc',
             ),
         ),
     ),
