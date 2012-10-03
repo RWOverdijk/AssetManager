@@ -53,6 +53,31 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
 
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testInvalidCustomResolverFails()
+    {
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'Config',
+            array(
+                'asset_manager' => array(
+                    'resolvers' => array(
+                        'My\Resolver' => 1234,
+                    ),
+                ),
+            )
+        );
+        $serviceManager->setService(
+            'My\Resolver',
+            new \stdClass
+        );
+
+        $factory = new AggregateResolverServiceFactory();
+        $resolver = $factory->createService($serviceManager);
+    }
+
     public function testWillPrioritizeResolversCorrectly()
     {
         $serviceManager = new ServiceManager();

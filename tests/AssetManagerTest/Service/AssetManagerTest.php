@@ -14,7 +14,6 @@ use AssetManager\Service\MimeResolver;
 use Zend\Http\Response;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Console\Request as ConsoleRequest;
-use Zend\Stdlib\ErrorHandler;
 
 class AssetManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -59,7 +58,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructFailsOnOtherType()
     {
-        $assetManager = new AssetManager('invalid');
+        new AssetManager('invalid');
     }
 
     public function testInvalidRequest()

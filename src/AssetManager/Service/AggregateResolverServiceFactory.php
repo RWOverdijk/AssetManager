@@ -5,8 +5,10 @@ namespace AssetManager\Service;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use AssetManager\Resolver\AggregateResolver;
+use AssetManager\Exception;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
 use AssetManager\Resolver\MimeResolverAwareInterface;
+use AssetManager\Resolver\ResolverInterface;
 
 /**
  * Factory class for AssetManagerService
@@ -27,7 +29,6 @@ class AggregateResolverServiceFactory implements FactoryInterface
         $config         = $serviceLocator->get('Config');
         $config         = isset($config['asset_manager']) ? $config['asset_manager'] : array();
         $resolver       = new AggregateResolver();
-        $mimeResolver   = $serviceLocator->get('mime_resolver');
 
         if (empty($config['resolvers'])) {
             return $resolver;
@@ -36,6 +37,12 @@ class AggregateResolverServiceFactory implements FactoryInterface
         foreach ($config['resolvers'] as $resolverService => $priority) {
 
             $resolverService = $serviceLocator->get($resolverService);
+
+            if (!$resolverService instanceof ResolverInterface) {
+                throw new Exception\RuntimeException(
+                    'Service does not implement the required interface ResolverInterface.'
+                );
+            }
 
             if ($resolverService instanceof AggregateResolverAwareInterface) {
                 $resolverService->setAggregateResolver($resolver);
