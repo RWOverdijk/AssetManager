@@ -7,6 +7,16 @@ namespace AssetManager\Service;
 class MimeResolver
 {
     /**
+     * Map for multiple extensions per mime-type, setting a main extension for the mime types.
+     *
+     * @var array
+     */
+    protected $mainMimeTypes = array(
+        'css'       => 'text/css',
+        'js'        => 'application/javascript',
+    );
+
+    /**
      * Map between file extensions and mime types.
      *
      * @var array
@@ -78,6 +88,7 @@ class MimeResolver
         'cmdf'     => 'chemical/x-cmdf',
         'cml'      => 'chemical/x-cml',
         'cod'      => 'application/vnd.rim.cod',
+        'coffee'   => 'application/javascript',
         'com'      => 'application/x-msdos-program',
         'cpa'      => 'chemical/x-compass',
         'cpio'     => 'application/x-cpio',
@@ -383,11 +394,13 @@ class MimeResolver
         'rtf'      => 'application/rtf',
         'rtx'      => 'text/richtext',
         'rxn'      => 'chemical/x-mdl-rxnfile',
+        'sass'     => 'text/css',
         'scala'    => 'text/x-scala',
         'sce'      => 'application/x-scilab',
         'sci'      => 'application/x-scilab',
         'sco'      => 'audio/csound',
         'scr'      => 'application/x-silverlight',
+        'scss'     => 'text/css',
         'sct'      => 'text/scriptlet',
         'sd'       => 'chemical/x-mdl-sdfile',
         'sd2'      => 'audio/x-sd2',
@@ -559,7 +572,9 @@ class MimeResolver
      */
     public function getExtension($mimetype)
     {
-        $extension = array_search($mimetype, $this->mimeTypes);
+        if (!($extension = array_search($mimetype, $this->mainMimeTypes))) {
+            $extension = array_search($mimetype, $this->mimeTypes);
+        }
 
         return !$extension ? null : $extension;
     }
