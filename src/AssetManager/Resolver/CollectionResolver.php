@@ -149,7 +149,7 @@ class CollectionResolver implements
 
             $mimeType = $res->mimetype;
 
-            $this->getAssetFilterManager()->setFilters($name, $res);
+            $this->getAssetFilterManager()->setFilters($asset, $res);
 
             $collection->add($res);
         }
