@@ -115,7 +115,7 @@ class AssetManager implements
      * @return   ResponseInterface
      * @throws   Exception\RuntimeException
      */
-    public function setAssetOnResponse(ResponseInterface $response)
+    public function setAssetOnResponse(ResponseInterface $response,RequestInterface $request)
     {
         if (!$this->asset instanceof AssetInterface) {
             throw new Exception\RuntimeException(
@@ -131,6 +131,18 @@ class AssetManager implements
         $this->getAssetFilterManager()->setFilters($this->path, $this->asset);
 
         $this->asset    = $this->getAssetCacheManager()->setCache($this->path, $this->asset);
+        
+        //check browser cache
+        $lastModified=gmdate("D, d M Y H:i:s",$this->asset->getLastModified()) . " GMT";
+        
+        $modifiedSince=$request->getHeaders('If-Modified-Since');
+        if($modifiedSince && $modifiedSince->compareTo($lastModified)==0)
+        {
+            $response->setStatusCode(304);
+            return $response;
+        }
+        
+        
         $mimeType       = $this->asset->mimetype;
         $assetContents  = $this->asset->dump();
 
@@ -145,6 +157,7 @@ class AssetManager implements
         $response->getHeaders()
                  ->addHeaderLine('Content-Transfer-Encoding',   'binary')
                  ->addHeaderLine('Content-Type',                $mimeType)
+                 ->addHeaderLine('Last-Modified',               $lastModified)
                  ->addHeaderLine('Content-Length',              $contentLength);
 
         $response->setContent($assetContents);

@@ -64,7 +64,7 @@ class Module implements
 
         $response->setStatusCode(200);
 
-        return $assetManager->setAssetOnResponse($response);
+        return $assetManager->setAssetOnResponse($response,$request);
     }
 
     /**
