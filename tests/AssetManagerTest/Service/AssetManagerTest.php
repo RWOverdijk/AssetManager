@@ -165,7 +165,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals($minified, $response->getBody());
     }
 
@@ -195,7 +195,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetCacheManager($assetCacheManager);
 
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals($minified, $response->getBody());
     }
 
@@ -224,7 +224,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetCacheManager($assetCacheManager);
 
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals($minified, $response->getBody());
     }
 
@@ -252,7 +252,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetCacheManager($assetCacheManager);
 
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals('called', $response->getBody());
     }
 
@@ -277,7 +277,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetCacheManager($assetCacheManager);
 
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals(file_get_contents(__DIR__ . '/../../_files/require-jquery.js'), $response->getBody());
     }
 
@@ -307,7 +307,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $assetManager->resolvesToAsset($request);
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
     }
 
     public function testSetStandardCacheDefault()
@@ -334,7 +334,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals(file_get_contents(__FILE__), $response->getBody());
     }
 
@@ -362,7 +362,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals(file_get_contents(__FILE__), $response->getBody());
     }
 
@@ -387,7 +387,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals(file_get_contents(__FILE__), $response->getBody());
     }
 
@@ -415,7 +415,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals(file_get_contents(__FILE__), $response->getBody());
     }
 
@@ -442,7 +442,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $this->assertTrue($assetManager->resolvesToAsset($request));
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
         $this->assertEquals(file_get_contents(__FILE__), $response->getBody());
     }
 
@@ -469,7 +469,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $assetManager->resolvesToAsset($request);
-        $assetManager->setAssetOnResponse($response);
+        $assetManager->setAssetOnResponse($response, $request);
     }
 
     /**
@@ -502,7 +502,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetCacheManager($assetCacheManager);
         $request            = $this->getRequest();
         $assetManager->resolvesToAsset($request);
-        $response           = $assetManager->setAssetOnResponse(new Response);
+        $response           = $assetManager->setAssetOnResponse(new Response, $request);
 
         $this->assertSame(file_get_contents(__FILE__), $response->getContent());
     }
@@ -524,7 +524,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $request      = $this->getRequest();
         $assetManager->resolvesToAsset($request);
 
-        $assetManager->setAssetOnResponse(new Response);
+        $assetManager->setAssetOnResponse(new Response, $request);
     }
 
     public function testResponseHeadersForAsset()
@@ -539,7 +539,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
         $request  = $this->getRequest();
         $assetManager->resolvesToAsset($request);
-        $response = $assetManager->setAssetOnResponse(new Response);
+        $response = $assetManager->setAssetOnResponse(new Response, $request);
         $thisFile = file_get_contents(__FILE__);
 
         if (function_exists('mb_strlen')) {
@@ -564,7 +564,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');
         $assetManager = new AssetManager($resolver);
         $request      = $this->getRequest();
-        $assetManager->setAssetOnResponse(new Response);
+        $assetManager->setAssetOnResponse(new Response, $request);
     }
 
     public function testResolvesToAssetNotFound()
