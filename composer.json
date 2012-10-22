@@ -1,6 +1,7 @@
 {
     "name": "rwoverdijk/assetmanager",
     "description": "An assetmanager module for Zend Framework 2.",
+    "license": "GPL-2.0",
     "type": "library",
     "keywords": [
         "asset",
