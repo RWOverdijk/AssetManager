@@ -51,7 +51,7 @@ class Module implements
     public function onDispatch(EventInterface $event)
     {
         $response = $event->getResponse();
-        if ($response->getStatusCode() !== 404) {
+        if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
             return;
         }
         $request        = $event->getRequest();
