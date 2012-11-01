@@ -46,9 +46,9 @@ class Module implements
     /**
      * Callback method for dispatch and dispatch.error events.
      *
-     * @param EventInterface $event
+     * @param MvcEvent $event
      */
-    public function onDispatch(EventInterface $event)
+    public function onDispatch(MvcEvent $event)
     {
         $response = $event->getResponse();
         if ($response->getStatusCode() !== 404) {
