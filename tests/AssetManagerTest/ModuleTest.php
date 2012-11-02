@@ -132,7 +132,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
      */
     public function testWillIgnoreInvalidRequestType()
     {
-        $cliRequest = $this->getMock('Zend\Console\Request');
+        $cliRequest = $this->getMock('Zend\Console\Request', array(), array(), '', false);
         $mvcEvent   = $this->getMock('Zend\Mvc\MvcEvent');
         $module     = new Module();
 
