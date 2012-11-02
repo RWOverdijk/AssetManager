@@ -1,6 +1,6 @@
 {
     "require": {
-        "rwoverdijk/assetmanager": "*",
+        "rwoverdijk/assetmanager": "*@dev",
         "kriswallsmith/assetic": "v1.1.0-alpha1"
     }
 }
