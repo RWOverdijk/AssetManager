@@ -2,6 +2,6 @@
     "minimum-stability": "dev",
     "require": {
         "rwoverdijk/assetmanager": "dev-master",
-        "zendframework/zendframework": "dev-master"
+        "zendframework/zendframework": "2.0.*"
     }
 }
