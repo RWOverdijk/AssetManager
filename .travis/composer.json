@@ -1,7 +1,6 @@
 {
-    "minimum-stability": "dev",
     "require": {
         "rwoverdijk/assetmanager": "*",
-        "kriswallsmith/assetic": "dev-master"
+        "kriswallsmith/assetic": "v1.1.0-alpha1"
     }
 }
