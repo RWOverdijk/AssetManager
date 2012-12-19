@@ -50,25 +50,29 @@ class Module implements
      */
     public function onDispatch(MvcEvent $event)
     {
-        if ($this->config['asset_manager']['use_route']) {
+        // Load variables
+        $request        = $event->getRequest();
+        $serviceManager = $event->getApplication()->getServiceManager();
+        $config         = $serviceManager->get('config');
+
+        // Look for route match
+        if ($config['asset_manager']['use_route']) {
             $routeMatch = $event->getRouteMatch();
             if (!$routeMatch) {
                 return;
             }
 
             // Append the matched route name to the request base path
-            $request  = $event->getRequest();
             $basePath = $request->getBasePath() . '/' . $routeMatch->getMatchedRouteName();
             $request->setBasePath($basePath);
         }
 
+        // Continue to resolve path
         $response = $event->getResponse();
         if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
             return;
         }
-        $request        = $event->getRequest();
-        $serviceManager = $event->getApplication()->getServiceManager();
-        $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
+        $assetManager = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
 
         if (!$assetManager->resolvesToAsset($request)) {
             return;
@@ -84,11 +88,6 @@ class Module implements
      */
     public function onBootstrap(EventInterface $event)
     {
-        // Store config for later retrieval
-        $application    = $event->getParam('application');
-        $serviceManager = $application->getServiceManager();
-        $this->config   = $serviceManager->get('config');
-
         // Attach for dispatch, and dispatch.error (with low priority to make sure statusCode gets set)
         $eventManager = $event->getTarget()->getEventManager();
         $callback     = array($this, 'onDispatch');
