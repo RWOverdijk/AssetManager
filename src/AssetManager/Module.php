@@ -61,7 +61,8 @@ class Module implements
         $config         = $serviceManager->get('config');
 
         // Look for route match
-        if (isset($config['asset_manager']) && isset($config['asset_manager']['use_route']) && $config['asset_manager']['use_route']) {
+        if (is_array($config) && isset($config['asset_manager']) && is_array($config['asset_manager'])
+                && isset($config['asset_manager']['use_route']) && $config['asset_manager']['use_route']) {
             $routeMatch = $event->getRouteMatch();
             if (!$routeMatch) {
                 return;
