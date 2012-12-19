@@ -54,10 +54,27 @@ class Module implements
         if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
             return;
         }
+
+        // Load variables
         $request        = $event->getRequest();
         $serviceManager = $event->getApplication()->getServiceManager();
-        $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
+        $config         = $serviceManager->get('config');
 
+        // Look for route match
+        if (is_array($config) && isset($config['asset_manager']) && is_array($config['asset_manager'])
+                && isset($config['asset_manager']['use_route']) && $config['asset_manager']['use_route']) {
+            $routeMatch = $event->getRouteMatch();
+            if (!$routeMatch) {
+                return;
+            }
+
+            // Append the matched route name to the request base path
+            $basePath = $request->getBasePath() . '/' . $routeMatch->getMatchedRouteName();
+            $request->setBasePath($basePath);
+        }
+
+        // Continue to resolve path
+        $assetManager = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
         if (!$assetManager->resolvesToAsset($request)) {
             return;
         }

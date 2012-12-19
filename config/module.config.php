@@ -22,5 +22,19 @@ return array(
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 1000,
             'AssetManager\Resolver\PathStackResolver'           => 500,
         ),
+        'use_route' => false,
+    ),
+    'router' => array(
+        'routes' => array(
+            'assets' => array(
+                'type' => 'Segment',
+                'options' => array(
+                    'route' => '/assets[/:file]',
+                    'constraints' => array(
+                        'file' => '.*',
+                    ),
+                ),
+            ),
+        ),
     ),
 );
