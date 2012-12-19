@@ -50,6 +50,11 @@ class Module implements
      */
     public function onDispatch(MvcEvent $event)
     {
+        $response = $event->getResponse();
+        if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
+            return;
+        }
+
         // Load variables
         $request        = $event->getRequest();
         $serviceManager = $event->getApplication()->getServiceManager();
@@ -68,12 +73,7 @@ class Module implements
         }
 
         // Continue to resolve path
-        $response = $event->getResponse();
-        if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
-            return;
-        }
         $assetManager = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
-
         if (!$assetManager->resolvesToAsset($request)) {
             return;
         }
