@@ -85,7 +85,7 @@ class Module implements
     public function onBootstrap(EventInterface $event)
     {
         // Store config for later retrieval
-        $application    = $event->getApplication();
+        $application    = $event->getParam('application');
         $serviceManager = $application->getServiceManager();
         $this->config   = $serviceManager->get('config');
 
