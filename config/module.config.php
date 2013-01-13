@@ -15,6 +15,11 @@ return array(
             'mime_resolver' => 'AssetManager\Service\MimeResolver',
         ),
     ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'headlink' => 'AssetManager\Helper\HeadLink'
+        ),
+    ),
     'asset_manager' => array(
         'resolvers' => array(
             'AssetManager\Resolver\MapResolver'                 => 2000,
