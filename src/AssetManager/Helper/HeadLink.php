@@ -10,14 +10,14 @@ class HeadLink extends StandardHeadLink implements ServiceLocatorAwareInterface
 {
     protected $sl = null;
 
-    public function __invoke(array $attributes = null, $placement = AbstractContainer::APPEND)
+    public function toString($indent = null)
     {
-        $value = parent::__invoke($attributes, $placement);
+        $value = parent::toString($indent);
         /** @var $pathStackResolver \AssetManager\Resolver\PathStackResolver */
-        $pathStackResolver = $this->sl->getServiceLocator()->get('AssetManager\Resolver\PathStackResolver');
-        $pathStackResolver->setMimeResolver($this->sl->getServiceLocator()->get('mime_resolver'));
+        $pathStackResolver = $this->sl->getServiceLocator()->get('AssetManager\Service\AggregateResolver');
 
         $container = $this->getContainer();
+
         foreach($container as $element)
         {
             $timestamp = $pathStackResolver->resolve($element->href)->getLastModified();
