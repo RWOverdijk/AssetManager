@@ -17,7 +17,8 @@ return array(
     ),
     'view_helpers' => array(
         'invokables' => array(
-            'headlink' => 'AssetManager\Helper\HeadLink'
+            'headlink' => 'AssetManager\Helper\HeadLink',
+            'headscript' => 'AssetManager\Helper\HeadScript'
         ),
     ),
     'asset_manager' => array(
