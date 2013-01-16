@@ -127,6 +127,21 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(200, $return->getStatusCode());
     }
 
+    /**
+     * @covers \AssetManager\Module::onDispatch
+     */
+    public function testWillIgnoreInvalidResponseType()
+    {
+        $cliResponse = $this->getMock('Zend\Console\Response', array(), array(), '', false);
+        $mvcEvent   = $this->getMock('Zend\Mvc\MvcEvent');
+        $module     = new Module();
+
+        $cliResponse->expects($this->never())->method('getStatusCode');
+        $mvcEvent->expects($this->once())->method('getResponse')->will($this->returnValue($cliResponse));
+
+        $this->assertNull($module->onDispatch($mvcEvent));
+    }
+
     public function testOnBootstrap()
     {
         $applicationEventManager = new EventManager();

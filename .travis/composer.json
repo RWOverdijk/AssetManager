@@ -1,7 +1,6 @@
 {
-    "minimum-stability": "dev",
     "require": {
-        "rwoverdijk/assetmanager": "dev-master",
-        "zendframework/zendframework": "dev-master"
+        "rwoverdijk/assetmanager": "*@dev",
+        "kriswallsmith/assetic": ">=v1.1.0-alpha1"
     }
 }

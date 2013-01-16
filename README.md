@@ -1,5 +1,7 @@
-# AssetManager 1.2.0
+# AssetManager 1.2.5
 By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius.github.com/)
+
+**Note:** This version includes a possible BC-break as it has switched to a different tag of assetic.
 
 [![Build Status](https://secure.travis-ci.org/RWOverdijk/AssetManager.png?branch=master)](http://travis-ci.org/RWOverdijk/AssetManager)
 
@@ -13,12 +15,11 @@ In a nutshell, this module allows you to package assets with your module working
 
 ## Installation
 
- 1.  Add `"minimum-stability": "dev"` to your `composer.json`
- 2.  Require assetmanager:
+ 1.  Require assetmanager:
 
 ```sh
 ./composer.phar require rwoverdijk/assetmanager
-#when asked for a version, type "dev-master" or "1.*". The latter being prefered.
+#when asked for a version, type "1.*".
 ```
 
 ## Usage
