@@ -73,7 +73,9 @@ class FilePathCache implements CacheInterface
         });
 
         if (!is_dir($cacheDir)) {
+            $umask = umask(0);
             mkdir($cacheDir, 0777, true);
+            umask($umask);
 
             // @codeCoverageIgnoreStart
         }
