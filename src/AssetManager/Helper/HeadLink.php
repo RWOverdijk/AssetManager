@@ -13,15 +13,21 @@ class HeadLink extends StandardHeadLink implements ServiceLocatorAwareInterface
     public function toString($indent = null)
     {
         $value = parent::toString($indent);
-        /** @var $pathStackResolver \AssetManager\Resolver\PathStackResolver */
-        $pathStackResolver = $this->sl->getServiceLocator()->get('AssetManager\Service\AggregateResolver');
+        /** @var $aggregateResolver \AssetManager\Resolver\AggregateResolver */
+        $mainLocator = $this->sl->getServiceLocator();
+        $aggregateResolver = $mainLocator->get('AssetManager\Service\AggregateResolver');
+        $cacheController = $mainLocator->get('AssetManager\Service\CacheController');
+
+        if (!$cacheController->hasMagicEtag()) {
+            return $value;
+        }
 
         $container = $this->getContainer();
-
         foreach($container as $element)
         {
-            #$timestamp = $pathStackResolver->resolve($element->href)->getLastModified();
-            $value = str_replace($element->href, $element->href.'', $value);
+            $asset = $aggregateResolver->resolve($element->href);
+            $etag = $cacheController->calculateEtag($asset);
+            $value = str_replace($element->href, $element->href.';ETag'.$etag, $value);
         }
 
         return $value;

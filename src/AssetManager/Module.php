@@ -56,15 +56,31 @@ class Module implements
         }
 
         $request        = $event->getRequest();
+        /** @var $headers  \Zend\Http\Headers */
+        $headers        = $request->getHeaders();
+        $uri            = $request->getUri();
+        $pos            = strpos($uri->getPath(), ';ETag');
+
+        if (
+            $pos !== false
+            && $headers->has('If-None-Match')
+        ) {
+            $response->setStatusCode(304);
+            $responseHeaders = $response->getHeaders();
+            $responseHeaders->addHeaderLine('Cache-Control', '');
+            return $response;
+        }
+
+        if ($pos !== false) {
+            $uri->setPath(substr($uri->getPath(), 0, $pos));
+        }
+
         $serviceManager = $event->getApplication()->getServiceManager();
         $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
 
         if (!$assetManager->resolvesToAsset($request)) {
             return;
         }
-
-        /** @var $headers  \Zend\Http\Headers */
-        $headers = $request->getHeaders();
 
         if ($headers->has('If-Modified-Since')) {
             $asset = $assetManager->resolve($request);
@@ -83,7 +99,7 @@ class Module implements
             $cacheController = $assetManager->getCacheController();
             $asset = $assetManager->resolve($request);
 
-            $assetManager->getAssetFilterManager()->setFilters(substr($request->getRequestUri(), 1), $asset);
+            $assetManager->getAssetFilterManager()->setFilters($uri, $asset);
             $etag = $cacheController->calculateEtag($asset);
 
             $match = $headers->get('If-None-Match')->getFieldValue();

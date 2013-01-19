@@ -80,6 +80,18 @@ class CacheController
     }
 
     /**
+     * @return bool|null
+     */
+    public function hasMagicEtag()
+    {
+        if (isset($this->config['magicetag'])) {
+            return $this->config['magicetag'];
+        }
+
+        return false;
+    }
+
+    /**
      * @return int
      */
     public function getLifetime()

@@ -13,13 +13,22 @@ class HeadScript extends StandardHeadScript implements ServiceLocatorAwareInterf
     public function toString($indent = null)
     {
         $value = parent::toString($indent);
-        $pathStackResolver = $this->sl->getServiceLocator()->get('AssetManager\Service\AggregateResolver');
         $container = $this->getContainer();
+
+        /** @var $aggregateResolver \AssetManager\Resolver\AggregateResolver */
+        $mainLocator = $this->sl->getServiceLocator();
+        $aggregateResolver = $mainLocator->get('AssetManager\Service\AggregateResolver');
+        $cacheController = $mainLocator->get('AssetManager\Service\CacheController');
+
+        if (!$cacheController->hasMagicEtag()) {
+            return $value;
+        }
 
         foreach($container as $element)
         {
             $source = $element->attributes["src"];
-            $value = str_replace($source, $source, $value);
+            $asset = $aggregateResolver->resolve($source);
+            $value = str_replace($source, $source.';ETag'.$cacheController->calculateEtag($asset), $value);
         }
 
         return $value;

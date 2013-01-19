@@ -33,17 +33,11 @@ class AssetManagerServiceFactory implements FactoryInterface
             $assetManagerConfig
         );
 
-        $assetManager->setAssetFilterManager(
-            $serviceLocator->get('AssetManager\Service\AssetFilterManager')
-        );
+        $assetManager->setAssetFilterManager($serviceLocator->get('AssetManager\Service\AssetFilterManager'));
 
-        $assetManager->setAssetCacheManager(
-            $serviceLocator->get('AssetManager\Service\AssetCacheManager')
-        );
+        $assetManager->setAssetCacheManager($serviceLocator->get('AssetManager\Service\AssetCacheManager'));
 
-        $assetManager->setCacheController(
-            $serviceLocator->get('AssetManager\Service\CacheController')
-        );
+        $assetManager->setCacheController($serviceLocator->get('AssetManager\Service\CacheController'));
 
         return $assetManager;
     }

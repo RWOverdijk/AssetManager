@@ -373,6 +373,131 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertSame(304, $return->getStatusCode());
     }
 
+    public function testOnDispatchNoneMatchRequestWithMagicETag304()
+    {
+        $event      = new MvcEvent();
+        $request    = new \Zend\Http\PhpEnvironment\Request();
+        $module     = new Module();
+        $response   = new Response();
+        $cache      = $this->getMock('AssetManager\Service\CacheController', array('calculateEtag'), array(
+                array(
+                    'cache_control' => array(
+                        'etag' => true,
+                        'lifetime' => '5m'
+                    )
+                )));
+        $cache->expects($this->exactly(0))->method('calculateEtag');
+
+        $response->setStatusCode(404);
+        $request->getHeaders()->addHeaderLine('If-None-Match', 'a-b-c');
+        $uri = new \Zend\Uri\Http('http://foo.bar/foo.js;ETaga-b-c');
+        $request->setUri($uri);
+
+        $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $filter       = $this->getMock('AssetManager\Service\AssetFilterManager');
+        $assetManager = $this->getMock('AssetManager\Service\AssetManager', array('resolvesToAsset', 'setAssetOnResponse', 'resolve', 'getAssetFilterManager'), array($resolver));
+        $assetManager->setCacheController($cache);
+        $assetManager
+            ->expects($this->exactly(0))
+            ->method('resolvesToAsset');
+
+        $asset = new \Assetic\Asset\StringAsset("foo");
+
+        $assetManager
+            ->expects($this->exactly(0))
+            ->method('resolve');
+
+        $amResponse = new Response();
+        $amResponse->setContent('bacon');
+
+        $assetManager
+            ->expects($this->exactly(0))
+            ->method('setAssetOnResponse');
+
+        $assetManager
+            ->expects($this->exactly(0))
+            ->method('getAssetFilterManager');
+
+
+        $serviceManager = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceManager
+            ->expects($this->exactly(0))
+            ->method('get');
+
+        $application = $this->getMock('Zend\Mvc\ApplicationInterface');
+        $application
+            ->expects($this->exactly(0))
+            ->method('getServiceManager');
+
+        $event->setApplication($application);
+        $event->setRequest($request);
+        $event->setResponse($response);
+
+        $return = $module->onDispatch($event);
+
+        $this->assertSame(304, $return->getStatusCode());
+    }
+
+    public function testOnDispatchNoneMatchRequestWithMagicETag200()
+    {
+        $event      = new MvcEvent();
+        $request    = new \Zend\Http\PhpEnvironment\Request();
+        $module     = new Module();
+        $response   = new Response();
+        $cache      = $this->getMock('AssetManager\Service\CacheController', array('calculateEtag'), array(
+                array(
+                    'cache_control' => array(
+                        'etag' => true,
+                        'magicetag' => true,
+                        'lifetime' => '5m'
+                    )
+                )));
+        #$cache->expects($this->exactly(1))->method('calculateEtag')->will($this->returnValue('a-b-c'));
+
+        $response->setStatusCode(404);
+        $uri = new \Zend\Uri\Http('http://foo.bar/foo.js;ETaga-b-c');
+        $request->setUri($uri);
+
+        $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $filter       = $this->getMock('AssetManager\Service\AssetFilterManager');
+        $assetManager = $this->getMock('AssetManager\Service\AssetManager', array('resolvesToAsset', 'setAssetOnResponse'), array($resolver));
+        $assetManager->setCacheController($cache);
+        $assetManager
+            ->expects($this->once())
+            ->method('resolvesToAsset')
+            ->will($this->returnValue(true));
+
+        $asset = new \Assetic\Asset\StringAsset("foo");
+
+        $amResponse = new Response();
+        $amResponse->setContent('bacon');
+
+        $assetManager
+            ->expects($this->once())
+            ->method('setAssetOnResponse')
+            ->will($this->returnValue($amResponse));
+
+        $serviceManager = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceManager
+            ->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($assetManager));
+
+        $application = $this->getMock('Zend\Mvc\ApplicationInterface');
+        $application
+            ->expects($this->once())
+            ->method('getServiceManager')
+            ->will($this->returnValue($serviceManager));
+
+        $event->setApplication($application);
+        $event->setRequest($request);
+        $event->setResponse($response);
+
+        $return = $module->onDispatch($event);
+
+        $this->assertSame(200, $return->getStatusCode());
+    }
+
 
     /**
      * @covers \AssetManager\Module::onDispatch
