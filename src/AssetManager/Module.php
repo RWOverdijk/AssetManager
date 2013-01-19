@@ -54,6 +54,7 @@ class Module implements
         if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
             return;
         }
+
         $request        = $event->getRequest();
         $serviceManager = $event->getApplication()->getServiceManager();
         $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
@@ -64,12 +65,30 @@ class Module implements
 
         /** @var $headers  \Zend\Http\Headers */
         $headers = $request->getHeaders();
+
         if ($headers->has('If-Modified-Since')) {
             $asset = $assetManager->resolve($request);
             $lastModified = $asset->getLastModified();
             $modifiedSince = strtotime($headers->get('If-Modified-Since')->getDate());
 
             if ($lastModified <= $modifiedSince) {
+                $response->setStatusCode(304);
+                $responseHeaders = $response->getHeaders();
+                $responseHeaders->addHeaderLine('Cache-Control', '');
+                return $response;
+            }
+        }
+
+        if ($headers->has('If-None-Match')) {
+            $cacheController = $assetManager->getCacheController();
+            $asset = $assetManager->resolve($request);
+
+            $assetManager->getAssetFilterManager()->setFilters(substr($request->getRequestUri(), 1), $asset);
+            $etag = $cacheController->calculateEtag($asset);
+
+            $match = $headers->get('If-None-Match')->getFieldValue();
+
+            if ($etag == $match) {
                 $response->setStatusCode(304);
                 $responseHeaders = $response->getHeaders();
                 $responseHeaders->addHeaderLine('Cache-Control', '');

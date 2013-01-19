@@ -19,9 +19,9 @@ class CacheController
     protected $config = array();
 
     /**
-     * @var bool|null
+     * @param array
      */
-    protected $etag = null;
+    protected $etagStorage = array();
 
     public function __construct($config = array())
     {
@@ -44,6 +44,10 @@ class CacheController
             $headers->addHeaderLine('Expires', date("D,d M Y H:i:s T", time() + $this->getLifetime()));
             $headers->addHeaderLine('Last-Modified', $lastModified);
             $headers->addHeaderLine('Pragma', '');
+
+            if ($this->hasEtag()) {
+                $headers->addHeaderLine('ETag', $this->calculateEtag($asset));
+            }
         }
     }
 
@@ -64,19 +68,15 @@ class CacheController
     }
 
     /**
-     * @param bool $bool
-     */
-    public function setEtag($bool)
-    {
-        $this->etag = $bool;
-    }
-
-    /**
      * @return bool|null
      */
-    public function getEtag()
+    public function hasEtag()
     {
-        return $this->etag;
+        if (isset($this->config['etag'])) {
+            return $this->config['etag'];
+        }
+
+        return false;
     }
 
     /**
@@ -88,5 +88,32 @@ class CacheController
             $lifetime = $this->config['lifetime'];
         }
         return 5*60;
+    }
+
+    public function calculateEtag(AssetInterface $asset)
+    {
+        $objectHash = spl_object_hash($asset);
+
+        if (isset($this->etagStorage[$objectHash])) {
+            return $this->etagStorage[$objectHash];
+        }
+
+        $mtime = $asset->getLastModified();
+        $size = null;
+
+        $assetContents = $asset->dump();
+
+        // @codeCoverageIgnoreStart
+        if (function_exists('mb_strlen')) {
+            $size = mb_strlen($assetContents, '8bit');
+        } else {
+            $size = strlen($assetContents);
+        }
+        // @codeCoverageIgnoreEnd
+
+        $etag = sprintf('%x-%x-%016x', 1, $size, $mtime);
+        $this->etagStorage[$objectHash] = $etag;
+
+        return $etag;
     }
 }

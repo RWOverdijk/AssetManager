@@ -17,7 +17,8 @@ class CacheControllerServiceFactoryTest extends PHPUnit_Framework_TestCase
         $this->config = array(
             'asset_manager' => array(
                 'cache_control' => array(
-                    'lifetime' => '5m'
+                    'lifetime' => '5m',
+                    'etag' => true
                 )
             )
         );
@@ -33,10 +34,13 @@ class CacheControllerServiceFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($cacheController instanceof CacheController);
         $config = $cacheController->getConfig();
         $this->assertSame(array(
-                'lifetime' => '5m'
+                'lifetime' => '5m',
+                'etag' => true
             ),
             $config
         );
+
+        $this->assertTrue($cacheController->hasEtag());
     }
 
     public function testForHeaderLineInResponse()
