@@ -5,7 +5,7 @@ namespace AssetManagerTest\Service;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\CacheControllerServiceFactory;
 use AssetManager\Service\CacheController;
-use AssetManager\Service\AggregateResolverServiceFactory;
+use Assetic\Asset\StringAsset;
 use Zend\ServiceManager\ServiceManager;
 
 class CacheControllerServiceFactoryTest extends PHPUnit_Framework_TestCase
@@ -48,11 +48,8 @@ class CacheControllerServiceFactoryTest extends PHPUnit_Framework_TestCase
         $cacheController = $factory->createService($serviceManager);
 
         $response = $this->getMock('Zend\Http\Headers');
-        $response->expects($this->once())->method('addHeaderLine')
-            ->with(
-                $this->equalTo('Cache-Control'),
-                $this->equalTo('public, max-age=300')
-        );
-        $cacheController->addHeaders($response);
+        $response->expects($this->any())->method('addHeaderLine');
+
+        $cacheController->addHeaders($response, new StringAsset("foo"));
     }
 }

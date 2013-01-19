@@ -2,10 +2,11 @@
 
 namespace AssetManager\Service;
 
+use Assetic\Asset\AssetInterface;
 use Zend\Http\Headers;
 
 /**
- * Factory class for AssetManagerService
+ * Cache controller service
  *
  * @category   AssetManager
  * @package    AssetManager
@@ -34,9 +35,16 @@ class CacheController
      *
      * @param \Zend\Http\Headers $headers
      */
-    public function addHeaders(Headers $headers)
+    public function addHeaders(Headers $headers, AssetInterface $asset)
     {
-        $headers->addHeaderLine('Cache-Control', 'public, max-age=' . $this->getLifetime());
+        if ($this->config !== array())
+        {
+            $lastModified = date("D,d M Y H:i:s T", $asset->getLastModified());
+            $headers->addHeaderLine('Cache-Control', 'max-age=' . $this->getLifetime().', public');
+            $headers->addHeaderLine('Expires', date("D,d M Y H:i:s T", time() + $this->getLifetime()));
+            $headers->addHeaderLine('Last-Modified', $lastModified);
+            $headers->addHeaderLine('Pragma', '');
+        }
     }
 
     /**
@@ -76,6 +84,9 @@ class CacheController
      */
     public function getLifetime()
     {
+        if (isset($this->config['lifetime'])) {
+            $lifetime = $this->config['lifetime'];
+        }
         return 5*60;
     }
 }

@@ -4,6 +4,7 @@ namespace AssetManager\Service;
 
 use Assetic\Asset\AssetInterface;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
+use AssetManager\Service\CacheControllerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
@@ -17,7 +18,8 @@ use Zend\Http\PhpEnvironment\Request;
  */
 class AssetManager implements
     AssetFilterManagerAwareInterface,
-    AssetCacheManagerAwareInterface
+    AssetCacheManagerAwareInterface,
+    CacheControllerAwareInterface
 {
     /**
      * @var ResolverInterface
@@ -33,6 +35,11 @@ class AssetManager implements
      * @var AssetCacheManager The AssetCacheManager service.
      */
     protected $cacheManager;
+
+    /**
+     * @var CacheController The cache control service
+     */
+    protected $cacheController;
 
     /**
      * @var AssetInterface The asset
@@ -89,6 +96,24 @@ class AssetManager implements
     }
 
     /**
+     * Cache control service aware interface implementation
+     *
+     * @param CacheController $cacheController
+     */
+    public function setCacheController(CacheController $cacheController)
+    {
+        $this->cacheController = $cacheController;
+    }
+
+    /**
+     * @return CacheController
+     */
+    public function getCacheController()
+    {
+        return $this->cacheController;
+    }
+
+    /**
      * Set the resolver to use in the asset manager
      *
      * @param ResolverInterface $resolver
@@ -142,8 +167,10 @@ class AssetManager implements
         }
         // @codeCoverageIgnoreEnd
 
-        $response->getHeaders()
-                 ->addHeaderLine('Content-Transfer-Encoding',   'binary')
+        $headers = $response->getHeaders();
+        $this->cacheController->addHeaders($headers, $this->asset);
+
+        $headers->addHeaderLine('Content-Transfer-Encoding',   'binary')
                  ->addHeaderLine('Content-Type',                $mimeType)
                  ->addHeaderLine('Content-Length',              $contentLength);
 
@@ -159,7 +186,7 @@ class AssetManager implements
      *
      * @return mixed false when not found, AssetInterface when resolved.
      */
-    protected function resolve(RequestInterface $request)
+    public function resolve(RequestInterface $request)
     {
         if (!$request instanceof Request) {
             return false;

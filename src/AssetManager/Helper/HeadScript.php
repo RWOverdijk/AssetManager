@@ -19,8 +19,7 @@ class HeadScript extends StandardHeadScript implements ServiceLocatorAwareInterf
         foreach($container as $element)
         {
             $source = $element->attributes["src"];
-            $timestamp = $pathStackResolver->resolve($source)->getLastModified();
-            $value = str_replace($source, $source.';mtime'.$timestamp, $value);
+            $value = str_replace($source, $source, $value);
         }
 
         return $value;

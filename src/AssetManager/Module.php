@@ -62,6 +62,21 @@ class Module implements
             return;
         }
 
+        /** @var $headers  \Zend\Http\Headers */
+        $headers = $request->getHeaders();
+        if ($headers->has('If-Modified-Since')) {
+            $asset = $assetManager->resolve($request);
+            $lastModified = $asset->getLastModified();
+            $modifiedSince = strtotime($headers->get('If-Modified-Since')->getDate());
+
+            if ($lastModified <= $modifiedSince) {
+                $response->setStatusCode(304);
+                $responseHeaders = $response->getHeaders();
+                $responseHeaders->addHeaderLine('Cache-Control', '');
+                return $response;
+            }
+        }
+
         $response->setStatusCode(200);
 
         return $assetManager->setAssetOnResponse($response);

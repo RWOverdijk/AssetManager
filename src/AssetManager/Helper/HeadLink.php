@@ -20,8 +20,8 @@ class HeadLink extends StandardHeadLink implements ServiceLocatorAwareInterface
 
         foreach($container as $element)
         {
-            $timestamp = $pathStackResolver->resolve($element->href)->getLastModified();
-            $value = str_replace($element->href, $element->href.';mtime'.$timestamp, $value);
+            #$timestamp = $pathStackResolver->resolve($element->href)->getLastModified();
+            $value = str_replace($element->href, $element->href.'', $value);
         }
 
         return $value;
