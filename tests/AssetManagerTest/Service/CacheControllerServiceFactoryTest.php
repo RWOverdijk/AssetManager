@@ -72,6 +72,44 @@ class CacheControllerServiceFactoryTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($headers->has('Expires'));
     }
 
+    public function testMagicEtagLifetimeInService()
+    {
+        $serviceManager = new ServiceManager();
+        $conf = array( 'asset_manager' =>
+        array(
+            'cache_control' => array(
+                'lifetime' => '5m',
+                'magicetag' => true
+            )
+        )
+        );
+        $serviceManager->setService('Config', $conf);
+
+        $factory = new CacheControllerServiceFactory();
+        $cacheController = $factory->createService($serviceManager);
+        $this->assertTrue($cacheController instanceof CacheController);
+        $config = $cacheController->getConfig();
+        $this->assertSame($conf, $conf);
+
+        $this->assertFalse($cacheController->hasEtag());
+        $this->assertTrue($cacheController->hasMagicEtag());
+
+        $headers = new \Zend\Http\Headers();
+        $cacheController->addHeaders($headers, new StringAsset('foo'));
+        $this->assertFalse($headers->has('ETag'));
+        $this->assertEquals('max-age=12960000, public', $headers->get('Cache-Control')->getFieldValue());
+
+        $config = array();
+        $config['lifetime'] = '1m';
+        $config['magicetag'] = false;
+        $cacheController->setConfig($config);
+
+        $headers = new \Zend\Http\Headers();
+        $cacheController->addHeaders($headers, new StringAsset('foo'));
+        $this->assertFalse($headers->has('ETag'));
+        $this->assertEquals('max-age=60, public', $headers->get('Cache-Control')->getFieldValue());
+    }
+
     public function testEtagCalculationOnlyExecuteOnce()
     {
         $serviceManager = new ServiceManager();

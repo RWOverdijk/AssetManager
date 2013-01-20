@@ -40,8 +40,14 @@ class CacheController
         if ($this->config !== array())
         {
             $lastModified = date("D,d M Y H:i:s T", $asset->getLastModified());
-            $headers->addHeaderLine('Cache-Control', 'max-age=' . $this->getLifetime().', public');
-            $headers->addHeaderLine('Expires', date("D,d M Y H:i:s T", time() + $this->getLifetime()));
+
+            $lifetime = $this->getLifetime();
+            if ($this->hasMagicEtag()) {
+                // 150 days
+                $lifetime = 12960000;
+            }
+            $headers->addHeaderLine('Cache-Control', 'max-age=' . $lifetime .', public');
+            $headers->addHeaderLine('Expires', date("D,d M Y H:i:s T", time() + $lifetime));
 
             $headers->addHeaderLine('Last-Modified', $lastModified);
             $headers->addHeaderLine('Pragma', '');
