@@ -14,9 +14,8 @@ class HeadScriptTest extends PHPUnit_Framework_TestCase
         $resolver = $this->getMock('AssetManager\Resolver\AggregateResolver', array('resolve'));
         $sl       = $this->getMock('Zend\ServiceManager\ServiceManager', array('getServiceLocator'));
         $cacheController  = $this->getMock('AssetManager\Service\CacheController', array('calculateEtag', 'hasMagicEtag'));
-        $helper   = new \AssetManager\Helper\HeadScript();
+        $helper   = new \AssetManager\Helper\HeadScript($sl);
         $helper->setView($view);
-        $helper->setServiceLocator($sl);
 
         $resolver->expects($this->once())->method('resolve')->will($this->returnValue(new StringAsset('foo')));
         $cacheController->expects($this->once())->method('calculateEtag')->will($this->returnValue('a-b-c'));
@@ -44,9 +43,8 @@ class HeadScriptTest extends PHPUnit_Framework_TestCase
         $resolver = $this->getMock('AssetManager\Resolver\AggregateResolver', array('resolve'));
         $sl       = $this->getMock('Zend\ServiceManager\ServiceManager', array('getServiceLocator'));
         $cacheController  = $this->getMock('AssetManager\Service\CacheController', array('calculateEtag'));
-        $helper   = new \AssetManager\Helper\HeadScript();
+        $helper   = new \AssetManager\Helper\HeadScript($sl);
         $helper->setView($view);
-        $helper->setServiceLocator($sl);
 
         $resolver->expects($this->exactly(0))->method('resolve');
         $cacheController->expects($this->exactly(0))->method('calculateEtag');

@@ -6,9 +6,15 @@ use Zend\View\Helper\Placeholder\Container\AbstractContainer;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class HeadScript extends StandardHeadScript implements ServiceLocatorAwareInterface
+class HeadScript extends StandardHeadScript
 {
     protected $sl = null;
+
+    public function __construct(ServiceLocatorInterface $sl)
+    {
+        parent::__construct();
+        $this->sl = $sl;
+    }
 
     public function toString($indent = null)
     {

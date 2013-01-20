@@ -17,9 +17,13 @@ return array(
         ),
     ),
     'view_helpers' => array(
-        'invokables' => array(
-            'headlink' => 'AssetManager\Helper\HeadLink',
-            'headscript' => 'AssetManager\Helper\HeadScript'
+        'factories' => array(
+            'headlink' => function($sl) {
+                return new AssetManager\Helper\HeadLink($sl);
+            },
+            'headscript' => function($sl) {
+                return new AssetManager\Helper\HeadScript($sl);
+            }
         ),
     ),
     'asset_manager' => array(
