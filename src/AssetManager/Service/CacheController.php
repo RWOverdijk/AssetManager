@@ -37,8 +37,7 @@ class CacheController
      */
     public function addHeaders(Headers $headers, AssetInterface $asset)
     {
-        if ($this->config !== array())
-        {
+        if ($this->config !== array()) {
             $lastModified = date("D,d M Y H:i:s T", $asset->getLastModified());
 
             $lifetime = $this->getLifetime();

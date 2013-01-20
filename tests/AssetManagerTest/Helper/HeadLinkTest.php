@@ -65,4 +65,3 @@ class HeadLinkTest extends PHPUnit_Framework_TestCase
         $this->assertSame($sl, $helper->getServiceLocator());
     }
 }
-

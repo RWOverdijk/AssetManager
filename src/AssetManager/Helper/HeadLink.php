@@ -2,7 +2,6 @@
 namespace AssetManager\Helper;
 
 use Zend\View\Helper\HeadLink as StandardHeadLink;
-use Zend\View\Helper\Placeholder\Container\AbstractContainer;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class HeadLink extends StandardHeadLink
@@ -38,8 +37,7 @@ class HeadLink extends StandardHeadLink
         }
 
         $container = $this->getContainer();
-        foreach($container as $element)
-        {
+        foreach ($container as $element) {
             $asset = $aggregateResolver->resolve($element->href);
             $etag = $cacheController->calculateEtag($asset);
             $value = str_replace($element->href, $element->href.';ETag'.$etag, $value);

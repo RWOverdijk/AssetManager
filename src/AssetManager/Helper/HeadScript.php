@@ -2,7 +2,6 @@
 namespace AssetManager\Helper;
 
 use Zend\View\Helper\HeadScript as StandardHeadScript;
-use Zend\View\Helper\Placeholder\Container\AbstractContainer;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class HeadScript extends StandardHeadScript
@@ -39,8 +38,7 @@ class HeadScript extends StandardHeadScript
             return $value;
         }
 
-        foreach($container as $element)
-        {
+        foreach ($container as $element) {
             $source = $element->attributes["src"];
             $asset = $aggregateResolver->resolve($source);
             $value = str_replace($source, $source.';ETag'.$cacheController->calculateEtag($asset), $value);
