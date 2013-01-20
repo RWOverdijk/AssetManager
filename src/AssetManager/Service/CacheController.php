@@ -42,6 +42,7 @@ class CacheController
             $lastModified = date("D,d M Y H:i:s T", $asset->getLastModified());
             $headers->addHeaderLine('Cache-Control', 'max-age=' . $this->getLifetime().', public');
             $headers->addHeaderLine('Expires', date("D,d M Y H:i:s T", time() + $this->getLifetime()));
+
             $headers->addHeaderLine('Last-Modified', $lastModified);
             $headers->addHeaderLine('Pragma', '');
 
@@ -99,7 +100,26 @@ class CacheController
         if (isset($this->config['lifetime'])) {
             $lifetime = $this->config['lifetime'];
         }
-        return 5*60;
+
+        $minute = 60;
+        $hour = 60*60;
+        $day = 24*60*60;
+
+        preg_match("/(\d+)(\w)/", $lifetime, $match);
+
+        if (count($match) === 0 || count($match) < 3) {
+            throw new \AssetManager\Exception\InvalidArgumentException("Invalid format");
+        }
+
+        if ($match[2] == 'd') {
+            return $match[1]*$day;
+        } elseif ($match[2] == 'h') {
+            return $match[1]*$hour;
+        } elseif ($match[2] == 'm') {
+            return $match[1]*$minute;
+        } else {
+            throw new \AssetManager\Exception\InvalidArgumentException("Valid formatters are d,h,m");
+        }
     }
 
     public function calculateEtag(AssetInterface $asset)

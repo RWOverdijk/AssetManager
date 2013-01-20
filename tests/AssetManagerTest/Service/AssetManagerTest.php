@@ -377,6 +377,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setCacheController($cacheController);
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
+        $this->assertSame($cacheController, $assetManager->getCacheController());
         $this->assertTrue($assetManager->resolvesToAsset($request));
         $assetManager->setAssetOnResponse($response);
         $this->assertEquals(file_get_contents(__FILE__), $response->getBody());
