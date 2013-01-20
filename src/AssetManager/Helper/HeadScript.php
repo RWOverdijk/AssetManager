@@ -3,19 +3,28 @@ namespace AssetManager\Helper;
 
 use Zend\View\Helper\HeadScript as StandardHeadScript;
 use Zend\View\Helper\Placeholder\Container\AbstractContainer;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class HeadScript extends StandardHeadScript
 {
+    /**
+     * @var null|\Zend\ServiceManager\ServiceLocatorInterface
+     */
     protected $sl = null;
 
+    /**
+     * {@inheritDoc}
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $sl
+     */
     public function __construct(ServiceLocatorInterface $sl)
     {
         parent::__construct();
         $this->sl = $sl;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function toString($indent = null)
     {
         $value = parent::toString($indent);
@@ -50,6 +59,11 @@ class HeadScript extends StandardHeadScript
         $this->sl = $sl;
     }
 
+    /**
+     * Get the service locator
+     *
+     * @return null|\Zend\ServiceManager\ServiceLocatorInterface
+     */
     public function getServiceLocator()
     {
         return $this->sl;
