@@ -373,7 +373,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertSame(304, $return->getStatusCode());
     }
 
-    public function testOnDispatchNoneMatchRequestWithMagicETag304()
+    public function testOnDispatchNoneMatchRequestWithCacheBusting304()
     {
         $event      = new MvcEvent();
         $request    = new \Zend\Http\PhpEnvironment\Request();
@@ -390,7 +390,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
         $response->setStatusCode(404);
         $request->getHeaders()->addHeaderLine('If-None-Match', 'a-b-c');
-        $uri = new \Zend\Uri\Http('http://foo.bar/foo.js;ETaga-b-c');
+        $uri = new \Zend\Uri\Http('http://foo.bar/foo.js;AMa-b-c');
         $request->setUri($uri);
 
         $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');
@@ -438,7 +438,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->assertSame(304, $return->getStatusCode());
     }
 
-    public function testOnDispatchNoneMatchRequestWithMagicETag200()
+    public function testOnDispatchNoneMatchRequestWithCacheBusting200()
     {
         $event      = new MvcEvent();
         $request    = new \Zend\Http\PhpEnvironment\Request();
@@ -448,14 +448,12 @@ class ModuleTest extends PHPUnit_Framework_TestCase
                 array(
                     'cache_control' => array(
                         'etag' => true,
-                        'magicetag' => true,
                         'lifetime' => '5m'
                     )
                 )));
-        #$cache->expects($this->exactly(1))->method('calculateEtag')->will($this->returnValue('a-b-c'));
 
         $response->setStatusCode(404);
-        $uri = new \Zend\Uri\Http('http://foo.bar/foo.js;ETaga-b-c');
+        $uri = new \Zend\Uri\Http('http://foo.bar/foo.js;AMa-b-c');
         $request->setUri($uri);
 
         $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');

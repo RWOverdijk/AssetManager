@@ -32,15 +32,11 @@ class HeadLink extends StandardHeadLink
         $aggregateResolver = $mainLocator->get('AssetManager\Service\AggregateResolver');
         $cacheController = $mainLocator->get('AssetManager\Service\CacheController');
 
-        if (!$cacheController->hasMagicEtag()) {
-            return $value;
-        }
-
         $container = $this->getContainer();
         foreach ($container as $element) {
             $asset = $aggregateResolver->resolve($element->href);
             $etag = $cacheController->calculateEtag($asset);
-            $value = str_replace($element->href, $element->href.';ETag'.$etag, $value);
+            $value = str_replace($element->href, $element->href.';AM'.$etag, $value);
         }
 
         return $value;

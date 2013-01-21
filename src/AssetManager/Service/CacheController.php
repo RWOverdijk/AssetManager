@@ -41,10 +41,6 @@ class CacheController
             $lastModified = date("D,d M Y H:i:s T", $asset->getLastModified());
 
             $lifetime = $this->getLifetime();
-            if ($this->hasMagicEtag()) {
-                // 150 days
-                $lifetime = 12960000;
-            }
             $headers->addHeaderLine('Cache-Control', 'max-age=' . $lifetime .', public');
             $headers->addHeaderLine('Expires', date("D,d M Y H:i:s T", time() + $lifetime));
 
@@ -80,18 +76,6 @@ class CacheController
     {
         if (isset($this->config['etag'])) {
             return $this->config['etag'];
-        }
-
-        return false;
-    }
-
-    /**
-     * @return bool|null
-     */
-    public function hasMagicEtag()
-    {
-        if (isset($this->config['magicetag'])) {
-            return $this->config['magicetag'];
         }
 
         return false;

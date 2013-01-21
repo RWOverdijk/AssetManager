@@ -34,14 +34,10 @@ class HeadScript extends StandardHeadScript
         $aggregateResolver = $mainLocator->get('AssetManager\Service\AggregateResolver');
         $cacheController = $mainLocator->get('AssetManager\Service\CacheController');
 
-        if (!$cacheController->hasMagicEtag()) {
-            return $value;
-        }
-
         foreach ($container as $element) {
             $source = $element->attributes["src"];
             $asset = $aggregateResolver->resolve($source);
-            $value = str_replace($source, $source.';ETag'.$cacheController->calculateEtag($asset), $value);
+            $value = str_replace($source, $source.';AM'.$cacheController->calculateEtag($asset), $value);
         }
 
         return $value;

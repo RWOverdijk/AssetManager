@@ -59,7 +59,7 @@ class Module implements
         /** @var $headers  \Zend\Http\Headers */
         $headers        = $request->getHeaders();
         $uri            = $request->getUri();
-        $pos            = strpos($uri->getPath(), ';ETag');
+        $pos            = strpos($uri->getPath(), ';AM');
 
         if (
             $pos !== false
