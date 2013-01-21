@@ -19,26 +19,8 @@ return array(
     ),
     'view_helpers' => array(
         'factories' => array(
-            'headlink' => function($sl) {
-                $cacheBustingManager = $sl->getServiceLocator()->get('AssetManager\Service\AssetCacheBustingManager');
-
-                if ($cacheBustingManager->getOverrideHeadHelper()) {
-
-                    return new AssetManager\Helper\HeadLink($sl);
-                }
-
-                return new Zend\View\Helper\HeadLink();
-            },
-            'headscript' => function($sl) {
-                $cacheBustingManager = $sl->getServiceLocator()->get('AssetManager\Service\AssetCacheBustingManager');
-
-                if ($cacheBustingManager->getOverrideHeadHelper()) {
-
-                    return new AssetManager\Helper\HeadScript($sl);
-                }
-
-                return new Zend\View\Helper\HeadScript();
-            }
+            'headlink' => 'AssetManager\Helper\HeadLinkServiceFactory',
+            'headscript' => 'AssetManager\Helper\HeadScriptServiceFactory',
         ),
     ),
     'asset_manager' => array(
