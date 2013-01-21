@@ -54,12 +54,62 @@ class Module implements
         if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
             return;
         }
+
         $request        = $event->getRequest();
+        /** @var $headers  \Zend\Http\Headers */
+        $headers        = $request->getHeaders();
+        $uri            = $request->getUri();
+        $pos            = strpos($uri->getPath(), ';AM');
+
+        if (
+            $pos !== false
+            && $headers->has('If-None-Match')
+        ) {
+            $response->setStatusCode(304);
+            $responseHeaders = $response->getHeaders();
+            $responseHeaders->addHeaderLine('Cache-Control', '');
+            return $response;
+        }
+
+        if ($pos !== false) {
+            $uri->setPath(substr($uri->getPath(), 0, $pos));
+        }
+
         $serviceManager = $event->getApplication()->getServiceManager();
         $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
 
         if (!$assetManager->resolvesToAsset($request)) {
             return;
+        }
+
+        if ($headers->has('If-Modified-Since')) {
+            $asset = $assetManager->resolve($request);
+            $lastModified = $asset->getLastModified();
+            $modifiedSince = strtotime($headers->get('If-Modified-Since')->getDate());
+
+            if ($lastModified <= $modifiedSince) {
+                $response->setStatusCode(304);
+                $responseHeaders = $response->getHeaders();
+                $responseHeaders->addHeaderLine('Cache-Control', '');
+                return $response;
+            }
+        }
+
+        if ($headers->has('If-None-Match')) {
+            $cacheController = $assetManager->getCacheController();
+            $asset = $assetManager->resolve($request);
+
+            $assetManager->getAssetFilterManager()->setFilters($uri, $asset);
+            $etag = $cacheController->calculateEtag($asset);
+
+            $match = $headers->get('If-None-Match')->getFieldValue();
+
+            if ($etag == $match) {
+                $response->setStatusCode(304);
+                $responseHeaders = $response->getHeaders();
+                $responseHeaders->addHeaderLine('Cache-Control', '');
+                return $response;
+            }
         }
 
         $response->setStatusCode(200);

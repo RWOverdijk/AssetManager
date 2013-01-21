@@ -12,6 +12,7 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
         $assetCacheManager = new \AssetManager\Service\AssetCacheManager();
+        $cacheController = new \AssetManager\Service\CacheController();
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'AssetManager\Service\AggregateResolver',
@@ -34,6 +35,11 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
                 'Bacon',
             ),
         ));
+
+        $serviceManager->setService(
+            'AssetManager\Service\CacheController',
+            $cacheController
+        );
 
         $factory = new AssetManagerServiceFactory();
         $this->assertInstanceOf('AssetManager\Service\AssetManager', $factory->createService($serviceManager));
