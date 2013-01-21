@@ -7,6 +7,7 @@ return array(
             'AssetManager\Service\AssetCacheManager'            => 'AssetManager\Service\AssetCacheManagerServiceFactory',
             'AssetManager\Service\AggregateResolver'            => 'AssetManager\Service\AggregateResolverServiceFactory',
             'AssetManager\Service\CacheController'              => 'AssetManager\Service\CacheControllerServiceFactory',
+            'AssetManager\Service\AssetCacheBustingManager'     => 'AssetManager\Service\AssetCacheBustingManagerServiceFactory',
             'AssetManager\Resolver\MapResolver'                 => 'AssetManager\Service\MapResolverServiceFactory',
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
@@ -19,10 +20,24 @@ return array(
     'view_helpers' => array(
         'factories' => array(
             'headlink' => function($sl) {
-                return new AssetManager\Helper\HeadLink($sl);
+                $cacheBustingManager = $sl->getServiceLocator()->get('AssetManager\Service\AssetCacheBustingManager');
+
+                if ($cacheBustingManager->getOverrideHeadHelper()) {
+
+                    return new AssetManager\Helper\HeadLink($sl);
+                }
+
+                return new Zend\View\Helper\HeadLink();
             },
             'headscript' => function($sl) {
-                return new AssetManager\Helper\HeadScript($sl);
+                $cacheBustingManager = $sl->getServiceLocator()->get('AssetManager\Service\AssetCacheBustingManager');
+
+                if ($cacheBustingManager->getOverrideHeadHelper()) {
+
+                    return new AssetManager\Helper\HeadScript($sl);
+                }
+
+                return new Zend\View\Helper\HeadScript();
             }
         ),
     ),
