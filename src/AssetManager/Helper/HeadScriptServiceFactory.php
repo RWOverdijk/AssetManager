@@ -8,7 +8,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\HeadScript as StandardHeadScript;
 
 /**
- * Factory class for HeadLink
+ * Factory class for HeadScript
  *
  * @category   AssetManager
  * @package    AssetManager
