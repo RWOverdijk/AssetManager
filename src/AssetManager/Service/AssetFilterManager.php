@@ -84,7 +84,7 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
 
         foreach ($filters as $filter) {
             if (!empty($filter['filter'])) {
-                $this->ensureByFilter($asset, $filter['filter'], $filter['args']);
+                $this->ensureByFilter($asset, $filter['filter'],array_key_exists('args',$filter) ? $filter['args'] : array());
             } elseif(!empty($filter['service'])) {
                 $this->ensureByService($asset, $filter['service']);
             } else {
