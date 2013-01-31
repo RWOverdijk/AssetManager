@@ -9,6 +9,7 @@ use AssetManager\Service\MimeResolver;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use ReflectionClass;
 
 class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAwareInterface
 {
@@ -83,7 +84,7 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
 
         foreach ($filters as $filter) {
             if (!empty($filter['filter'])) {
-                $this->ensureByFilter($asset, $filter['filter']);
+                $this->ensureByFilter($asset, $filter['filter'], $filter['args']);
             } elseif(!empty($filter['service'])) {
                 $this->ensureByService($asset, $filter['service']);
             } else {
@@ -119,7 +120,7 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
      * @param   mixed           $service    Either an instance of FilterInterface or a classname.
      * @throws  Exception\RuntimeException
      */
-    protected function ensureByFilter(AssetInterface $asset, $filter)
+    protected function ensureByFilter(AssetInterface $asset, $filter, $args)
     {
         if ($filter instanceof FilterInterface) {
             $filterInstance = $filter;
@@ -141,7 +142,8 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
             );
         }
 
-        $filterInstance = new $filterClass;
+        $rc = new ReflectionClass($filterClass);
+        $filterInstance = $rc->newInstanceArgs($args);
 
         $asset->ensureFilter($filterInstance);
     }
