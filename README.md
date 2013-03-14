@@ -41,6 +41,9 @@ return array(
                     'js/c.js',
                 ),
             ),
+            'paths' => array(
+                __DIR__ . '/some/particular/directory',
+            ),
             'map' => array(
                 'specific-path.css' => __DIR__ . '/some/particular/file.css',
             ),
