@@ -163,7 +163,7 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
         $resolver->setMimeResolver($mimeResolver);
 
         $asset1 = array(
-            'bacon' => 'http://foo.bar/file.js',
+            'bacon' => 'http://foo.bar/',
         );
 
         $resolver->setMap($asset1);
