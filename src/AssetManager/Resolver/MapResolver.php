@@ -69,9 +69,9 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
     {
         if (!is_array($map) && !$map instanceof Traversable) {
             throw new Exception\InvalidArgumentException(sprintf(
-                    '%s: expects an array or Traversable, received "%s"',
-                    __METHOD__,
-                    (is_object($map) ? get_class($map) : gettype($map))
+                '%s: expects an array or Traversable, received "%s"',
+                __METHOD__,
+                (is_object($map) ? get_class($map) : gettype($map))
             ));
         }
 
