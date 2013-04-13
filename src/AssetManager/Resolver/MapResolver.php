@@ -103,10 +103,10 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
 
         $file     = $this->map[$name];
         $mimeType = $this->getMimeResolver()->getMimeType($file);
-        if (0 === strpos($file, 'http://')) {
-            $asset = new HttpAsset($file);
-        } else {
+        if (false === filter_var($file, FILTER_VALIDATE_URL)) {
             $asset = new FileAsset($file);
+        } else {
+            $asset = new HttpAsset($file);
         }
         $asset->mimetype = $mimeType;
 
