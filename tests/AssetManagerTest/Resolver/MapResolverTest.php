@@ -153,23 +153,23 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
     public function testResolveHttpAssetSuccess()
     {
         $resolver = new MapResolver;
-        
+
         $this->assertTrue($resolver instanceof MimeResolverAwareInterface);
-        
+
         $mimeResolver = new MimeResolver;
-        
+
         $resolver->setMimeResolver($mimeResolver);
-        
+
         $url = 'https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js';
         $asset1 = array(
             'bacon' => $url,
         );
-        
+
         $resolver->setMap($asset1);
-        
+
         $asset      = $resolver->resolve('bacon');
         $mimetype   = $mimeResolver->getMimeType($url);
-        
+
         $this->assertTrue($asset instanceof Asset\HttpAsset);
         $this->assertEquals($mimetype, $asset->mimetype);
         $this->assertEquals($asset->dump(), file_get_contents($url));
