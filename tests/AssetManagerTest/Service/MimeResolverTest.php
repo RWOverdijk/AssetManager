@@ -22,4 +22,11 @@ class MimeResolverTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('css', $mimeResolver->getExtension('text/css'));
         $this->assertEquals('js', $mimeResolver->getExtension('application/javascript'));
     }
+
+    public function testGetUrlMimeType()
+    {
+        $mimeResolver = new MimeResolver;
+
+        $this->assertEquals('application/javascript', $mimeResolver->getMimeType('http://foo.bar/file.js'));
+    }
 }
