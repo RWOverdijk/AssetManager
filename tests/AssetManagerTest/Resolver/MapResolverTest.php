@@ -149,7 +149,7 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($mimetype, $asset->mimetype);
         $this->assertEquals($asset->dump(), file_get_contents(__FILE__));
     }
-    
+
     public function testResolveHttpAssetSuccess()
     {
         $resolver = new MapResolver;
