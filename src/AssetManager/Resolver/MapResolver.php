@@ -5,6 +5,7 @@ namespace AssetManager\Resolver;
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
 use Assetic\Asset\FileAsset;
+use Assetic\Asset\HttpAsset;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 
@@ -13,6 +14,7 @@ use AssetManager\Service\MimeResolver;
  */
 class MapResolver implements ResolverInterface, MimeResolverAwareInterface
 {
+
     /**
      * @var array
      */
@@ -67,9 +69,9 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
     {
         if (!is_array($map) && !$map instanceof Traversable) {
             throw new Exception\InvalidArgumentException(sprintf(
-                '%s: expects an array or Traversable, received "%s"',
-                __METHOD__,
-                (is_object($map) ? get_class($map) : gettype($map))
+                    '%s: expects an array or Traversable, received "%s"',
+                    __METHOD__,
+                    (is_object($map) ? get_class($map) : gettype($map))
             ));
         }
 
@@ -99,11 +101,16 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
             return null;
         }
 
-        $file            = $this->map[$name];
-        $mimeType        = $this->getMimeResolver()->getMimeType($file);
-        $asset           = new FileAsset($file);
+        $file     = $this->map[$name];
+        $mimeType = $this->getMimeResolver()->getMimeType($file);
+        if (0 === strpos($file, 'http://')) {
+            $asset = new HttpAsset($file);
+        } else {
+            $asset = new FileAsset($file);
+        }
         $asset->mimetype = $mimeType;
 
         return $asset;
     }
+
 }
