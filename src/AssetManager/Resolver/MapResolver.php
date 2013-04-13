@@ -101,8 +101,8 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
             return null;
         }
 
-        $file     = $this->map[$name];
-        $mimeType = $this->getMimeResolver()->getMimeType($file);
+        $file            = $this->map[$name];
+        $mimeType        = $this->getMimeResolver()->getMimeType($file);
         if (false === filter_var($file, FILTER_VALIDATE_URL)) {
             $asset = new FileAsset($file);
         } else {
