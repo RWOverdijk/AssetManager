@@ -5,6 +5,7 @@ namespace AssetManager\Resolver;
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
 use Assetic\Asset\FileAsset;
+use Assetic\Asset\HttpAsset;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 
@@ -13,6 +14,7 @@ use AssetManager\Service\MimeResolver;
  */
 class MapResolver implements ResolverInterface, MimeResolverAwareInterface
 {
+
     /**
      * @var array
      */
@@ -101,9 +103,14 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
 
         $file            = $this->map[$name];
         $mimeType        = $this->getMimeResolver()->getMimeType($file);
-        $asset           = new FileAsset($file);
+        if (false === filter_var($file, FILTER_VALIDATE_URL)) {
+            $asset = new FileAsset($file);
+        } else {
+            $asset = new HttpAsset($file);
+        }
         $asset->mimetype = $mimeType;
 
         return $asset;
     }
+
 }
