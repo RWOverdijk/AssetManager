@@ -5,6 +5,7 @@ namespace AssetManager\Resolver;
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
 use Assetic\Asset\FileAsset;
+use Assetic\Asset\HttpAsset;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 
