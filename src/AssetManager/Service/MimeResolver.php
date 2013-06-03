@@ -139,6 +139,7 @@ class MimeResolver
         'embl'     => 'chemical/x-embl-dl-nucleotide',
         'eml'      => 'message/rfc822',
         'ent'      => 'chemical/x-pdb',
+        'eot'      => 'application/vnd.ms-fontobject',
         'eps'      => 'application/postscript',
         'eps2'     => 'application/postscript',
         'eps3'     => 'application/postscript',
@@ -317,6 +318,7 @@ class MimeResolver
         'onetoc2'  => 'application/onenote',
         'orc'      => 'audio/csound',
         'orf'      => 'image/x-olympus-orf',
+        'otf'      => 'application/x-font-opentype',
         'otg'      => 'application/vnd.oasis.opendocument.graphics-template',
         'oth'      => 'application/vnd.oasis.opendocument.text-web',
         'otp'      => 'application/vnd.oasis.opendocument.presentation-template',
@@ -479,6 +481,7 @@ class MimeResolver
         'ts'       => 'video/MP2T',
         'tsp'      => 'application/dsptype',
         'tsv'      => 'text/tab-separated-values',
+        'ttf'      => 'application/x-font-ttf',
         'txt'      => 'text/plain',
         'udeb'     => 'application/x-debian-package',
         'uls'      => 'text/iuls',
@@ -509,6 +512,7 @@ class MimeResolver
         'wmv'      => 'video/x-ms-wmv',
         'wmx'      => 'video/x-ms-wmx',
         'wmz'      => 'application/x-ms-wmz',
+        'woff'     => 'application/application/x-font-woff',
         'wp5'      => 'application/vnd.wordperfect5.1',
         'wpd'      => 'application/vnd.wordperfect',
         'wrl'      => 'x-world/x-vrml',
@@ -550,8 +554,8 @@ class MimeResolver
     /**
      * Get the mime type from a file extension.
      *
-     * @param  string   $filename
-     * @return string   The mime type found. Falls back to text/plain.
+     * @param  string $filename
+     * @return string The mime type found. Falls back to text/plain.
      */
     public function getMimeType($filename)
     {
@@ -567,8 +571,8 @@ class MimeResolver
     /**
      * Get the extension that matches given mimetype.
      *
-     * @param   string  $mimetype
-     * @return  mixed   null when not found, extension (string) when found.
+     * @param  string $mimetype
+     * @return mixed  null when not found, extension (string) when found.
      */
     public function getExtension($mimetype)
     {
