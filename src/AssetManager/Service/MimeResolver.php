@@ -139,7 +139,7 @@ class MimeResolver
         'embl'     => 'chemical/x-embl-dl-nucleotide',
         'eml'      => 'message/rfc822',
         'ent'      => 'chemical/x-pdb',
-        'eot'      => 'application/vnd.ms-fontobject',    
+        'eot'      => 'application/vnd.ms-fontobject',
         'eps'      => 'application/postscript',
         'eps2'     => 'application/postscript',
         'eps3'     => 'application/postscript',
@@ -554,8 +554,8 @@ class MimeResolver
     /**
      * Get the mime type from a file extension.
      *
-     * @param  string   $filename
-     * @return string   The mime type found. Falls back to text/plain.
+     * @param  string $filename
+     * @return string The mime type found. Falls back to text/plain.
      */
     public function getMimeType($filename)
     {
@@ -571,8 +571,8 @@ class MimeResolver
     /**
      * Get the extension that matches given mimetype.
      *
-     * @param   string  $mimetype
-     * @return  mixed   null when not found, extension (string) when found.
+     * @param  string $mimetype
+     * @return mixed  null when not found, extension (string) when found.
      */
     public function getExtension($mimetype)
     {
