@@ -559,7 +559,7 @@ class MimeResolver
      */
     public function getMimeType($filename)
     {
-        $extension = pathinfo($filename, PATHINFO_EXTENSION);
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 
         if (isset($this->mimeTypes[$extension])) {
             return $this->mimeTypes[$extension];
