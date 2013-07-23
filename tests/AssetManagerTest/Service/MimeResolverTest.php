@@ -13,7 +13,7 @@ class MimeResolverTest extends PHPUnit_Framework_TestCase
 
         //Success
         $this->assertEquals('application/x-httpd-php', $mimeResolver->getMimeType(__FILE__));
-		$this->assertEquals('application/x-httpd-php', $mimeResolver->getMimeType(strtoupper(__FILE__)));
+        $this->assertEquals('application/x-httpd-php', $mimeResolver->getMimeType(strtoupper(__FILE__)));
     }
 
     public function testGetExtension()
