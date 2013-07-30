@@ -19,9 +19,12 @@ class DynamicCollectionCacheServiceFactory implements FactoryInterface
         if (isset($config['asset_manager']['dynamic_collection_cache'])) {
             $options = $config['asset_manager']['dynamic_collection_cache'];
         }
-
+        try {
         return new DynamicCollectionCache(
             new DynamicCollectionCacheOptions($options)
         );
+        } catch (\Exception $e) {
+            echo $e->getMessage();die();
+        }
     }
 }

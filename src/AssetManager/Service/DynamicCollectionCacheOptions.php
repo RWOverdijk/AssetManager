@@ -18,7 +18,7 @@ class DynamicCollectionCacheOptions extends AbstractOptions
     /**
      * @var string
      */
-    protected $cackeKey;
+    protected $cacheKey;
 
     /**
      * @return boolean
@@ -39,9 +39,9 @@ class DynamicCollectionCacheOptions extends AbstractOptions
     /**
      * @return string
      */
-    public function getCackeKey()
+    public function getCacheKey()
     {
-        return $this->cackeKey;
+        return $this->cacheKey;
     }
 
     /**
@@ -67,12 +67,12 @@ class DynamicCollectionCacheOptions extends AbstractOptions
     }
 
     /**
-     * @param string $cackeKey
+     * @param string $cacheKey
      * @return DynamicCollectionCacheOptions
      */
-    public function setCackeKey($cackeKey)
+    public function setCacheKey($cacheKey)
     {
-        $this->cackeKey = $cackeKey;
+        $this->cacheKey = $cacheKey;
         return $this;
     }
 }

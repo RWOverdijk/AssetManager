@@ -88,7 +88,7 @@ class DynamicCollectionCache
     protected function loadCollections()
     {
         $this->collections = (
-            $this->getStorage()->getItem($this->options->getCackeKey()) ?:
+            $this->getStorage()->getItem($this->options->getCacheKey()) ?:
             array()
         );
     }
@@ -103,7 +103,7 @@ class DynamicCollectionCache
     protected function saveCollections()
     {
         return $this->getStorage()->setItem(
-            $this->options->getCackeKey(),
+            $this->options->getCacheKey(),
             $this->collections
         );
     }
