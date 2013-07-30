@@ -88,21 +88,9 @@ class DynamicCollectionCache
     protected function loadCollections()
     {
         $this->collections = (
-            $this->getStorage()->getItem($this->getCacheIdentifier()) ?:
+            $this->getStorage()->getItem($this->options->getCackeKey()) ?:
             array()
         );
-    }
-
-    /**
-     * Gets the cache file name
-     *
-     * @return string
-     */
-    protected function getCacheIdentifier()
-    {
-        return $this->options->getCachePath() .
-            DIRECTORY_SEPARATOR .
-            $this->options->getCacheFile();
     }
 
     /**
@@ -115,7 +103,7 @@ class DynamicCollectionCache
     protected function saveCollections()
     {
         return $this->getStorage()->setItem(
-            $this->getCacheIdentifier(),
+            $this->options->getCackeKey(),
             $this->collections
         );
     }

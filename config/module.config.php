@@ -31,8 +31,7 @@ return array(
                 ),
             ),
             'enabled'         => false,
-            'cache_path'      => __DIR__ . "/../data/assetmanager/cache",
-            'cache_file'      => 'dynamic_collections.php',
+            'cache_key'       => 'dynamic_collections_cacke_key',
         ),
     ),
 );

@@ -11,19 +11,14 @@ class DynamicCollectionCacheOptions extends AbstractOptions
     protected $enabled = false;
 
     /**
-     * @var string
-     */
-    protected $cachePath;
-
-    /**
-     * @var string
-     */
-    protected $cacheFile;
-
-    /**
      * @var array
      */
     protected $storageOptions;
+
+    /**
+     * @var string
+     */
+    protected $cackeKey;
 
     /**
      * @return boolean
@@ -33,28 +28,20 @@ class DynamicCollectionCacheOptions extends AbstractOptions
         return $this->enabled;
     }
 
-    /**
-     * @return string
-     */
-    public function getCachePath()
-    {
-        return $this->cachePath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCacheFile()
-    {
-        return $this->cacheFile;
-    }
-
-    /**
+        /**
      * @return array
      */
     public function getStorageOptions()
     {
         return $this->storageOptions;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCackeKey()
+    {
+        return $this->cackeKey;
     }
 
     /**
@@ -69,28 +56,6 @@ class DynamicCollectionCacheOptions extends AbstractOptions
     }
 
     /**
-     * @param string $cachePath
-     *
-     * @return DynamicCollectionCacheOptions
-     */
-    public function setCachePath($cachePath)
-    {
-        $this->cachePath = $cachePath;
-        return $this;
-    }
-
-    /**
-     * @param string $cacheFile
-     *
-     * @return DynamicCollectionCacheOptions
-     */
-    public function setCacheFile($cacheFile)
-    {
-        $this->cacheFile = $cacheFile;
-        return $this;
-    }
-
-    /**
      * @param srray $storageOptions
      *
      * @return DynamicCollectionCacheOptions
@@ -98,6 +63,16 @@ class DynamicCollectionCacheOptions extends AbstractOptions
     public function setStorageOptions(array $storageOptions)
     {
         $this->storageOptions = $storageOptions;
+        return $this;
+    }
+
+    /**
+     * @param string $cackeKey
+     * @return DynamicCollectionCacheOptions
+     */
+    public function setCackeKey($cackeKey)
+    {
+        $this->cackeKey = $cackeKey;
         return $this;
     }
 }
