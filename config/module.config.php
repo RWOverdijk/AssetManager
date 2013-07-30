@@ -6,6 +6,7 @@ return array(
             'AssetManager\Service\AssetFilterManager'           => 'AssetManager\Service\AssetFilterManagerServiceFactory',
             'AssetManager\Service\AssetCacheManager'            => 'AssetManager\Service\AssetCacheManagerServiceFactory',
             'AssetManager\Service\AggregateResolver'            => 'AssetManager\Service\AggregateResolverServiceFactory',
+            'AssetManager\Service\DynamicCollectionCache'       => 'AssetManager\Service\DynamicCollectionCacheServiceFactory',
             'AssetManager\Resolver\MapResolver'                 => 'AssetManager\Service\MapResolverServiceFactory',
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
@@ -21,6 +22,10 @@ return array(
             'AssetManager\Resolver\CollectionResolver'          => 1500,
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 1000,
             'AssetManager\Resolver\PathStackResolver'           => 500,
+        ),
+        'dynamic_collection_cache' => array(
+            'enabled'    => false,
+            'cache_path' => __DIR__ . "/../data/assetmanager/cache",
         ),
     ),
 );

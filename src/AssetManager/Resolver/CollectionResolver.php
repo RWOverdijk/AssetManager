@@ -10,6 +10,7 @@ use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
 /**
  * This resolver allows the resolving of collections.
@@ -19,8 +20,12 @@ use AssetManager\Service\AssetFilterManager;
 class CollectionResolver implements
     ResolverInterface,
     AggregateResolverAwareInterface,
-    AssetFilterManagerAwareInterface
+    AssetFilterManagerAwareInterface,
+    ServiceLocatorAwareInterface
 {
+    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
+    use \AssetManager\ServiceManager\ServiceTrait;
+
     /**
      * @var ResolverInterface
      */
@@ -35,6 +40,11 @@ class CollectionResolver implements
      * @var array the collections
      */
     protected $collections = array();
+
+    /**
+     * @var boolean
+     */
+    protected $dynamicCollectionCacheInitialized = false;
 
     /**
      * Constructor
@@ -108,6 +118,8 @@ class CollectionResolver implements
      */
     public function resolve($name)
     {
+        $this->initializeDynamicCollectionCache();
+
         if (!isset($this->collections[$name])) {
             return null;
         }
@@ -157,6 +169,30 @@ class CollectionResolver implements
         $collection->mimetype = $mimeType;
 
         return $collection;
+    }
+
+    /**
+     * Checks with the dynamic collection service if there are
+     * dynamic collections to be added to the internal collection list
+     */
+    protected function initializeDynamicCollectionCache()
+    {
+        if ($this->dynamicCollectionCacheInitialized) {
+            return;
+        }
+
+        $dynamicCollections = $this
+            ->getAssetManagerDynamicCollectionCacheService()
+            ->getCollections();
+
+        if (false !== $dynamicCollections) {
+            $this->collections = ArrayUtils::merge(
+                $this->collections,
+                $dynamicCollections
+            );
+        }
+        
+        $this->dynamicCollectionCacheInitialized = true;
     }
 
     /**

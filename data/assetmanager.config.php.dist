@@ -1,0 +1,9 @@
+<?php
+return array(
+    'asset_manager' => array(
+        'dynamic_collection_cache' => array(
+            'enabled'    => false,
+            'cache_path' => __DIR__ . "/../data/assetmanager/cache",
+        ),
+    ),
+);
