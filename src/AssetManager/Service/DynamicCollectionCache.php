@@ -1,25 +1,29 @@
 <?php
 namespace AssetManager\Service;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\Cache\StorageFactory;
+use Zend\Cache\Storage\StorageInterface;
 
-class DynamicCollectionCache implements ServiceLocatorAwareInterface
+class DynamicCollectionCache
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    use \AssetManager\ServiceManager\ServiceTrait;
-
     /**
      * @var DynamicCollectionCacheOptions
      */
     protected $options;
 
     /**
+     * @var StorageInterface
+     */
+    private $storage;
+
+    /**
      * @var array
      */
     protected $collections;
 
-    public function __construct(DynamicCollectionCacheOptions $options)
-    {
+    public function __construct(
+        DynamicCollectionCacheOptions $options
+    ) {
         $this->options = $options;
     }
 
@@ -30,7 +34,7 @@ class DynamicCollectionCache implements ServiceLocatorAwareInterface
      */
     public function getCollections()
     {
-        if (false === $this->options->getEnabled()) {
+        if (false === $this->options->isEnabled()) {
             return array();
         }
         if (null === $this->collections) {
@@ -51,7 +55,7 @@ class DynamicCollectionCache implements ServiceLocatorAwareInterface
               $collectionIdentifier,
         array $collection
     ) {
-        if (false === $this->options->getEnabled()) {
+        if (false === $this->options->isEnabled()) {
             return false;
         }
         if (null === $this->collections) {
@@ -65,20 +69,28 @@ class DynamicCollectionCache implements ServiceLocatorAwareInterface
     }
 
     /**
+     * @return StorageInterface
+     */
+    private function getStorage()
+    {
+        if ($this->storage instanceof StorageInterface) {
+            return $this->storage;
+        }
+        $this->storage = StorageFactory::factory(
+            $this->options->getStorageOptions()
+        );
+        return $this->storage;
+    }
+
+    /**
      * Loads the collections from the cache folder
      */
     protected function loadCollections()
     {
-        $dynamicCollections = $this->getCacheFileName();
-        if (!file_exists($dynamicCollections)) {
-            $this->collections = array();
-            return;
-        }
-        $fromFile = include $dynamicCollections;;
-        if (!is_array($fromFile)) {
-            $fromFile = array();
-        }
-        $this->collections = $fromFile;
+        $this->collections = (
+            $this->getStorage()->getItem($this->getCacheIdentifier()) ?:
+            array()
+        );
     }
 
     /**
@@ -86,40 +98,25 @@ class DynamicCollectionCache implements ServiceLocatorAwareInterface
      *
      * @return string
      */
-    protected function getCacheFileName()
+    protected function getCacheIdentifier()
     {
         return $this->options->getCachePath() .
-            DIRECTORY_SEPARATOR . 'dynamic_collections.php';
+            DIRECTORY_SEPARATOR .
+            $this->options->getCacheFile();
     }
 
     /**
-     * Try to save the current collections array to cache file
+     * Try to save the current collections array to cache
      *
-     * When the file is in use this method returns false
+     * When setting fails this method returns false
      *
      * @return boolean true on success false on failure
      */
     protected function saveCollections()
     {
-        $file = $this->getCacheFileName();
-        $toWrite =  "<?php\n" .
-            'return ' . var_export($this->collections, true) . ";\n";
-        if (file_exists($file)) {
-            $fp = fopen($this->getCacheFileName(), 'r+');
-            if (false === flock($fp, LOCK_EX)) {
-                fclose($fp);
-                return false;
-            }
-            ftruncate($fp, 0);
-            fwrite($fp, $toWrite);
-            fflush($fp);
-            flock($fp, LOCK_UN);
-            fclose($fp);
-        } else {
-            $fp = fopen($this->getCacheFileName(), 'w');
-            fwrite($fp, $toWrite);
-            fclose($fp);
-        }
-        return true;
+        return $this->getStorage()->setItem(
+            $this->getCacheIdentifier(),
+            $this->collections
+        );
     }
 }

@@ -2,8 +2,15 @@
 return array(
     'asset_manager' => array(
         'dynamic_collection_cache' => array(
+            'storage_options' => array(
+                'adapter' => array(
+                    'name'    => 'apc',
+                    'options' => array('ttl' => 86400),
+                ),
+            ),
             'enabled'    => false,
             'cache_path' => __DIR__ . "/../data/assetmanager/cache",
+            'cache_file' => 'dynamic_collections.php',
         ),
     ),
 );

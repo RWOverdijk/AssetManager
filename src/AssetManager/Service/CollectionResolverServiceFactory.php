@@ -21,9 +21,6 @@ class CollectionResolverServiceFactory implements FactoryInterface
         if (isset($config['asset_manager']['resolver_configs']['collections'])) {
             $collections = $config['asset_manager']['resolver_configs']['collections'];
         }
-
-        $collectionResolver = new CollectionResolver($collections);
-
-        return $collectionResolver;
+        return new CollectionResolver($serviceLocator, $collections);
     }
 }

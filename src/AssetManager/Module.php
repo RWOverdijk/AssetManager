@@ -17,8 +17,7 @@ use Zend\Mvc\MvcEvent;
 class Module implements
     Feature\AutoloaderProviderInterface,
     Feature\ConfigProviderInterface,
-    Feature\BootstrapListenerInterface,
-    Feature\ViewHelperProviderInterface
+    Feature\BootstrapListenerInterface
 {
     /**
      * {@inheritDoc}
@@ -77,13 +76,5 @@ class Module implements
         $priority     = -9999999;
         $eventManager->attach(MvcEvent::EVENT_DISPATCH,       $callback, $priority);
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $callback, $priority);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getViewHelperConfig()
-    {
-        return include __DIR__ . '/../../config/view-helper.config.php';
     }
 }

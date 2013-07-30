@@ -10,7 +10,7 @@ use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * This resolver allows the resolving of collections.
@@ -20,11 +20,12 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 class CollectionResolver implements
     ResolverInterface,
     AggregateResolverAwareInterface,
-    AssetFilterManagerAwareInterface,
-    ServiceLocatorAwareInterface
+    AssetFilterManagerAwareInterface
 {
-    use \Zend\ServiceManager\ServiceLocatorAwareTrait;
-    use \AssetManager\ServiceManager\ServiceTrait;
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $serviceLocator;
 
     /**
      * @var ResolverInterface
@@ -51,10 +52,14 @@ class CollectionResolver implements
      *
      * Instantiate and optionally populate collections.
      *
-     * @param array|Traversable $collections
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param array|Traversable       $collections
      */
-    public function __construct($collections = array())
-    {
+    public function __construct(
+        ServiceLocatorInterface $serviceLocator,
+        $collections = array()
+    ) {
+        $this->serviceLocator = $serviceLocator;
         $this->setCollections($collections);
     }
 
@@ -175,15 +180,16 @@ class CollectionResolver implements
      * Checks with the dynamic collection service if there are
      * dynamic collections to be added to the internal collection list
      */
-    protected function initializeDynamicCollectionCache()
+    private function initializeDynamicCollectionCache()
     {
         if ($this->dynamicCollectionCacheInitialized) {
             return;
         }
-
-        $dynamicCollections = $this
-            ->getAssetManagerDynamicCollectionCacheService()
-            ->getCollections();
+        $dynamicCollectionCache = $this->serviceLocator->get(
+            'AssetManager\Service\DynamicCollectionCache'
+        );
+        /*@var $dynamicCollectionCache \AssetManager\Service\DynamicCollectionCache*/
+        $dynamicCollections = $dynamicCollectionCache->getCollections();
 
         if (false !== $dynamicCollections) {
             $this->collections = ArrayUtils::merge(
@@ -191,7 +197,7 @@ class CollectionResolver implements
                 $dynamicCollections
             );
         }
-        
+
         $this->dynamicCollectionCacheInitialized = true;
     }
 

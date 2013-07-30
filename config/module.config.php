@@ -24,8 +24,15 @@ return array(
             'AssetManager\Resolver\PathStackResolver'           => 500,
         ),
         'dynamic_collection_cache' => array(
-            'enabled'    => false,
-            'cache_path' => __DIR__ . "/../data/assetmanager/cache",
+            'storage_options' => array(
+                'adapter' => array(
+                    'name'    => 'apc',
+                    'options' => array('ttl' => 86400),
+                ),
+            ),
+            'enabled'         => false,
+            'cache_path'      => __DIR__ . "/../data/assetmanager/cache",
+            'cache_file'      => 'dynamic_collections.php',
         ),
     ),
 );
