@@ -6,6 +6,7 @@ use PHPUnit_Framework_TestCase;
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
 use Assetic\Asset;
+use Assetic\Asset\AssetCache;
 use AssetManager\Service\MimeResolver;
 use AssetManager\Resolver\ResolverInterface;
 
@@ -298,6 +299,77 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
         $resolver->setAssetFilterManager($assetFilterManager);
 
         $resolver->resolve('myCollection');
+    }
+
+    public function testTwoCollectionsHasDifferentCacheKey()
+    {
+        $aggregateResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+
+        //assets with same 'last modifled time'.
+        $now = time();
+        $bacon =  new Asset\StringAsset('bacon');
+        $bacon->setLastModified($now);
+        $bacon->mimetype = 'text/plain';
+
+        $eggs =  new Asset\StringAsset('eggs');
+        $eggs->setLastModified($now);
+        $eggs->mimetype = 'text/plain';
+
+        $assets = array(
+            array('bacon', $bacon),
+            array('eggs', $eggs),
+        );
+
+        $aggregateResolver
+            ->expects($this->any())
+            ->method('resolve')
+            ->will($this->returnValueMap($assets));
+
+        $resolver = new CollectionResolver(array(
+            'collection1' => array(
+                'bacon',
+            ),
+            'collection2' => array(
+                'eggs',
+            ),
+        ));
+
+        $mimeResolver = new MimeResolver;
+        $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
+        $assetFilterManager->setMimeResolver($mimeResolver);
+
+        $resolver->setAggregateResolver($aggregateResolver);
+        $resolver->setAssetFilterManager($assetFilterManager);
+
+        $collection1 = $resolver->resolve('collection1');
+        $collection2 = $resolver->resolve('collection2');
+
+        $cacheInterface = $this->getMock('Assetic\Cache\CacheInterface');
+
+        $cacheKeys = new \ArrayObject();
+        $callback = function ($key) use ($cacheKeys) {
+            $cacheKeys[] = $key;
+            return true;
+        };
+
+        $cacheInterface
+            ->expects($this->exactly(2))
+            ->method('has')
+            ->will($this->returnCallback($callback));
+
+        $cacheInterface
+            ->expects($this->exactly(2))
+            ->method('get')
+            ->will($this->returnValue('cached content'));
+
+        $cache1 = new AssetCache($collection1, $cacheInterface);
+        $cache1->load();
+
+        $cache2 = new AssetCache($collection2, $cacheInterface);
+        $cache2->load();
+
+        $this->assertCount(2, $cacheKeys);
+        $this->assertNotEquals($cacheKeys[0], $cacheKeys[1]);
     }
 
     public function testSuccessResolve()
