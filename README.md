@@ -1,4 +1,4 @@
-# AssetManager 1.3.1
+# AssetManager
 By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius.github.com/)
 
 **Note:** This version includes a possible BC-break as it has switched to a different tag of assetic.
