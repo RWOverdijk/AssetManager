@@ -96,7 +96,7 @@ class AssetCacheManager
                 'FilePathCache' => function($options) use ($path) {
                     if (empty($options['dir'])) {
                         throw new Exception\RuntimeException(
-                            'FilesystemCache expected dir entry.'
+                            'FilePathCache expected dir entry.'
                         );
                     }
                     $dir = $options['dir'];
