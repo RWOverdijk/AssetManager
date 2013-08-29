@@ -1,7 +1,10 @@
 <?php
 return array(
-    'service_manager' => array (
-        'factories' => array (
+    'service_manager' => array(
+        'aliases' => array(
+            'asset-manager'                                     => 'AssetManager\Service\AssetManager',
+        ),
+        'factories' => array(
             'AssetManager\Service\AssetManager'                 => 'AssetManager\Service\AssetManagerServiceFactory',
             'AssetManager\Service\AssetFilterManager'           => 'AssetManager\Service\AssetFilterManagerServiceFactory',
             'AssetManager\Service\AssetCacheManager'            => 'AssetManager\Service\AssetCacheManagerServiceFactory',
