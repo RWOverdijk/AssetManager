@@ -56,7 +56,7 @@ class Module implements
         }
         $request        = $event->getRequest();
         $serviceManager = $event->getApplication()->getServiceManager();
-        $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
+        $assetManager   = $serviceManager->get('asset-manager');
 
         if (!$assetManager->resolvesToAsset($request)) {
             return;
