@@ -512,7 +512,7 @@ class MimeResolver
         'wmv'      => 'video/x-ms-wmv',
         'wmx'      => 'video/x-ms-wmx',
         'wmz'      => 'application/x-ms-wmz',
-        'woff'     => 'application/application/x-font-woff',
+        'woff'     => 'application/x-font-woff',
         'wp5'      => 'application/vnd.wordperfect5.1',
         'wpd'      => 'application/vnd.wordperfect',
         'wrl'      => 'x-world/x-vrml',
