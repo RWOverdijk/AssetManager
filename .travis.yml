@@ -13,6 +13,7 @@ before_script:
   - php composer.phar install --dev
   - rm -rf vendor/rwoverdijk/assetmanager
   - cp -r ../AssetManager vendor/rwoverdijk/assetmanager
+  - sh -c "if [ '$TRAVIS_PHP_VERSION' = '5.4' ]; then echo 'starting PHP server on port 8080'; php -S localhost:8080 -t public/ & fi"
   - cd vendor/rwoverdijk/assetmanager
   - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
 
