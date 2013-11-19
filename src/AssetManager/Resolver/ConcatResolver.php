@@ -164,7 +164,18 @@ class ConcatResolver implements
                 );
             }
 
-            //$this->getAssetFilterManager()->setFilters($asset, $res);
+            $res->mimetype = $this->getMimeResolver()->getMimeType(
+                $res->getSourceRoot().$res->getSourcePath()
+            );
+
+            if (null !== $mimeType && $res->mimetype !== $mimeType) {
+                throw new Exception\RuntimeException(sprintf(
+                    'Asset "%s" from collection "%s" doesn\'t have the expected mime-type "%s".',
+                    $asset,
+                    $name,
+                    $mimeType
+                ));
+            }
 
             //$mimeType = $res->mimetype;
             $content .= "\n".$res->dump();
