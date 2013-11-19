@@ -31,6 +31,7 @@
         "zendframework/zend-eventmanager": "2.*",
         "zendframework/zend-modulemanager": "2.*",
         "zendframework/zend-mvc": "2.*",
+        "zendframework/zend-config": "2.*",
         "kriswallsmith/assetic": "1.1.*"
     },
     "autoload": {
