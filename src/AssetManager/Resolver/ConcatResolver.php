@@ -177,7 +177,6 @@ class ConcatResolver implements
                 ));
             }
 
-            $content .= "\n".$res->dump();
             $stringAsset->appendContent($res->dump());
 
             if ($res->getLastModified() > $lastModified) {
