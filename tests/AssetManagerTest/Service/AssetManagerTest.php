@@ -424,7 +424,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $config = array(
             'caching' => array(
                 'asset-path' => array(
-                    'cache' => function($file) {
+                    'cache' => function ($file) {
                         return new FilePathCache('/tmp', $file);
                     },
                 ),
@@ -451,7 +451,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $config = array(
             'caching' => array(
                 'asset-path' => array(
-                    'cache' => function($file) {
+                    'cache' => function ($file) {
                         return new \stdClass;
                     },
                 ),
