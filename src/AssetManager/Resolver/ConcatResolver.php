@@ -190,6 +190,7 @@ class ConcatResolver implements
         $stringAsset->setLastModified($lastModified);
         $stringAsset->mimetype = $mimeType;
         $this->getAssetFilterManager()->setFilters($name, $stringAsset);
+        $stringAsset->setTargetPath($name);
 
         return $stringAsset;
     }
