@@ -9,6 +9,7 @@ use AssetManager\Asset\ConcatStringAsset;
 use AssetManager\Exception;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
+use AssetManager\Service\MimeResolver;
 
 /**
  * This resolver allows the resolving of concatenated files.
@@ -17,7 +18,8 @@ use AssetManager\Service\AssetFilterManager;
 class ConcatResolver implements
     ResolverInterface,
     AggregateResolverAwareInterface,
-    AssetFilterManagerAwareInterface
+    AssetFilterManagerAwareInterface,
+    MimeResolverAwareInterface
 {
     /**
      * @var ResolverInterface
@@ -35,6 +37,11 @@ class ConcatResolver implements
     protected $concats = array();
 
     /**
+     * @var MimeResolver The mime resolver.
+     */
+    protected $mimeResolver;
+
+    /**
      * Constructor
      *
      * Instantiate and optionally populate concats.
@@ -44,6 +51,26 @@ class ConcatResolver implements
     public function __construct($concats = array())
     {
         $this->setConcats($concats);
+    }
+
+    /**
+     * Set the mime resolver
+     *
+     * @param MimeResolver $resolver
+     */
+    public function setMimeResolver(MimeResolver $resolver)
+    {
+        $this->mimeResolver = $resolver;
+    }
+
+    /**
+     * Get the mime resolver
+     *
+     * @return MimeResolver
+     */
+    public function getMimeResolver()
+    {
+        return $this->mimeResolver;
     }
 
     /**
