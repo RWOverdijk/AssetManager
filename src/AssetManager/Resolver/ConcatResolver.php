@@ -177,6 +177,7 @@ class ConcatResolver implements
                 ));
             }
 
+            $this->getAssetFilterManager()->setFilters($asset, $res);
             $stringAsset->appendContent($res->dump());
 
             if ($res->getLastModified() > $lastModified) {
@@ -186,7 +187,7 @@ class ConcatResolver implements
 
         $stringAsset->setLastModified($lastModified);
         $stringAsset->mimetype = $mimeType;
-        //$this->getAssetFilterManager()->setFilters($name, $stringAsset);
+        $this->getAssetFilterManager()->setFilters($name, $stringAsset);
 
         return $stringAsset;
     }
