@@ -178,6 +178,8 @@ class ConcatResolver implements
             }
 
             $this->getAssetFilterManager()->setFilters($asset, $res);
+
+            $mimeType = $res->mimetype;
             $stringAsset->appendContent($res->dump());
 
             if ($res->getLastModified() > $lastModified) {
