@@ -260,8 +260,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     public function testMimeTypesDontMatch()
     {
         $callbackInvocationCount = 0;
-        $callback = function() use (&$callbackInvocationCount) {
-
+        $callback = function () use (&$callbackInvocationCount) {
             $asset1 = new Asset\StringAsset('bacon');
             $asset2 = new Asset\StringAsset('eggs');
             $asset3 = new Asset\StringAsset('Mud');
@@ -375,7 +374,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     public function testSuccessResolve()
     {
         $callbackInvocationCount = 0;
-        $callback = function() use (&$callbackInvocationCount) {
+        $callback = function () use (&$callbackInvocationCount) {
 
             $asset1 = new Asset\StringAsset('bacon');
             $asset2 = new Asset\StringAsset('eggs');

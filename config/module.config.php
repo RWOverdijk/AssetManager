@@ -10,6 +10,7 @@ return array(
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
             'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
+            'AssetManager\Resolver\ConcatResolver'              => 'AssetManager\Service\ConcatResolverServiceFactory',
         ),
         'invokables' => array(
             'mime_resolver' => 'AssetManager\Service\MimeResolver',
@@ -18,6 +19,7 @@ return array(
     'asset_manager' => array(
         'resolvers' => array(
             'AssetManager\Resolver\MapResolver'                 => 2000,
+            'AssetManager\Resolver\ConcatResolver'              => 1750,
             'AssetManager\Resolver\CollectionResolver'          => 1500,
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 1000,
             'AssetManager\Resolver\PathStackResolver'           => 500,
