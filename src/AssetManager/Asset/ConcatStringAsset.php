@@ -38,16 +38,33 @@ class ConcatStringAsset extends BaseAsset
         parent::__construct($filters, $sourceRoot, $sourcePath);
     }
 
+    /**
+     * load asset
+     *
+     * @param FilterInterface $additionalFilter
+     */
     public function load(FilterInterface $additionalFilter = null)
     {
         $this->doLoad($this->getContent(), $additionalFilter);
     }
 
+    /**
+     * set last modified value of asset
+     *
+     * this is useful for cache mechanism detection id file has changed
+     *
+     * @param $lastModified
+     */
     public function setLastModified($lastModified)
     {
         $this->lastModified = $lastModified;
     }
 
+    /**
+     * get last modified value from asset
+     *
+     * @return int|null
+     */
     public function getLastModified()
     {
         return $this->lastModified;
