@@ -52,4 +52,19 @@ class ConcatStringAsset extends BaseAsset
     {
         return $this->lastModified;
     }
+
+    /**
+     * Append content to current content
+     *
+     * @param string $content
+     *
+     * @return $this
+     */
+    public function appendContent($content)
+    {
+        $this->setContent(
+            $this->getContent().$content
+        );
+        return $this;
+    }
 }
