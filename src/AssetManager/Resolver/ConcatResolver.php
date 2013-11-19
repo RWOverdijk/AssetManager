@@ -143,8 +143,8 @@ class ConcatResolver implements
             );
         }
 
+        $stringAsset = new ConcatStringAsset();
         $mimeType   = null;
-        $content = "";
         $lastModified = 0;
 
         foreach ($this->concats[$name] as $asset) {
@@ -178,13 +178,13 @@ class ConcatResolver implements
             }
 
             $content .= "\n".$res->dump();
+            $stringAsset->appendContent($res->dump());
 
             if ($res->getLastModified() > $lastModified) {
                 $lastModified = $res->getLastModified();
             }
         }
 
-        $stringAsset = new ConcatStringAsset(ltrim($content));
         $stringAsset->setLastModified($lastModified);
         $stringAsset->mimetype = $mimeType;
         //$this->getAssetFilterManager()->setFilters($name, $stringAsset);
