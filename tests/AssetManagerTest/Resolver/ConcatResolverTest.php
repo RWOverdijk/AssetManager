@@ -7,6 +7,7 @@ use Assetic\Asset;
 use AssetManager\Resolver\ConcatResolver;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
 use AssetManager\Resolver\ResolverInterface;
+use AssetManager\Service\MimeResolver;
 
 class ConcatIterable implements \IteratorAggregate
 {
@@ -182,6 +183,9 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
         $resolver->setAggregateResolver($aggregateResolver);
 
         $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
+        $mimeResolver = new MimeResolver;
+        $assetFilterManager->setMimeResolver($mimeResolver);
+        $resolver->setMimeResolver($mimeResolver);
         $resolver->setAssetFilterManager($assetFilterManager);
 
         $resolver->setConcats($asset1);
@@ -192,7 +196,6 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(
             $asset->dump(),
             file_get_contents(__FILE__)
-            ."\n"
             .file_get_contents(__FILE__)
         );
     }
