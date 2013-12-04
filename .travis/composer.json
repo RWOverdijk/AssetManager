@@ -1,4 +1,10 @@
 {
+     "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:michaelmoussa/AssetManager.git"
+        }
+    ],
     "require": {
         "rwoverdijk/assetmanager": "*@dev",
         "kriswallsmith/assetic": ">=v1.1.0-alpha1"
