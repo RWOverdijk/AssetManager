@@ -87,7 +87,10 @@ class FilePathCache implements CacheInterface
             throw new \RuntimeException('Unable to write file ' . $this->cachedFile());
         }
 
-        file_put_contents($this->cachedFile(), $value);
+        // Use "rename" to achieve atomic writes
+        $tmpFilePath = $cacheDir . '/' . uniqid('AssetManagerFilePathCache');
+        file_put_contents($tmpFilePath, $value);
+        rename($tmpFilePath, $this->cachedFile());
     }
 
     /**
