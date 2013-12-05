@@ -1,13 +1,8 @@
 # AssetManager
 By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius.github.com/)
 
-**Note:** This version includes a possible BC-break as it has switched to a different tag of assetic.
-
-Original Repository Build Status
 [![Build Status](https://secure.travis-ci.org/RWOverdijk/AssetManager.png?branch=master)](http://travis-ci.org/RWOverdijk/AssetManager)
-
-This Repository Build Status
-[![Build Status](https://secure.travis-ci.org/skors/AssetManager.png?branch=master)](http://travis-ci.org/skors/AssetManager)
+[![Latest Stable Version](https://poser.pugx.org/RWOverdijk/AssetManager/v/stable.png)](https://packagist.org/packages/RWOverdijk/AssetManager)
 
 ## Introduction
 This module is intended for usage with a default directory structure of a
