@@ -81,7 +81,7 @@ class AssetCacheManager
         } else {
             // @codeCoverageIgnoreStart
             $factories  = array(
-                'FilesystemCache' => function($options) {
+                'FilesystemCache' => function ($options) {
                     if (empty($options['dir'])) {
                         throw new Exception\RuntimeException(
                             'FilesystemCache expected dir entry.'
@@ -90,10 +90,10 @@ class AssetCacheManager
                     $dir = $options['dir'];
                     return new Cache\FilesystemCache($dir);
                 },
-                'ApcCache' => function($options) {
+                'ApcCache' => function ($options) {
                     return new Cache\ApcCache();
                 },
-                'FilePathCache' => function($options) use ($path) {
+                'FilePathCache' => function ($options) use ($path) {
                     if (empty($options['dir'])) {
                         throw new Exception\RuntimeException(
                             'FilePathCache expected dir entry.'
