@@ -5,9 +5,7 @@ namespace AssetManager;
 use Zend\Loader\StandardAutoloader;
 use Zend\Loader\AutoloaderFactory;
 use Zend\EventManager\EventInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature;
 use Zend\Mvc\MvcEvent;
 
 /**
@@ -17,9 +15,9 @@ use Zend\Mvc\MvcEvent;
  * @package    AssetManager
  */
 class Module implements
-    AutoloaderProviderInterface,
-    ConfigProviderInterface,
-    BootstrapListenerInterface
+    Feature\AutoloaderProviderInterface,
+    Feature\ConfigProviderInterface,
+    Feature\BootstrapListenerInterface
 {
     /**
      * {@inheritDoc}

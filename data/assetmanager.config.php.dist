@@ -1,0 +1,15 @@
+<?php
+return array(
+    'asset_manager' => array(
+        'dynamic_collection_cache' => array(
+            'storage_options' => array(
+                'adapter' => array(
+                    'name'    => 'apc',
+                    'options' => array('ttl' => 86400),
+                ),
+            ),
+            'enabled'    => false,
+            'cache_key'  => 'dynamic_collections_cacke_key',
+        ),
+    ),
+);
