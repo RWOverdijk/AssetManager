@@ -1,23 +1,12 @@
 <?php
 
-/*
- * This file is part of the Assetic package, an OpenSky project.
- *
- * (c) 2010-2013 OpenSky Project Inc
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 namespace AssetManager\Asset;
 
 use Assetic\Filter\FilterInterface;
 use Assetic\Asset\BaseAsset;
 
 /**
- * Represents a string asset.
- *
- * @author Kris Wallsmith <kris.wallsmith@gmail.com>
+ * Represents a concatented string asset.
  */
 class ConcatStringAsset extends BaseAsset
 {
