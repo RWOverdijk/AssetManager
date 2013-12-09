@@ -149,8 +149,11 @@ class ConcatResolver implements
 
         foreach ($this->concats[$name] as $asset) {
 
-            if (null === ($res = $this->getAggregateResolver()->resolve($asset))) {
             $asset = (string) $asset;
+
+            $res = $this->getAggregateResolver()->resolve($asset);
+
+            if (null === $res) {
                 throw new Exception\RuntimeException("Asset '$asset' could not be found.");
             }
 
