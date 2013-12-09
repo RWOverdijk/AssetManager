@@ -69,7 +69,7 @@ class ConcatStringAsset extends BaseAsset
     public function appendContent($content)
     {
         $this->setContent(
-            $this->getContent().$content
+            $this->getContent() . $content
         );
     }
 }

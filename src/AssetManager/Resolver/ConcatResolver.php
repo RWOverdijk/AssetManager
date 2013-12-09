@@ -165,7 +165,7 @@ class ConcatResolver implements
             }
 
             $res->mimetype = $this->getMimeResolver()->getMimeType(
-                $res->getSourceRoot().$res->getSourcePath()
+                $res->getSourceRoot() . $res->getSourcePath()
             );
 
             if (null !== $mimeType && $res->mimetype !== $mimeType) {
