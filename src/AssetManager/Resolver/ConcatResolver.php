@@ -149,12 +149,8 @@ class ConcatResolver implements
 
         foreach ($this->concats[$name] as $asset) {
 
-            if (!is_string($asset)) {
-                throw new Exception\RuntimeException(
-                    'Asset should be of type string. got ' . gettype($asset)
-                );
-            }
             if (null === ($res = $this->getAggregateResolver()->resolve($asset))) {
+            $asset = (string) $asset;
                 throw new Exception\RuntimeException("Asset '$asset' could not be found.");
             }
 
