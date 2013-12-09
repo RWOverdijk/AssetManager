@@ -71,6 +71,5 @@ class ConcatStringAsset extends BaseAsset
         $this->setContent(
             $this->getContent().$content
         );
-        return $this;
     }
 }
