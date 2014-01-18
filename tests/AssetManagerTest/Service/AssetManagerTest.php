@@ -500,6 +500,21 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $this->assertSame(file_get_contents(__FILE__), $response->getContent());
     }
 
+    public function testAssetSetOnResponse()
+    {
+        $assetManager = new AssetManager($this->getResolver());
+        $this->assertFalse($assetManager->assetSetOnResponse());
+
+        $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
+        $assetFilterManager->setMimeResolver(new MimeResolver);
+        $assetManager->setAssetFilterManager($assetFilterManager);
+        $assetManager->setAssetCacheManager(new \AssetManager\Service\AssetCacheManager());
+        $assetManager->resolvesToAsset($this->getRequest());
+        $assetManager->setAssetOnResponse(new Response);
+
+        $this->assertTrue($assetManager->assetSetOnResponse());
+    }
+
     /**
      * @expectedException \AssetManager\Exception\RuntimeException
      */

@@ -48,6 +48,11 @@ class AssetManager implements
     protected $config;
 
     /**
+     * @var bool Whether this instance has at least one asset successfully set on response
+     */
+    protected $assetSetOnResponse = false;
+
+    /**
      * Constructor
      *
      * @param ResolverInterface $resolver
@@ -84,6 +89,16 @@ class AssetManager implements
         }
 
         return (bool)$this->asset;
+    }
+
+    /**
+     * Returns true if this instance of asset manager has at least one asset successfully set on response
+     *
+     * @return bool
+     */
+    public function assetSetOnResponse()
+    {
+        return $this->assetSetOnResponse;
     }
 
     /**
@@ -146,6 +161,8 @@ class AssetManager implements
                  ->addHeaderLine('Content-Length', $contentLength);
 
         $response->setContent($assetContents);
+
+        $this->assetSetOnResponse = true;
 
         return $response;
     }
