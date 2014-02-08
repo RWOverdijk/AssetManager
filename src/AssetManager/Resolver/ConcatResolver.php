@@ -145,35 +145,31 @@ class ConcatResolver implements
 
             $resolvedAsset = $this->getAggregateResolver()->resolve((string) $assetName);
 
-            $res = $this->getAggregateResolver()->resolve($asset);
-
-            if (null === $res) {
-                throw new Exception\RuntimeException("Asset '$asset' could not be found.");
-            }
-
-            if (!$res instanceof AssetInterface) {
+            if (!$resolvedAsset instanceof AssetInterface) {
                 throw new Exception\RuntimeException(
                     "Asset '$asset' does not implement Assetic\\Asset\\AssetInterface."
                 );
             }
 
-            $res->mimetype = $this->getMimeResolver()->getMimeType(
-                $res->getSourceRoot() . $res->getSourcePath()
+            $resolvedAsset->mimetype = $this->getMimeResolver()->getMimeType(
+                $resolvedAsset->getSourceRoot() . $resolvedAsset->getSourcePath()
             );
 
-            if (null !== $mimeType && $res->mimetype !== $mimeType) {
-                throw new Exception\RuntimeException(sprintf(
-                    'Asset "%s" from collection "%s" doesn\'t have the expected mime-type "%s".',
-                    $asset,
-                    $name,
-                    $mimeType
-                ));
+            if (null !== $mimeType && $resolvedAsset->mimetype !== $mimeType) {
+                throw new Exception\RuntimeException(
+                    sprintf(
+                        'Asset "%s" from collection "%s" doesn\'t have the expected mime-type "%s".',
+                        $assetName,
+                        $name,
+                        $mimeType
+                    )
+                );
             }
 
-            $this->getAssetFilterManager()->setFilters($asset, $res);
+            $this->getAssetFilterManager()->setFilters($assetName, $resolvedAsset);
 
-            $mimeType = $res->mimetype;
-            $stringAsset->appendContent($res->dump());
+            $mimeType = $resolvedAsset->mimetype;
+            $stringAsset->appendContent($resolvedAsset->dump());
 
             if ($res->getLastModified() > $lastModified) {
                 $lastModified = $res->getLastModified();
