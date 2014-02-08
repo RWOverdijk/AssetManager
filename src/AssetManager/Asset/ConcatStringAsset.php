@@ -25,9 +25,8 @@ class ConcatStringAsset extends BaseAsset
      */
     public function __construct($content = '', $filters = array(), $sourceRoot = null, $sourcePath = null)
     {
-        $this->setContent($content);
-
         parent::__construct($filters, $sourceRoot, $sourcePath);
+        $this->setContent($content);
     }
 
     /**
