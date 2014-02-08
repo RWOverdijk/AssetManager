@@ -10,6 +10,9 @@ use Assetic\Asset\BaseAsset;
  */
 class ConcatStringAsset extends BaseAsset
 {
+    /**
+     * @var int Timestamp of last modified date from asset
+     */
     private $lastModified;
 
     /**
@@ -42,7 +45,7 @@ class ConcatStringAsset extends BaseAsset
      *
      * this is useful for cache mechanism detection id file has changed
      *
-     * @param $lastModified
+     * @param int $lastModified
      */
     public function setLastModified($lastModified)
     {
