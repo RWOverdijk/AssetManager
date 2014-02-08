@@ -22,12 +22,12 @@ class ConcatResolver implements
     MimeResolverAwareInterface
 {
     /**
-     * @var ResolverInterface
+     * @var null|ResolverInterface
      */
     protected $aggregateResolver;
 
     /**
-     * @var AssetFilterManager The filterManager service.
+     * @var null|AssetFilterManager The filterManager service.
      */
     protected $filterManager;
 
