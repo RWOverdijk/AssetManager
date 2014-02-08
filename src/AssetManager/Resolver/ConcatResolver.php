@@ -176,9 +176,7 @@ class ConcatResolver implements
             $mimeType = $resolvedAsset->mimetype;
             $stringAsset->appendContent($resolvedAsset->dump());
 
-            if ($res->getLastModified() > $lastModified) {
-                $lastModified = $res->getLastModified();
-            }
+            $lastModified = max($resolvedAsset->getLastModified(), $lastModified);
         }
 
         $stringAsset->setLastModified($lastModified);
