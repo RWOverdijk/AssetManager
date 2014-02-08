@@ -137,19 +137,13 @@ class ConcatResolver implements
             return null;
         }
 
-        if (!is_array($this->concats[$name])) {
-            throw new Exception\RuntimeException(
-                "Concat with name $name is not an an array."
-            );
-        }
-
-        $stringAsset = new ConcatStringAsset();
-        $mimeType   = null;
+        $stringAsset  = new ConcatStringAsset();
+        $mimeType     = null;
         $lastModified = 0;
 
-        foreach ($this->concats[$name] as $asset) {
+        foreach ((array) $this->concats[$name] as $assetName) {
 
-            $asset = (string) $asset;
+            $resolvedAsset = $this->getAggregateResolver()->resolve((string) $assetName);
 
             $res = $this->getAggregateResolver()->resolve($asset);
 
