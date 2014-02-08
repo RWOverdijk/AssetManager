@@ -147,7 +147,12 @@ class ConcatResolver implements
 
             if (!$resolvedAsset instanceof AssetInterface) {
                 throw new Exception\RuntimeException(
-                    "Asset '$asset' does not implement Assetic\\Asset\\AssetInterface."
+                    sprintf(
+                        'Asset "%s" from collection "%s" can\'t be resolved '
+                        .'to an Asset implementing Assetic\Asset\AssetInterface.',
+                        $assetName,
+                        $name
+                    )
                 );
             }
 
