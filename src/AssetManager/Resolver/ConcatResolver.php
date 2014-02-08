@@ -83,19 +83,7 @@ class ConcatResolver implements
      */
     public function setConcats($concats)
     {
-        if (!is_array($concats) && !$concats instanceof Traversable) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                '%s: expects an array or Traversable, received "%s"',
-                __METHOD__,
-                (is_object($concats) ? get_class($concats) : gettype($concats))
-            ));
-        }
-
-        if ($concats instanceof Traversable) {
-            $concats = ArrayUtils::iteratorToArray($concats);
-        }
-
-        $this->concats = $concats;
+        $this->concats = ArrayUtils::iteratorToArray($concats);
     }
 
     /**
