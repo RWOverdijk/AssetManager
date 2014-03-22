@@ -24,19 +24,17 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zend-stdlib": "2.*",
         "zendframework/zend-servicemanager": "2.*",
         "zendframework/zend-http": "2.*",
-        "zendframework/zend-loader": "2.*",
         "zendframework/zend-eventmanager": "2.*",
         "zendframework/zend-modulemanager": "2.*",
         "zendframework/zend-mvc": "2.*",
         "zendframework/zend-view": "2.*",
         "zendframework/zend-config": "2.*",
-        "zendframework/zend-form": "2.*",
-        "zendframework/zend-serializer": "2.*",
-        "zendframework/zend-console": "2.*",
         "kriswallsmith/assetic": "1.1.*"
+    },
+    "require-dev": {
+        "zendframework/zendframework": "2.*"
     },
     "autoload": {
         "psr-0": {
