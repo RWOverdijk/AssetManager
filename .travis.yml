@@ -3,14 +3,16 @@ language: php
 php:
   - 5.3
   - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
 
 before_script:
   - cd ..
   - git clone git://github.com/zendframework/ZendSkeletonApplication.git
   - cd ZendSkeletonApplication
   - cp ../AssetManager/.travis/composer.json ./
-  - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install --dev
+  - composer update --dev --prefer-source
   - rm -rf vendor/rwoverdijk/assetmanager
   - cp -r ../AssetManager vendor/rwoverdijk/assetmanager
   - cd vendor/rwoverdijk/assetmanager
