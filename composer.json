@@ -36,6 +36,7 @@
         "zendframework/zend-form": "2.*",
         "zendframework/zend-serializer": "2.*",
         "zendframework/zend-console": "2.*",
+        "zendframework/zend-log": "2.*",
         "kriswallsmith/assetic": "1.1.*"
     },
     "autoload": {
