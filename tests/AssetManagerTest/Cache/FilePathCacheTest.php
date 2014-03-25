@@ -37,7 +37,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RunTimeException
+     * @expectedException \RunTimeException
      *
      */
     public function testGetException()
@@ -59,7 +59,8 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
     {
         restore_error_handler(); // Previous test fails, so doesn't unset.
         $time = time();
-        $sentence = 'I am, what I am. Cached data, please don\'t hate, for we are all equals. Except you, you\'re a dick.';
+        $sentence = 'I am, what I am. Cached data, please don\'t hate, '
+            . 'for we are all equals. Except you, you\'re a dick.';
         $base = '/tmp/_cachetest.' . $time . '/';
         mkdir($base, 0777);
         mkdir($base.'readonly', 0400, true);
@@ -75,7 +76,8 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
     {
         restore_error_handler(); // Previous test fails, so doesn't unset.
         $time = time()+1;
-        $sentence = 'I am, what I am. Cached data, please don\'t hate, for we are all equals. Except you, you\'re a dick.';
+        $sentence = 'I am, what I am. Cached data, please don\'t hate, '
+            . 'for we are all equals. Except you, you\'re a dick.';
         $base = '/tmp/_cachetest.' . $time . '/';
         mkdir($base, 0400, true);
 
@@ -88,7 +90,8 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
     public function testSetSuccess()
     {
         $time       = time();
-        $sentence   = 'I am, what I am. Cached data, please don\'t hate, for we are all equals. Except you, you\'re a dick.';
+        $sentence = 'I am, what I am. Cached data, please don\'t hate, '
+            . 'for we are all equals. Except you, you\'re a dick.';
         $base       = '/tmp/_cachetest.' . $time . '/';
         $cache      = new FilePathCache($base, 'bacon.'.$time);
 
@@ -101,11 +104,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
      */
     public function testRemoveFails()
     {
-        $time       = time()+2;
-        $sentence   = 'I am, what I am. Cached data, please don\'t hate, for we are all equals. Except you, you\'re a dick.';
-        $base       = '/tmp/_cachetest.' . $time . '/';
-        $path       = $base.'bacon.'.$time;
-        $cache      = new FilePathCache('/dev', 'null');
+        $cache = new FilePathCache('/dev', 'null');
 
         $cache->remove('bacon');
     }
@@ -113,7 +112,8 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
     public function testRemoveSuccess()
     {
         $time       = time();
-        $sentence   = 'I am, what I am. Cached data, please don\'t hate, for we are all equals. Except you, you\'re a dick.';
+        $sentence = 'I am, what I am. Cached data, please don\'t hate, '
+            . 'for we are all equals. Except you, you\'re a dick.';
         $base       = '/tmp/_cachetest.' . $time . '/';
         $cache      = new FilePathCache($base, 'bacon.'.$time);
 
@@ -124,15 +124,13 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
 
     public function testCachedFile()
     {
-        $method = new \ReflectionMethod(
-          'AssetManager\Cache\FilePathCache', 'cachedFile'
-        );
+        $method = new \ReflectionMethod('AssetManager\Cache\FilePathCache', 'cachedFile');
 
         $method->setAccessible(true);
 
         $this->assertEquals(
-          '/' . ltrim(__FILE__, '/'),
-          $method->invoke(new FilePathCache('', __FILE__))
+            '/' . ltrim(__FILE__, '/'),
+            $method->invoke(new FilePathCache('', __FILE__))
         );
     }
 }
