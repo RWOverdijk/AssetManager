@@ -16,10 +16,6 @@
  * and is licensed under the MIT license.
  */
 
-use Zend\ServiceManager\ServiceManager;
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\Loader\StandardAutoloader;
-
 ini_set('error_reporting', E_ALL);
 
 $files = array(__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../autoload.php');
@@ -41,12 +37,3 @@ if (file_exists(__DIR__ . '/TestConfiguration.php')) {
 } else {
     $config = require __DIR__ . '/TestConfiguration.php.dist';
 }
-
-$serviceManager = new ServiceManager(new ServiceManagerConfig(
-    isset($config['service_manager']) ? $config['service_manager'] : array()
-));
-$serviceManager->setService('ApplicationConfig', $config);
-
-/* @var $moduleManager \Zend\ModuleManager\ModuleManager */
-$moduleManager = $serviceManager->get('ModuleManager');
-$moduleManager->loadModules();
