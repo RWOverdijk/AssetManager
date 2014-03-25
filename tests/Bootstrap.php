@@ -20,37 +20,29 @@ use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
 use Zend\Loader\StandardAutoloader;
 
-chdir(__DIR__);
+ini_set('error_reporting', E_ALL);
 
+$files = array(__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../autoload.php');
 
-$previousDir = '.';
+foreach ($files as $file) {
+    if (file_exists($file)) {
+        $loader = require $file;
 
-while (!file_exists('config/application.config.php')) {
-    $dir = dirname(getcwd());
-
-    if ($previousDir === $dir) {
-        throw new RuntimeException(
-            'Unable to locate "config/application.config.php":'
-            . ' is AssetManager in a sub-directory of your application skeleton?'
-        );
+        break;
     }
-
-    $previousDir = $dir;
-    chdir($dir);
 }
 
-if (!(@include_once __DIR__ . '/../../vendor/autoload.php') && !@(include_once __DIR__ . '/../../../autoload.php')) {
+if (! isset($loader)) {
     throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
 }
 
-if (!$config = @include __DIR__ . '/TestConfiguration.php') {
+if (file_exists(__DIR__ . '/TestConfiguration.php')) {
+    $config = require __DIR__ . '/TestConfiguration.php';
+} else {
     $config = require __DIR__ . '/TestConfiguration.php.dist';
 }
 
-$loader = new StandardAutoloader();
-$loader->registerNamespace('AssetManager', __DIR__ . '/../src/AssetManager');
-$loader->registerNamespace('AssetManagerTest', __DIR__ . '/AssetManagerTest');
-$loader->register();
+$loader->add('AssetManagerTest', __DIR__ . '/AssetManagerTest');
 
 $serviceManager = new ServiceManager(new ServiceManagerConfig(
     isset($config['service_manager']) ? $config['service_manager'] : array()
