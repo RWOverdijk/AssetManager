@@ -23,7 +23,7 @@ $files = array(__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../autoloa
 foreach ($files as $file) {
     if (file_exists($file)) {
         $loader = require $file;
-        
+
         unset($loader, $file, $files);
 
         return;
