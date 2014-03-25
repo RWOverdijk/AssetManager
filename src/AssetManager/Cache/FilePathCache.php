@@ -3,6 +3,8 @@
 namespace AssetManager\Cache;
 
 use Assetic\Cache\CacheInterface;
+use AssetManager\Exception\RuntimeException;
+use Zend\Stdlib\ErrorHandler;
 
 /**
  * A file path cache. Same as FilesystemCache, except for the fact that this will create the
@@ -66,11 +68,7 @@ class FilePathCache implements CacheInterface
     {
         $cacheDir = dirname($this->cachedFile());
 
-        set_error_handler(function ($errno, $errstr) {
-            if ($errstr !== 'mkdir(): File exists') {
-                throw new \RuntimeException($errstr);
-            }
-        });
+        ErrorHandler::start();
 
         if (!is_dir($cacheDir)) {
             $umask = umask(0);
@@ -81,7 +79,7 @@ class FilePathCache implements CacheInterface
         }
         // @codeCoverageIgnoreEnd
 
-        restore_error_handler();
+        ErrorHandler::stop();
 
         if (!is_writable($cacheDir)) {
             throw new \RuntimeException('Unable to write file ' . $this->cachedFile());
@@ -98,13 +96,15 @@ class FilePathCache implements CacheInterface
      */
     public function remove($key)
     {
-        set_error_handler(function ($errno, $errstr) {
-            throw new \RuntimeException($errstr);
-        });
+        try {
+            ErrorHandler::start(\E_WARNING);
 
-        $success = unlink($this->cachedFile());
+            $success = unlink($this->cachedFile());
 
-        restore_error_handler();
+            ErrorHandler::stop(true);
+        } catch (\ErrorException $e) {
+            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        }
 
         return $success;
     }
