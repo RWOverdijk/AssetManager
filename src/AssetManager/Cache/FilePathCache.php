@@ -96,14 +96,14 @@ class FilePathCache implements CacheInterface
      */
     public function remove($key)
     {
-        try {
-            ErrorHandler::start(\E_WARNING);
+        ErrorHandler::start(\E_WARNING);
 
-            $success = unlink($this->cachedFile());
+        $success = unlink($this->cachedFile());
 
-            ErrorHandler::stop(true);
-        } catch (\ErrorException $e) {
-            throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
+        ErrorHandler::stop();
+
+        if (false === $success) {
+            throw new RuntimeException(sprintf('Could not remove key "%s"', $this->cachedFile()));
         }
 
         return $success;
