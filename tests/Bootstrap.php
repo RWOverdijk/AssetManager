@@ -23,17 +23,11 @@ $files = array(__DIR__ . '/../vendor/autoload.php', __DIR__ . '/../../../autoloa
 foreach ($files as $file) {
     if (file_exists($file)) {
         $loader = require $file;
+        
+        unset($loader, $file, $files);
 
-        break;
+        return;
     }
 }
 
-if (! isset($loader)) {
-    throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
-}
-
-if (file_exists(__DIR__ . '/TestConfiguration.php')) {
-    $config = require __DIR__ . '/TestConfiguration.php';
-} else {
-    $config = require __DIR__ . '/TestConfiguration.php.dist';
-}
+throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
