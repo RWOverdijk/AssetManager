@@ -5,15 +5,7 @@ php:
   - 5.4
 
 before_script:
-  - cd ..
-  - git clone git://github.com/zendframework/ZendSkeletonApplication.git
-  - cd ZendSkeletonApplication
-  - cp ../AssetManager/.travis/composer.json ./
-  - curl -s http://getcomposer.org/installer | php
-  - php composer.phar install --dev
-  - rm -rf vendor/rwoverdijk/assetmanager
-  - cp -r ../AssetManager vendor/rwoverdijk/assetmanager
-  - cd vendor/rwoverdijk/assetmanager
+  - ./vendor/bin/phpunit
   - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
 
 script:
