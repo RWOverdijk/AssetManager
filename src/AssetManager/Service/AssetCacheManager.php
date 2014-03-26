@@ -90,7 +90,7 @@ class AssetCacheManager
                     $dir = $options['dir'];
                     return new Cache\FilesystemCache($dir);
                 },
-                'ApcCache' => function ($options) {
+                'ApcCache' => function () {
                     return new Cache\ApcCache();
                 },
                 'FilePathCache' => function ($options) use ($path) {

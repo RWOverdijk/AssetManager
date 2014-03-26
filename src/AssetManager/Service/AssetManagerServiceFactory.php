@@ -43,5 +43,4 @@ class AssetManagerServiceFactory implements FactoryInterface
 
         return $assetManager;
     }
-
 }

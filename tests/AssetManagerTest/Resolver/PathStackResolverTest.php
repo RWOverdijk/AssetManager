@@ -33,7 +33,7 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \PHPUnit_Framework_Error
      */
     public function testSetMimeResolverFailObject()
     {
@@ -42,7 +42,7 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \PHPUnit_Framework_Error
      */
     public function testSetMimeResolverFailString()
     {
@@ -130,5 +130,4 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
         $resolver->addPath(null);
     }
-
 }

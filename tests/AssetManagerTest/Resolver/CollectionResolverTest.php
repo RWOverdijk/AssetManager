@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Service\AssetFilterManager;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
@@ -9,35 +10,6 @@ use Assetic\Asset;
 use Assetic\Asset\AssetCache;
 use AssetManager\Service\MimeResolver;
 use AssetManager\Resolver\ResolverInterface;
-
-class CollectionsIterable implements \IteratorAggregate
-{
-    public $collectionName1 = array(
-        'collection 1.1',
-        'collection 1.2',
-        'collection 1.3',
-        'collection 1.4',
-    );
-
-    public $collectionName2 = array(
-        'collection 2.1',
-        'collection 2.2',
-        'collection 2.3',
-        'collection 2.4',
-    );
-
-    public $collectionName3 = array(
-        'collection 3.1',
-        'collection 3.2',
-        'collection 3.3',
-        'collection 3.4',
-    );
-
-    public function getIterator()
-    {
-        return new \ArrayIterator($this);
-    }
-}
 
 class CollectionsResolverTest extends PHPUnit_Framework_TestCase
 {
@@ -134,7 +106,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException AssetManager\Exception\InvalidArgumentException
+     * @expectedException \AssetManager\Exception\InvalidArgumentException
      */
     public function testSetCollectionFailsObject()
     {
@@ -144,7 +116,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException AssetManager\Exception\InvalidArgumentException
+     * @expectedException \AssetManager\Exception\InvalidArgumentException
      */
     public function testSetCollectionFailsString()
     {
@@ -170,7 +142,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \PHPUnit_Framework_Error
      */
     public function testSetAggregateResolverFails()
     {
@@ -179,7 +151,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
         $resolver->setAggregateResolver(new \stdClass);
     }
 
-    /*
+    /**
      * Resolve
      */
     public function testResolveNoArgsEqualsNull()
@@ -190,7 +162,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException AssetManager\Exception\RuntimeException
+     * @expectedException \AssetManager\Exception\RuntimeException
      */
     public function testResolveNonArrayCollectionException()
     {
@@ -200,7 +172,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException AssetManager\Exception\RuntimeException
+     * @expectedException \AssetManager\Exception\RuntimeException
      */
     public function testCollectionItemNonString()
     {
@@ -213,7 +185,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException AssetManager\Exception\RuntimeException
+     * @expectedException \AssetManager\Exception\RuntimeException
      */
     public function testCouldNotResolve()
     {
@@ -234,7 +206,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException AssetManager\Exception\RuntimeException
+     * @expectedException \AssetManager\Exception\RuntimeException
      */
     public function testResolvesToNonAsset()
     {
@@ -255,7 +227,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException AssetManager\Exception\RuntimeException
+     * @expectedException \AssetManager\Exception\RuntimeException
      */
     public function testMimeTypesDontMatch()
     {
@@ -406,7 +378,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
 
 
         $mimeResolver = new MimeResolver;
-        $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
+        $assetFilterManager = new AssetFilterManager();
 
         $assetFilterManager->setMimeResolver($mimeResolver);
 

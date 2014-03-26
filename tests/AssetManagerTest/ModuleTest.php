@@ -85,7 +85,11 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testOnDispatchStatus200()
     {
         $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');
-        $assetManager = $this->getMock('AssetManager\Service\AssetManager', array('resolvesToAsset', 'setAssetOnResponse'), array($resolver));
+        $assetManager = $this->getMock(
+            'AssetManager\Service\AssetManager',
+            array('resolvesToAsset', 'setAssetOnResponse'),
+            array($resolver)
+        );
         $assetManager
             ->expects($this->once())
             ->method('resolvesToAsset')

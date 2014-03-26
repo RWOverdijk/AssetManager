@@ -2,8 +2,6 @@
 
 namespace AssetManager\Resolver;
 
-use AssetManager\Resolver\ResolverInterface;
-
 interface AggregateResolverAwareInterface
 {
     /**

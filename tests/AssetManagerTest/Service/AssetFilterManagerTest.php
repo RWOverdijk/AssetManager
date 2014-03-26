@@ -2,14 +2,21 @@
 
 namespace AssetManagerTest\Service;
 
-require_once __DIR__ . '/../../_files/CustomFilter.php';
-
+use Assetic\Asset\StringAsset;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetFilterManager;
 use Zend\ServiceManager\ServiceManager;
 
 class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        require_once __DIR__ . '/../../_files/CustomFilter.php';
+    }
+
     public function testensureByService()
     {
         $assetFilterManager = new AssetFilterManager(array(
@@ -24,7 +31,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('testFilter', new \CustomFilter());
         $assetFilterManager->setServiceLocator($serviceManager);
 
-        $asset = new \Assetic\Asset\StringAsset('Herp derp');
+        $asset = new StringAsset('Herp derp');
 
         $assetFilterManager->setFilters('test/path.test', $asset);
 
@@ -32,7 +39,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testensureByServiceInvalid()
     {
@@ -48,7 +55,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('testFilter', new \CustomFilter());
         $assetFilterManager->setServiceLocator($serviceManager);
 
-        $asset = new \Assetic\Asset\StringAsset('Herp derp');
+        $asset = new StringAsset('Herp derp');
 
         $assetFilterManager->setFilters('test/path.test', $asset);
 
@@ -56,7 +63,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testensureByInvalid()
     {
@@ -67,7 +74,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
             ),
         ));
 
-        $asset = new \Assetic\Asset\StringAsset('Herp derp');
+        $asset = new StringAsset('Herp derp');
 
         $assetFilterManager->setFilters('test/path.test', $asset);
     }

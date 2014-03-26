@@ -3,8 +3,6 @@
 namespace AssetManager\Service;
 
 use Assetic\Asset\AssetInterface;
-use AssetManager\Service\AssetFilterManagerAwareInterface;
-use AssetManager\Service\AssetFilterManager;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
 use Zend\Stdlib\RequestInterface;
@@ -143,9 +141,9 @@ class AssetManager implements
         // @codeCoverageIgnoreEnd
 
         $response->getHeaders()
-                 ->addHeaderLine('Content-Transfer-Encoding',   'binary')
-                 ->addHeaderLine('Content-Type',                $mimeType)
-                 ->addHeaderLine('Content-Length',              $contentLength);
+                 ->addHeaderLine('Content-Transfer-Encoding', 'binary')
+                 ->addHeaderLine('Content-Type', $mimeType)
+                 ->addHeaderLine('Content-Length', $contentLength);
 
         $response->setContent($assetContents);
 
@@ -203,7 +201,7 @@ class AssetManager implements
     /**
      * Set the AssetCacheManager.
      *
-     * @param AssetCacheManager $filterManager
+     * @param AssetCacheManager $cacheManager
      */
     public function setAssetCacheManager(AssetCacheManager $cacheManager)
     {
