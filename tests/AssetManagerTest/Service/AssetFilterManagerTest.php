@@ -29,7 +29,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
 
         $assetFilterManager->setFilters('test/path.test', $asset);
 
-        $this->assertEquals('called', $asset->dump());
+        $this->assertEquals('Herp Derp', $asset->dump());
     }
 
     public function testensureByService()
