@@ -20,16 +20,16 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
     public function testNulledValuesAreSkipped()
     {
         $assetFilterManager = new AssetFilterManager(array(
-	    'test/path.test' => array(
-	        'null_filters' => null
-	    )
+        'test/path.test' => array(
+            'null_filters' => null
+        )
         ));
-	
-	    $asset = new StringAsset('Herp Derp');
 
-    	$assetFilterManager->setFilters('test/path.test', $asset);
+        $asset = new StringAsset('Herp Derp');
 
-	    $this->assertEquals('called', $asset->dump());
+        $assetFilterManager->setFilters('test/path.test', $asset);
+
+        $this->assertEquals('called', $asset->dump());
     }
 
     public function testensureByService()
