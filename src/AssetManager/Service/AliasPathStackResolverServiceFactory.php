@@ -18,7 +18,7 @@ class AliasPathStackResolverServiceFactory implements FactoryInterface
     {
         $config            = $serviceLocator->get('config');
         $pathStackResolver = new AliasPathStackResolver();
-        $paths             = array();
+        $aliases             = array();
 
         if (isset($config['asset_manager']['resolver_configs']['aliases'])) {
             $aliases = $config['asset_manager']['resolver_configs']['aliases'];
