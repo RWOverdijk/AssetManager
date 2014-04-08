@@ -8,6 +8,7 @@ return array(
             'AssetManager\Service\AggregateResolver'            => 'AssetManager\Service\AggregateResolverServiceFactory',
             'AssetManager\Resolver\MapResolver'                 => 'AssetManager\Service\MapResolverServiceFactory',
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
+            'AssetManager\Resolver\AliasPathStackResolver'      => 'AssetManager\Service\AliasPathStackResolverServiceFactory',
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
             'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
         ),
@@ -17,9 +18,10 @@ return array(
     ),
     'asset_manager' => array(
         'resolvers' => array(
-            'AssetManager\Resolver\MapResolver'                 => 2000,
-            'AssetManager\Resolver\CollectionResolver'          => 1500,
-            'AssetManager\Resolver\PrioritizedPathsResolver'    => 1000,
+            'AssetManager\Resolver\MapResolver'                 => 2500,
+            'AssetManager\Resolver\CollectionResolver'          => 2000,
+            'AssetManager\Resolver\PrioritizedPathsResolver'    => 1500,
+            'AssetManager\Resolver\AliasPathStackResolver'      => 1000,
             'AssetManager\Resolver\PathStackResolver'           => 500,
         ),
     ),
