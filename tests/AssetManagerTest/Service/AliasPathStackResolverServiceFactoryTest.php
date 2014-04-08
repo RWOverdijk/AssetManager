@@ -29,8 +29,10 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
         );
 
         $factory = new AliasPathStackResolverServiceFactory();
+
         /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
         $resolver = $factory->createService($serviceManager);
+
         $this->assertSame(
             array(
                 'alias1/' => 'path1' . DIRECTORY_SEPARATOR,
