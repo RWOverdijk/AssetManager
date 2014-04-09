@@ -17,15 +17,12 @@ class AliasPathStackResolverServiceFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config            = $serviceLocator->get('config');
-        $pathStackResolver = new AliasPathStackResolver();
-        $aliases             = array();
+        $aliases           = array();
 
         if (isset($config['asset_manager']['resolver_configs']['aliases'])) {
             $aliases = $config['asset_manager']['resolver_configs']['aliases'];
         }
 
-        $pathStackResolver->setAliases($aliases);
-
-        return $pathStackResolver;
+        return new AliasPathStackResolver($aliases);
     }
 }

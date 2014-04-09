@@ -33,12 +33,16 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
         /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
         $resolver = $factory->createService($serviceManager);
 
+        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $property = $reflectionClass->getProperty('aliases');
+        $property->setAccessible(true);
+
         $this->assertSame(
             array(
                 'alias1/' => 'path1' . DIRECTORY_SEPARATOR,
                 'alias2/' => 'path2' . DIRECTORY_SEPARATOR,
             ),
-            $resolver->getAliases()
+            $property->getValue($resolver)
         );
     }
 
@@ -53,6 +57,11 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
         $factory = new AliasPathStackResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
         $resolver = $factory->createService($serviceManager);
-        $this->assertEmpty($resolver->getAliases());
+
+        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $property = $reflectionClass->getProperty('aliases');
+        $property->setAccessible(true);
+
+        $this->assertEmpty($property->getValue($resolver));
     }
 }
