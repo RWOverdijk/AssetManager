@@ -34,68 +34,25 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
     protected $mimeResolver;
 
     /**
-     * Set the mime resolver
+     * Constructor
      *
-     * @param MimeResolver $resolver
-     */
-    public function setMimeResolver(MimeResolver $resolver)
-    {
-        $this->mimeResolver = $resolver;
-    }
-
-    /**
-     * Get the mime resolver
+     * Populate the array stack with a list of aliases and their corresponding paths
      *
-     * @return MimeResolver
-     */
-    public function getMimeResolver()
-    {
-        return $this->mimeResolver;
-    }
-
-    /**
-     * Add many aliases to the stack at once
-     *
-     * @param array|Traversable $aliases
-     */
-    public function addAliases($aliases)
-    {
-        foreach ($aliases as $alias => $path) {
-            $this->addAlias($alias, $path);
-        }
-    }
-
-    /**
-     * Rest the alias stack to the aliases provided
-     *
-     * @param  Traversable|array                  $aliases
+     * @param  array                              $aliases
      * @throws Exception\InvalidArgumentException
      */
-    public function setAliases($aliases)
+    public function __construct($aliases)
     {
-        if (!is_array($aliases) && !$aliases instanceof Traversable) {
+        if (!is_array($aliases)) {
             throw new Exception\InvalidArgumentException(sprintf(
                 'Invalid argument provided for $paths, expecting either an array or Traversable object, "%s" given',
                 is_object($aliases) ? get_class($aliases) : gettype($aliases)
             ));
         }
 
-        $this->clearAliases();
-        $this->addAliases($aliases);
-    }
-
-    /**
-     * Normalize a path for insertion in the stack
-     *
-     * @param  string $path
-     * @return string
-     */
-    protected function normalizePath($path)
-    {
-        $path = rtrim($path, '/\\');
-        $path .= DIRECTORY_SEPARATOR;
-
-        return $path;
+        foreach ($aliases as $alias => $path) {
+            $this->addAlias($alias, $path);
+        }
     }
 
     /**
@@ -105,7 +62,7 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
      * @param  string                             $path
      * @throws Exception\InvalidArgumentException
      */
-    public function addAlias($alias, $path)
+    private function addAlias($alias, $path)
     {
         if (!is_string($path)) {
             throw new Exception\InvalidArgumentException(sprintf(
@@ -125,23 +82,37 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
     }
 
     /**
-     * Clear all aliases
+     * Normalize a path for insertion in the stack
      *
-     * @return void
+     * @param  string $path
+     * @return string
      */
-    public function clearAliases()
+    private function normalizePath($path)
     {
-        $this->aliases = array();
+        $path = rtrim($path, '/\\');
+        $path .= DIRECTORY_SEPARATOR;
+
+        return $path;
     }
 
     /**
-     * Returns stack of aliases
+     * Set the mime resolver
      *
-     * @return Array
+     * @param MimeResolver $resolver
      */
-    public function getAliases()
+    public function setMimeResolver(MimeResolver $resolver)
     {
-        return $this->aliases;
+        $this->mimeResolver = $resolver;
+    }
+
+    /**
+     * Get the mime resolver
+     *
+     * @return MimeResolver
+     */
+    public function getMimeResolver()
+    {
+        return $this->mimeResolver;
     }
 
     /**
@@ -174,7 +145,7 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
             return null;
         }
 
-        foreach ($this->getAliases() as $alias => $path) {
+        foreach ($this->aliases as $alias => $path) {
 
             if (strpos($name, $alias) === false) {
                 continue;
