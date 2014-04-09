@@ -25,7 +25,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
         $property->setAccessible(true);
 
         $this->assertEquals(
-            $aliases, $property->getValue($resolver)
+            $aliases,
+            $property->getValue($resolver)
         );
 
     }
@@ -177,8 +178,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($resolver->isLfiProtectionOn());
 
         $this->assertNull($resolver->resolve(
-                '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . basename(__FILE__)
-            ));
+            '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . basename(__FILE__)
+        ));
 
         $resolver->setLfiProtection(false);
 
