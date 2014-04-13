@@ -4,7 +4,6 @@ return array(
         'factories' => array (
             'AssetManager\Service\AssetManager'                 => 'AssetManager\Service\AssetManagerServiceFactory',
             'AssetManager\Service\AssetFilterManager'           => 'AssetManager\Service\AssetFilterManagerServiceFactory',
-            'AssetManager\Service\AssetCacheManager'            => 'AssetManager\Service\AssetCacheManagerServiceFactory',
             'AssetManager\Service\AggregateResolver'            => 'AssetManager\Service\AggregateResolverServiceFactory',
             'AssetManager\Resolver\MapResolver'                 => 'AssetManager\Service\MapResolverServiceFactory',
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
@@ -12,7 +11,8 @@ return array(
             'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
         ),
         'invokables' => array(
-            'mime_resolver' => 'AssetManager\Service\MimeResolver',
+            'mime_resolver'                                     => 'AssetManager\Service\MimeResolver',
+            'AssetManager\Service\AssetCacheManager'            => 'AssetManager\Service\AssetCacheManager',
         ),
     ),
     'asset_manager' => array(
