@@ -7,45 +7,17 @@ use Assetic\Asset\AssetCache;
 use Assetic\Cache\CacheInterface;
 use Assetic\Cache;
 use AssetManager\Cache\FilePathCache;
+use AssetManager\Cache\ZendCache;
 use AssetManager\Exception;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AssetCacheManager
+class AssetCacheManager implements ServiceLocatorAwareInterface
 {
     /**
-     * @var array Cache configuration.
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
      */
-    protected $config;
-
-    /**
-     * Construct the AssetCacheManager
-     *
-     * @param   array $config
-     * @return  AssetCacheManager
-     */
-    public function __construct(array $config = array())
-    {
-        $this->setConfig($config);
-    }
-
-    /**
-     * Get the cache configuration.
-     *
-     * @return  array
-     */
-    protected function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * Set the cache configuration.
-     *
-     * @param array $config
-     */
-    protected function setConfig($config)
-    {
-        $this->config = $config;
-    }
+    protected $serviceLocator;
 
     /**
      * Set the cache (if any) on the asset, and return the new AssetCache.
@@ -58,6 +30,8 @@ class AssetCacheManager
     public function setCache($path, AssetInterface $asset)
     {
         $caching = null;
+        $serviceLocator = $this->serviceLocator;
+
         $config  = $this->getConfig();
 
         if (!empty($config[$path])) {
@@ -82,26 +56,36 @@ class AssetCacheManager
             // @codeCoverageIgnoreStart
             $factories  = array(
                 'FilesystemCache' => function ($options) {
-                    if (empty($options['dir'])) {
-                        throw new Exception\RuntimeException(
-                            'FilesystemCache expected dir entry.'
-                        );
-                    }
-                    $dir = $options['dir'];
-                    return new Cache\FilesystemCache($dir);
-                },
+                        if (empty($options['dir'])) {
+                            throw new Exception\RuntimeException(
+                                'FilesystemCache expected dir entry.'
+                            );
+                        }
+                        $dir = $options['dir'];
+                        return new Cache\FilesystemCache($dir);
+                    },
                 'ApcCache' => function () {
-                    return new Cache\ApcCache();
-                },
+                        return new Cache\ApcCache();
+                    },
                 'FilePathCache' => function ($options) use ($path) {
-                    if (empty($options['dir'])) {
-                        throw new Exception\RuntimeException(
-                            'FilePathCache expected dir entry.'
-                        );
+                        if (empty($options['dir'])) {
+                            throw new Exception\RuntimeException(
+                                'FilePathCache expected dir entry.'
+                            );
+                        }
+                        $dir = $options['dir'];
+                        return new FilePathCache($dir, $path);
+                    },
+                'ZendCache' => function ($options) use ($path, $serviceLocator) {
+                        if (empty($options['service'])) {
+                            throw new Exception\RuntimeException(
+                                'FilePathCache expected dir entry.'
+                            );
+                        }
+
+                        return new ZendCache($serviceLocator->get($options['service']));
                     }
-                    $dir = $options['dir'];
-                    return new FilePathCache($dir, $path);
-                }
+
             );
             // @codeCoverageIgnoreEnd
 
@@ -124,5 +108,41 @@ class AssetCacheManager
         $assetCache->mimetype   = $asset->mimetype;
 
         return $assetCache;
+    }
+
+    /**
+     * Sets the Zend Service Locator.
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * Get the Zend Service Locator.
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator() {
+        return $this->serviceLocator;
+    }
+
+    /**
+     * Get the cache configuration.
+     *
+     * @return  array
+     */
+    protected function getConfig()
+    {
+        $config  = $this->serviceLocator->get('Config');
+        $return = array();
+
+        if (!empty($config['asset_manager']['caching'])) {
+            $return = $config['asset_manager']['caching'];
+        }
+
+        return $return;
     }
 }
