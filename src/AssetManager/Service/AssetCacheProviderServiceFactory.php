@@ -2,10 +2,7 @@
 
 namespace AssetManager\Service;
 
-use Assetic\Cache\ApcCache;
-use Assetic\Cache\FilesystemCache;
-use AssetManager\Cache\FilePathCache;
-use AssetManager\Exception\RuntimeException;
+use Assetic\Cache\CacheInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -28,31 +25,69 @@ class AssetCacheProviderServiceFactory implements FactoryInterface
         $config  = $serviceLocator->get('Config');
         $cachingDefinitions = array();
 
-        $providers = array();
+        $return = array();
 
         if (!empty($config['asset_manager']['caching'])) {
             $cachingDefinitions = $config['asset_manager']['caching'];
         }
 
         foreach ($cachingDefinitions as $path => $cacheProviderDefinition) {
+
             if (empty($cacheProviderDefinition['cache'])) {
                 continue;
+
             } elseif (is_callable($cacheProviderDefinition['cache'])) {
-                $providers[$path] = $cacheProviderDefinition['cache']($path);
+                $provider = $cacheProviderDefinition['cache']($path);
+
             } elseif ($serviceLocator->has($cacheProviderDefinition['cache'])) {
-                $providers[$path] = $serviceLocator->get($cacheProviderDefinition['cache']);
+                $provider = $serviceLocator->get($cacheProviderDefinition['cache']);
+
             } else {
                 $dir = '';
+                $class = $cacheProviderDefinition['cache'];
 
                 if (!empty($options['dir'])) {
                     $dir = $options['dir'];
                 }
 
-                $providers[$path] = new $cacheProviderDefinition['cache']($dir, $path);
+                $class = $this->classMapper($class);
+                $provider = new $class($dir, $path);
             }
+
+            if (!$provider instanceof CacheInterface) {
+                continue;
+            }
+
+            $return[$path] = $provider;
         }
 
-        return $providers;
+        return $return;
+    }
+
+    /**
+     * Class mapper to provide BC compatibility
+     * @param $class
+     *
+     * @return string
+     */
+    private function classMapper($class)
+    {
+        $classToCheck = $class;
+        $classToCheck .= (substr($class, -5) === 'Cache') ? '' : 'Cache';
+
+        switch ($classToCheck) {
+        case 'ApcCache':
+            $class = 'Assetic\Cache\ApcCache';
+            break;
+        case 'FilesystemCache':
+            $class = 'Assetic\Cache\FilesystemCache';
+            break;
+        case 'AssetManager\Cache\FilePathCache':
+            $class = 'AssetManager\Cache\FilePathCache';
+            break;
+        }
+
+        return $class;
     }
 
 }

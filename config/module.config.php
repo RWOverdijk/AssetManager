@@ -17,7 +17,7 @@ return array(
             'AssetManager\Service\MimeResolver'                 => 'AssetManager\Service\MimeResolver',
         ),
 
-        'alias' => array(
+        'aliases' => array(
             'mime_resolver'                                     => 'AssetManager\Service\MimeResolver',
         )
     ),

@@ -9,14 +9,14 @@ use Assetic\Cache\CacheInterface;
 class AssetCacheManager
 {
     /**
-     * @var array Cache configuration.
-     */
-    protected $config;
-
-    /**
      * @var array Cache Provider array
      */
     protected $cacheProviders;
+
+    /**
+     * @var array Cache configuration.
+     */
+    protected $config;
 
     /**
      * Construct the AssetCacheManager
@@ -52,6 +52,7 @@ class AssetCacheManager
 
         if ($caching === null
             || empty($caching['cache'])
+            || empty($this->cacheProviders)
             || empty($this->cacheProviders[$path])
             || !$this->cacheProviders[$path] instanceof CacheInterface
         ) {
@@ -63,6 +64,4 @@ class AssetCacheManager
 
         return $assetCache;
     }
-
-
 }
