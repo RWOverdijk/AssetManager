@@ -14,7 +14,6 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  */
 class AssetCacheProviderServiceFactory implements FactoryInterface
 {
-
     /**
      * {@inheritDoc}
      *
@@ -76,18 +75,17 @@ class AssetCacheProviderServiceFactory implements FactoryInterface
         $classToCheck .= (substr($class, -5) === 'Cache') ? '' : 'Cache';
 
         switch ($classToCheck) {
-        case 'ApcCache':
-            $class = 'Assetic\Cache\ApcCache';
+            case 'ApcCache':
+                $class = 'Assetic\Cache\ApcCache';
             break;
-        case 'FilesystemCache':
-            $class = 'Assetic\Cache\FilesystemCache';
+            case 'FilesystemCache':
+                $class = 'Assetic\Cache\FilesystemCache';
             break;
-        case 'FilePathCache':
-            $class = 'AssetManager\Cache\FilePathCache';
+            case 'FilePathCache':
+                $class = 'AssetManager\Cache\FilePathCache';
             break;
         }
 
         return $class;
     }
-
 }

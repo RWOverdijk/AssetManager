@@ -25,7 +25,7 @@ class AssetCacheManager
      * @param   array $config
      * @return  AssetCacheManager
      */
-    public function __construct(array $cacheProviders=array(), array $config=array())
+    public function __construct(array $cacheProviders = array(), array $config = array())
     {
         $this->cacheProviders = $cacheProviders;
         $this->config = $config;

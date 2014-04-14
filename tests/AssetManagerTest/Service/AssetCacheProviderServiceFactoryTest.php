@@ -6,7 +6,7 @@ use Assetic\Cache\ApcCache;
 use Assetic\Cache\CacheInterface;
 use AssetManager\Cache\FilePathCache;
 use PHPUnit_Framework_TestCase;
-use AssetManager\Service\AssetCacheProviderServiceFactory;    ;
+use AssetManager\Service\AssetCacheProviderServiceFactory;
 use Zend\ServiceManager\ServiceManager;
 
 class AssetCacheProviderServiceFactoryTest extends PHPUnit_Framework_TestCase
@@ -43,7 +43,7 @@ class AssetCacheProviderServiceFactoryTest extends PHPUnit_Framework_TestCase
                 'asset_manager' => array(
                     'caching' => array(
                         'default' => array(
-                            'cache' => function(){
+                            'cache' => function () {
                                 return new FilePathCache('somewhere', 'somfile');
                             },
                         ),
@@ -75,7 +75,7 @@ class AssetCacheProviderServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $serviceManager->setFactory('myZf2Service', function(){
+        $serviceManager->setFactory('myZf2Service', function () {
             return new FilePathCache('somewhere', 'somfile');
         });
 
@@ -99,7 +99,7 @@ class AssetCacheProviderServiceFactoryTest extends PHPUnit_Framework_TestCase
                         ),
 
                         'my_callback.tmp' => array(
-                            'cache' => function(){
+                            'cache' => function () {
                                 return new FilePathCache('somewhere', 'somfile');
                             },
                         ),
@@ -119,7 +119,7 @@ class AssetCacheProviderServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $serviceManager->setFactory('myZf2Service', function(){
+        $serviceManager->setFactory('myZf2Service', function () {
             return new FilePathCache('somewhere', 'somfile');
         });
 
