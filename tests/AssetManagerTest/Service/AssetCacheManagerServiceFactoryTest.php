@@ -25,6 +25,11 @@ class AssetCacheManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
+        $serviceManager->setService(
+            'AssetManager\Service\AssetCacheProviders',
+            array()
+        );
+
         $t = new AssetCacheManagerServiceFactory($serviceManager);
 
         $service = $t->createService($serviceManager);

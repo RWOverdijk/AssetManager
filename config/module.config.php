@@ -10,10 +10,16 @@ return array(
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
             'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
+            'AssetManager\Service\AssetCacheProviders'          => 'AssetManager\Service\AssetCacheProviderServiceFactory',
         ),
+
         'invokables' => array(
-            'mime_resolver' => 'AssetManager\Service\MimeResolver',
+            'AssetManager\Service\MimeResolver'                 => 'AssetManager\Service\MimeResolver',
         ),
+
+        'alias' => array(
+            'mime_resolver'                                     => 'AssetManager\Service\MimeResolver',
+        )
     ),
     'asset_manager' => array(
         'resolvers' => array(

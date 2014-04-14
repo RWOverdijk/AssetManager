@@ -21,7 +21,10 @@ class AssetCacheManagerServiceFactory implements FactoryInterface
             $filters = $config['asset_manager']['caching'];
         }
 
-        $assetCacheManager = new AssetCacheManager($filters);
+        $assetCacheManager = new AssetCacheManager(
+            $serviceLocator->get('AssetManager\Service\AssetCacheProviders'),
+            $filters
+        );
 
         return $assetCacheManager;
     }

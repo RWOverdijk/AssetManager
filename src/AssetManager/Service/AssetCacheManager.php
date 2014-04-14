@@ -5,9 +5,6 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetCache;
 use Assetic\Cache\CacheInterface;
-use Assetic\Cache;
-use AssetManager\Cache\FilePathCache;
-use AssetManager\Exception;
 
 class AssetCacheManager
 {
@@ -17,33 +14,20 @@ class AssetCacheManager
     protected $config;
 
     /**
+     * @var array Cache Provider array
+     */
+    protected $cacheProviders;
+
+    /**
      * Construct the AssetCacheManager
      *
+     * @param   array $cacheProviders
      * @param   array $config
      * @return  AssetCacheManager
      */
-    public function __construct(array $config = array())
+    public function __construct(array $cacheProviders=array(), array $config=array())
     {
-        $this->setConfig($config);
-    }
-
-    /**
-     * Get the cache configuration.
-     *
-     * @return  array
-     */
-    protected function getConfig()
-    {
-        return $this->config;
-    }
-
-    /**
-     * Set the cache configuration.
-     *
-     * @param array $config
-     */
-    protected function setConfig($config)
-    {
+        $this->cacheProviders = $cacheProviders;
         $this->config = $config;
     }
 
@@ -58,7 +42,7 @@ class AssetCacheManager
     public function setCache($path, AssetInterface $asset)
     {
         $caching = null;
-        $config  = $this->getConfig();
+        $config  = $this->config;
 
         if (!empty($config[$path])) {
             $caching = $config[$path];
@@ -66,63 +50,19 @@ class AssetCacheManager
             $caching = $config['default'];
         }
 
-        if (null === $caching) {
+        if ($caching === null
+            || empty($caching['cache'])
+            || empty($this->cacheProviders[$path])
+            || !$this->cacheProviders[$path] instanceof CacheInterface
+        ) {
             return $asset;
         }
 
-        if (empty($caching['cache'])) {
-            return $asset;
-        }
-
-        $cacher = null;
-
-        if (is_callable($caching['cache'])) {
-            $cacher = $caching['cache']($path);
-        } else {
-            // @codeCoverageIgnoreStart
-            $factories  = array(
-                'FilesystemCache' => function ($options) {
-                    if (empty($options['dir'])) {
-                        throw new Exception\RuntimeException(
-                            'FilesystemCache expected dir entry.'
-                        );
-                    }
-                    $dir = $options['dir'];
-                    return new Cache\FilesystemCache($dir);
-                },
-                'ApcCache' => function () {
-                    return new Cache\ApcCache();
-                },
-                'FilePathCache' => function ($options) use ($path) {
-                    if (empty($options['dir'])) {
-                        throw new Exception\RuntimeException(
-                            'FilePathCache expected dir entry.'
-                        );
-                    }
-                    $dir = $options['dir'];
-                    return new FilePathCache($dir, $path);
-                }
-            );
-            // @codeCoverageIgnoreEnd
-
-            $type  = $caching['cache'];
-            $type .= (substr($type, -5) === 'Cache') ? '' : 'Cache';
-
-            if (!isset($factories[$type])) {
-                return $asset;
-            }
-
-            $options = empty($caching['options']) ? array() : $caching['options'];
-            $cacher  = $factories[$type]($options);
-        }
-
-        if (!$cacher instanceof CacheInterface) {
-            return $asset;
-        }
-
-        $assetCache             = new AssetCache($asset, $cacher);
+        $assetCache             = new AssetCache($asset, $this->cacheProviders[$path]);
         $assetCache->mimetype   = $asset->mimetype;
 
         return $assetCache;
     }
+
+
 }
