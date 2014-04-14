@@ -82,7 +82,7 @@ class AssetCacheProviderServiceFactory implements FactoryInterface
         case 'FilesystemCache':
             $class = 'Assetic\Cache\FilesystemCache';
             break;
-        case 'AssetManager\Cache\FilePathCache':
+        case 'FilePathCache':
             $class = 'AssetManager\Cache\FilePathCache';
             break;
         }
