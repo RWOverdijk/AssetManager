@@ -77,13 +77,13 @@ class AssetCacheProviderServiceFactory implements FactoryInterface
         switch ($classToCheck) {
             case 'ApcCache':
                 $class = 'Assetic\Cache\ApcCache';
-            break;
+                break;
             case 'FilesystemCache':
                 $class = 'Assetic\Cache\FilesystemCache';
-            break;
+                break;
             case 'FilePathCache':
                 $class = 'AssetManager\Cache\FilePathCache';
-            break;
+                break;
         }
 
         return $class;
