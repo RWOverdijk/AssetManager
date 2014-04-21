@@ -64,7 +64,7 @@ class AssetCacheProviderServiceFactory implements FactoryInterface
     }
 
     /**
-     * Class mapper to provide BC compatibility
+     * Class mapper to provide Backwards compatibility
      * @param $class
      *
      * @return string
