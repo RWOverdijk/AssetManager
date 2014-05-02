@@ -15,10 +15,6 @@ return array(
         'invokables' => array(
             'AssetManager\Service\MimeResolver'                 => 'AssetManager\Service\MimeResolver',
         ),
-
-        'aliases' => array(
-            'mime_resolver'                                     => 'AssetManager\Service\MimeResolver',
-        )
     ),
     'asset_manager' => array(
         'resolvers' => array(

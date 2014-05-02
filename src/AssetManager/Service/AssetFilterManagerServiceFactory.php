@@ -24,7 +24,7 @@ class AssetFilterManagerServiceFactory implements FactoryInterface
         $assetFilterManager = new AssetFilterManager($filters);
 
         $assetFilterManager->setServiceLocator($serviceLocator);
-        $assetFilterManager->setMimeResolver($serviceLocator->get('mime_resolver'));
+        $assetFilterManager->setMimeResolver($serviceLocator->get('AssetManager\Service\MimeResolver'));
 
         return $assetFilterManager;
     }
