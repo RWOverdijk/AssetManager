@@ -447,10 +447,10 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetCacheManager->expects($this->any())
             ->method('setCache')
             ->will($this->returnCallback(
-                    function($path, $asset) {
-                        return $asset;
-                    }
-                ));
+                function($path, $asset) {
+                    return $asset;
+                }
+            ));
 
         return $assetCacheManager;
     }
