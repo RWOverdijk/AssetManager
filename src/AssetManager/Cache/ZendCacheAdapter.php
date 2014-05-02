@@ -6,9 +6,9 @@ use Assetic\Cache\CacheInterface;
 use Zend\Cache\Storage\StorageInterface;
 
 /**
- * Zend Cache Storage Adaptor for Assetic
+ * Zend Cache Storage Adapter for Assetic
  */
-class ZendCacheAdaptor implements CacheInterface
+class ZendCacheAdapter implements CacheInterface
 {
 
     /** @var StorageInterface */
