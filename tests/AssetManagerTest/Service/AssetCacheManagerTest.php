@@ -23,17 +23,11 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testSetCache()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'my/path' => array(
-                            'cache' => 'Apc',
-                        ),
-                    ),
-                ),
-            )
+
+        $config = array(
+            'my/path' => array(
+                'cache' => 'Apc',
+            ),
         );
 
         $mockAsset = $this->getMockBuilder('\Assetic\Asset\FileAsset')
@@ -42,7 +36,7 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
 
         $mockAsset->mimetype = 'image/png';
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $assetCache = $assetManager->setCache('my/path', $mockAsset);
 
         $this->assertTrue($assetCache instanceof AssetCache);
@@ -55,17 +49,10 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testSetCacheNoProviderFound()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'my/path' => array(
-                            'cache' => 'Apc',
-                        ),
-                    ),
-                ),
-            )
+        $config = array(
+            'my/path' => array(
+                'cache' => 'Apc',
+            ),
         );
 
         $mockAsset = $this->getMockBuilder('\Assetic\Asset\FileAsset')
@@ -74,7 +61,7 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
 
         $mockAsset->mimetype = 'image/png';
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $assetCache = $assetManager->setCache('not/defined', $mockAsset);
 
         $this->assertFalse($assetCache instanceof AssetCache);
@@ -86,20 +73,14 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testGetProvider()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'my/path' => array(
-                            'cache' => 'Apc',
-                        ),
-                    ),
-                ),
-            )
+
+        $config = array(
+            'my/path' => array(
+                'cache' => 'Apc',
+            ),
         );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getProvider'
@@ -117,20 +98,13 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testGetProviderUsingDefaultConfiguration()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'default' => array(
-                            'cache' => 'Apc',
-                        ),
-                    ),
-                ),
-            )
+        $config = array(
+            'default' => array(
+                'cache' => 'Apc',
+            ),
         );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getProvider'
@@ -148,17 +122,11 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testGetProviderWithDefinedService()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'default' => array(
-                            'cache' => 'myZf2Service',
-                        ),
-                    ),
-                ),
-            )
+
+        $config = array(
+            'default' => array(
+                'cache' => 'myZf2Service',
+            ),
         );
 
         $serviceManager->setFactory(
@@ -168,7 +136,7 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
             }
         );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getProvider'
@@ -186,27 +154,24 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testGetProviderWithCacheOptions()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'my_provided_class.tmp' => array(
-                            'cache' => 'AssetManager\\Cache\\FilePathCache',
-                            'options' => array(
-                                'dir' => 'somewhere',
-                            )
-                        ),
-                    ),
-                ),
-            )
+
+        $config = array(
+            'my_provided_class.tmp' => array(
+                'cache' => 'AssetManager\\Cache\\FilePathCache',
+                'options' => array(
+                    'dir' => 'somewhere',
+                )
+            ),
         );
 
-        $serviceManager->setFactory('myZf2Service', function () {
-            return new FilePathCache('somewhere', 'somfile');
-        });
+        $serviceManager->setFactory(
+            'myZf2Service',
+            function () {
+                return new FilePathCache('somewhere', 'somfile');
+            }
+        );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getProvider'
@@ -229,41 +194,37 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testGetProviderWithMultipleDefinition()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'default' => array(
-                            'cache' => 'myZf2Service',
-                        ),
+        $config = array(
+            'default' => array(
+                'cache' => 'myZf2Service',
+            ),
 
-                        'my_callback.tmp' => array(
-                            'cache' => function () {
-                                return new FilePathCache('somewhere', 'somefile');
-                            },
-                        ),
+            'my_callback.tmp' => array(
+                'cache' => function () {
+                        return new FilePathCache('somewhere', 'somefile');
+                    },
+            ),
 
-                        'my_provided_class.tmp' => array(
-                            'cache' => 'AssetManager\\Cache\\FilePathCache',
-                            'options' => array(
-                                'dir' => 'somewhere',
-                            )
-                        ),
+            'my_provided_class.tmp' => array(
+                'cache' => 'AssetManager\\Cache\\FilePathCache',
+                'options' => array(
+                    'dir' => 'somewhere',
+                )
+            ),
 
-                        'my_bc_check.tmp' => array(
-                            'cache' => 'Apc',
-                        ),
-                    ),
-                ),
-            )
+            'my_bc_check.tmp' => array(
+                'cache' => 'Apc',
+            ),
         );
 
-        $serviceManager->setFactory('myZf2Service', function () {
-            return new FilePathCache('somewhere', 'somfile');
-        });
+        $serviceManager->setFactory(
+            'myZf2Service',
+            function () {
+                return new FilePathCache('somewhere', 'somfile');
+            }
+        );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getProvider'
@@ -289,12 +250,8 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testGetProviderWithNoCacheConfig()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array()
-        );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, array());
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getProvider'
@@ -318,18 +275,11 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
         );
 
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'my_provided_class.tmp' => $expected
-                    )
-                )
-            )
+        $config = array(
+            'my_provided_class.tmp' => $expected,
         );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getCacheProviderConfig'
@@ -341,8 +291,8 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
- * @covers \AssetManager\Service\AssetCacheManager::getCacheProviderConfig
- */
+     * @covers \AssetManager\Service\AssetCacheManager::getCacheProviderConfig
+     */
     public function testGetCacheProviderConfigReturnsDefaultCache()
     {
         $expected = array(
@@ -353,21 +303,14 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
         );
 
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array(
-                'asset_manager' => array(
-                    'caching' => array(
-                        'default' => $expected,
-                        'some_other_definition' => array(
-                            'cache' => 'AssetManager\Cache\FilePathCache',
-                        )
-                    )
-                )
+        $config = array(
+            'default' => $expected,
+            'some_other_definition' => array(
+                'cache' => 'AssetManager\Cache\FilePathCache',
             )
         );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, $config);
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getCacheProviderConfig'
@@ -384,12 +327,8 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testClassMapperResolvesApcCache()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array()
-        );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, array());
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'classMapper'
@@ -406,12 +345,8 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testClassMapperResolvesFilesystemCache()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array()
-        );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, array());
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'classMapper'
@@ -428,12 +363,9 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testClassMapperResolvesFilePathCache()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array()
-        );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+        $assetManager = new AssetCacheManager($serviceManager, array());
+
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'classMapper'
@@ -450,12 +382,9 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
     public function testClassMapperResolvesShorthandClassAlias()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService(
-            'Config',
-            array()
-        );
 
-        $assetManager = new AssetCacheManager($serviceManager);
+
+        $assetManager = new AssetCacheManager($serviceManager, array());
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'classMapper'

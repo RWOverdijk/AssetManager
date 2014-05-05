@@ -19,6 +19,14 @@ class AssetCacheManagerServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new AssetCacheManager($serviceLocator);
+        $config = array();
+
+        $globalConfig = $serviceLocator->get('config');
+
+        if (!empty($globalConfig['asset_manager']['caching'])) {
+            $config = $globalConfig['asset_manager']['caching'];
+        }
+
+        return new AssetCacheManager($serviceLocator, $config);
     }
 }

@@ -9,12 +9,12 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Asset Cache Manager.  Sets asset cache based on configuration.
- *
- * @category   AssetManager
- * @package    AssetManager
  */
 class AssetCacheManager
 {
+    /**
+     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     */
     protected $serviceLocator;
 
     /**
@@ -26,18 +26,16 @@ class AssetCacheManager
      * Construct the AssetCacheManager
      *
      * @param   ServiceLocatorInterface $serviceLocator
+     * @param   array                   $config
      *
      * @return  AssetCacheManager
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
-    {
+    public function __construct(
+        ServiceLocatorInterface $serviceLocator,
+        $config
+    ) {
         $this->serviceLocator = $serviceLocator;
-
-        $globalConfig = $this->serviceLocator->get('config');
-
-        if (!empty($globalConfig['asset_manager']['caching'])) {
-            $this->config = $globalConfig['asset_manager']['caching'];
-        }
+        $this->config = $config;
     }
 
     /**
@@ -79,23 +77,24 @@ class AssetCacheManager
             return null;
         }
 
-        if (is_callable($cacheProvider['cache'])) {
-            $provider = call_user_func($cacheProvider['cache'], $path);
-        } elseif ($this->serviceLocator->has($cacheProvider['cache'])) {
-            $provider = $this->serviceLocator->get($cacheProvider['cache']);
-        } else {
-            $dir = '';
-            $class = $cacheProvider['cache'];
-
-            if (!empty($cacheProvider['options']['dir'])) {
-                $dir = $cacheProvider['options']['dir'];
-            }
-
-            $class = $this->classMapper($class);
-            $provider = new $class($dir, $path);
+        if ($this->serviceLocator->has($cacheProvider['cache'])) {
+            return $this->serviceLocator->get($cacheProvider['cache']);
         }
 
-        return $provider;
+        // Left here for BC.  Please consider defining a ZF2 service instead.
+        if (is_callable($cacheProvider['cache'])) {
+            return call_user_func($cacheProvider['cache'], $path);
+        }
+
+        $dir = '';
+        $class = $cacheProvider['cache'];
+
+        if (!empty($cacheProvider['options']['dir'])) {
+            $dir = $cacheProvider['options']['dir'];
+        }
+
+        $class = $this->classMapper($class);
+        return new $class($dir, $path);
     }
 
     /**
