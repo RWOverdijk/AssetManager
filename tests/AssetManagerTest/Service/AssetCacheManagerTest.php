@@ -201,8 +201,8 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
 
             'my_callback.tmp' => array(
                 'cache' => function () {
-                        return new FilePathCache('somewhere', 'somefile');
-                    },
+                    return new FilePathCache('somewhere', 'somefile');
+                },
             ),
 
             'my_provided_class.tmp' => array(
