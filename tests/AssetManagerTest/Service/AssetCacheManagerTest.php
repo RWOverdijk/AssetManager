@@ -225,6 +225,7 @@ class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
         );
 
         $assetManager = new AssetCacheManager($serviceManager, $config);
+
         $reflectionMethod = new \ReflectionMethod(
             'AssetManager\Service\AssetCacheManager',
             'getProvider'
