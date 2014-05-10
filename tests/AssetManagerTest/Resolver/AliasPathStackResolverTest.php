@@ -7,6 +7,9 @@ use Assetic\Asset;
 use AssetManager\Resolver\AliasPathStackResolver;
 use AssetManager\Service\MimeResolver;
 
+/**
+ * Unit Tests for the Alias Path Stack Resolver
+ */
 class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -244,8 +247,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($resolver->isLfiProtectionOn());
 
         $this->assertNull($resolver->resolve(
-                '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . basename(__FILE__)
-            ));
+            '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . basename(__FILE__)
+        ));
 
         $resolver->setLfiProtection(false);
 

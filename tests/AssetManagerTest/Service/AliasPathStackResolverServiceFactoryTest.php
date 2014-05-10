@@ -6,6 +6,9 @@ use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AliasPathStackResolverServiceFactory;
 use Zend\ServiceManager\ServiceManager;
 
+/**
+ * Unit Tests the factory for the Alias Path Stack Resolver
+ */
 class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
