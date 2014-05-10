@@ -41,15 +41,8 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
      * @param  array                              $aliases
      * @throws Exception\InvalidArgumentException
      */
-    public function __construct($aliases)
+    public function __construct(Array $aliases)
     {
-        if (!is_array($aliases)) {
-            throw new Exception\InvalidArgumentException(sprintf(
-                'Invalid argument provided for $paths, expecting either an array or Traversable object, "%s" given',
-                is_object($aliases) ? get_class($aliases) : gettype($aliases)
-            ));
-        }
-
         foreach ($aliases as $alias => $path) {
             $this->addAlias($alias, $path);
         }
@@ -89,10 +82,7 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
      */
     private function normalizePath($path)
     {
-        $path = rtrim($path, '/\\');
-        $path .= DIRECTORY_SEPARATOR;
-
-        return $path;
+        return rtrim($path, '/\\') . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -146,7 +136,6 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
         }
 
         foreach ($this->aliases as $alias => $path) {
-
             if (strpos($name, $alias) === false) {
                 continue;
             }

@@ -11,6 +11,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test constructor passes
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::__construct
      */
     public function testConstructor()
     {
@@ -28,13 +30,13 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
             $aliases,
             $property->getValue($resolver)
         );
-
     }
 
     /**
      * Test constructor fails when aliases passed in is not an array
      *
-     * @expectedException \AssetManager\Exception\InvalidArgumentException
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::__construct
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testConstructorFail()
     {
@@ -43,6 +45,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test add alias method.
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::addAlias
      */
     public function testAddAlias()
     {
@@ -67,6 +71,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     /**
      * Test addAlias fails with bad key
      *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::addAlias
      * @expectedException \AssetManager\Exception\InvalidArgumentException
      */
     public function testAddAliasFailsWithBadKey()
@@ -86,6 +91,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test addAlias fails with bad Path
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::addAlias
      * @expectedException \AssetManager\Exception\InvalidArgumentException
      */
     public function testAddAliasFailsWithBadPath()
@@ -105,6 +112,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test normalize path
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::normalizePath
      */
     public function testNormalizePath()
     {
@@ -124,6 +133,30 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Set Mime Resolver Only Accepts a mime Resolver
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::setMimeResolver
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::getMimeResolver
+     */
+    public function testGetAndSetMimeResolver()
+    {
+        $mimeReolver = $this->getMockBuilder('AssetManager\Service\MimeResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $resolver = new AliasPathStackResolver(array('my/alias/' => __DIR__));
+
+        $resolver->setMimeResolver($mimeReolver);
+
+        $returned = $resolver->getMimeResolver();
+
+        $this->assertEquals($mimeReolver, $returned);
+    }
+
+    /**
+     * Test Set Mime Resolver Only Accepts a mime Resolver
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::setMimeResolver
      * @expectedException \PHPUnit_Framework_Error
      */
     public function testSetMimeResolverFailObject()
@@ -133,16 +166,42 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error
+     * Test Lfi Protection Flag Defaults to true
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::isLfiProtectionOn
      */
-    public function testSetMimeResolverFailString()
+    public function testLfiProtectionFlagDefaultsTrue()
     {
         $resolver = new AliasPathStackResolver(array('my/alias/' => __DIR__));
-        $resolver->setMimeResolver('invalid');
+        $returned = $resolver->isLfiProtectionOn();
+
+        $this->assertTrue($returned);
+    }
+
+    /**
+     * Test Get and Set of Lfi Protection Flag
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::setLfiProtection
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::isLfiProtectionOn
+     */
+    public function testGetAndSetOfLfiProtectionFlag()
+    {
+        $resolver = new AliasPathStackResolver(array('my/alias/' => __DIR__));
+        $resolver->setLfiProtection(true);
+        $returned = $resolver->isLfiProtectionOn();
+
+        $this->assertTrue($returned);
+
+        $resolver->setLfiProtection(false);
+        $returned = $resolver->isLfiProtectionOn();
+
+        $this->assertFalse($returned);
     }
 
     /**
      * Test Resolve returns valid asset
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::resolve
      */
     public function testResolve()
     {
@@ -161,6 +220,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
 
     /**
      * Test that resolver will not resolve directories
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::resolve
      */
     public function testWillNotResolveDirectories()
     {
@@ -168,6 +229,11 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
         $this->assertNull($resolver->resolve('my/alias/'.basename(__DIR__)));
     }
 
+    /**
+     * Test Lfi Protection
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::resolve
+     */
     public function testLfiProtection()
     {
         $mimeResolver = new MimeResolver;
@@ -178,8 +244,8 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($resolver->isLfiProtectionOn());
 
         $this->assertNull($resolver->resolve(
-            '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . basename(__FILE__)
-        ));
+                '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . basename(__FILE__)
+            ));
 
         $resolver->setLfiProtection(false);
 
