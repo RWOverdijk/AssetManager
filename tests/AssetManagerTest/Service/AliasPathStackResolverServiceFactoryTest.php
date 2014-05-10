@@ -10,6 +10,8 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
 {
     /**
      * Mainly to avoid regressions
+     *
+     * @covers \AssetManager\Service\AliasPathStackResolverServiceFactory
      */
     public function testCreateService()
     {
@@ -48,6 +50,8 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
 
     /**
      * Mainly to avoid regressions
+     *
+     * @covers \AssetManager\Service\AliasPathStackResolverServiceFactory
      */
     public function testCreateServiceWithNoConfig()
     {
