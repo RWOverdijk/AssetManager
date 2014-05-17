@@ -50,6 +50,7 @@ class Module implements
      */
     public function onDispatch(MvcEvent $event)
     {
+        /* @var $response \Zend\Http\Response */
         $response = $event->getResponse();
         if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
             return;
@@ -73,10 +74,11 @@ class Module implements
     public function onBootstrap(EventInterface $event)
     {
         // Attach for dispatch, and dispatch.error (with low priority to make sure statusCode gets set)
+        /* @var $eventManager \Zend\EventManager\EventManagerInterface */
         $eventManager = $event->getTarget()->getEventManager();
         $callback     = array($this, 'onDispatch');
         $priority     = -9999999;
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH,       $callback, $priority);
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH, $callback, $priority);
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $callback, $priority);
     }
 }

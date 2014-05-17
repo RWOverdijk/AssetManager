@@ -5,7 +5,6 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetInterface;
 use Assetic\Filter\FilterInterface;
 use AssetManager\Exception;
-use AssetManager\Service\MimeResolver;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -63,6 +62,8 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
      *
      * @param   string          $path
      * @param   AssetInterface  $asset
+     *
+     * @throws Exception\RuntimeException on invalid filters
      */
     public function setFilters($path, AssetInterface $asset)
     {
@@ -82,9 +83,12 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
         }
 
         foreach ($filters as $filter) {
+            if (is_null($filter)) {
+                continue;
+            }
             if (!empty($filter['filter'])) {
                 $this->ensureByFilter($asset, $filter['filter']);
-            } elseif(!empty($filter['service'])) {
+            } elseif (!empty($filter['service'])) {
                 $this->ensureByService($asset, $filter['service']);
             } else {
                 throw new Exception\RuntimeException(
@@ -116,7 +120,7 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
      * Ensure that the filters as filter are set.
      *
      * @param   AssetInterface  $asset
-     * @param   mixed           $service    Either an instance of FilterInterface or a classname.
+     * @param   mixed           $filter    Either an instance of FilterInterface or a classname.
      * @throws  Exception\RuntimeException
      */
     protected function ensureByFilter(AssetInterface $asset, $filter)

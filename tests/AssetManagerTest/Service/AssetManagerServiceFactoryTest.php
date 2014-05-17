@@ -2,6 +2,8 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Service\AssetCacheManager;
+use AssetManager\Service\AssetFilterManager;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetManagerServiceFactory;
 use Zend\ServiceManager\ServiceManager;
@@ -10,8 +12,8 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
     public function testCreateService()
     {
-        $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
-        $assetCacheManager = new \AssetManager\Service\AssetCacheManager();
+        $assetFilterManager = new AssetFilterManager();
+        $assetCacheManager = new AssetCacheManager();
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'AssetManager\Service\AggregateResolver',
@@ -20,12 +22,12 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $serviceManager->setService(
             'AssetManager\Service\AssetFilterManager',
-             $assetFilterManager
+            $assetFilterManager
         );
 
         $serviceManager->setService(
             'AssetManager\Service\AssetCacheManager',
-             $assetCacheManager
+            $assetCacheManager
         );
 
         $serviceManager->setService('Config', array(

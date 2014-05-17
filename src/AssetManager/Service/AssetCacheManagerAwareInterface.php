@@ -7,7 +7,7 @@ interface AssetCacheManagerAwareInterface
     /**
      * Set the AssetCacheManager.
      *
-     * @param AssetCacheManager $filterManager
+     * @param AssetCacheManager $cacheManager
      */
     public function setAssetCacheManager(AssetCacheManager $cacheManager);
 

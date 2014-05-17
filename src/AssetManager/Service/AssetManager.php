@@ -3,8 +3,6 @@
 namespace AssetManager\Service;
 
 use Assetic\Asset\AssetInterface;
-use AssetManager\Service\AssetFilterManagerAwareInterface;
-use AssetManager\Service\AssetFilterManager;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
 use Zend\Stdlib\RequestInterface;
@@ -50,6 +48,11 @@ class AssetManager implements
     protected $config;
 
     /**
+     * @var bool Whether this instance has at least one asset successfully set on response
+     */
+    protected $assetSetOnResponse = false;
+
+    /**
      * Constructor
      *
      * @param ResolverInterface $resolver
@@ -86,6 +89,16 @@ class AssetManager implements
         }
 
         return (bool)$this->asset;
+    }
+
+    /**
+     * Returns true if this instance of asset manager has at least one asset successfully set on response
+     *
+     * @return bool
+     */
+    public function assetSetOnResponse()
+    {
+        return $this->assetSetOnResponse;
     }
 
     /**
@@ -143,11 +156,13 @@ class AssetManager implements
         // @codeCoverageIgnoreEnd
 
         $response->getHeaders()
-                 ->addHeaderLine('Content-Transfer-Encoding',   'binary')
-                 ->addHeaderLine('Content-Type',                $mimeType)
-                 ->addHeaderLine('Content-Length',              $contentLength);
+                 ->addHeaderLine('Content-Transfer-Encoding', 'binary')
+                 ->addHeaderLine('Content-Type', $mimeType)
+                 ->addHeaderLine('Content-Length', $contentLength);
 
         $response->setContent($assetContents);
+
+        $this->assetSetOnResponse = true;
 
         return $response;
     }
@@ -203,7 +218,7 @@ class AssetManager implements
     /**
      * Set the AssetCacheManager.
      *
-     * @param AssetCacheManager $filterManager
+     * @param AssetCacheManager $cacheManager
      */
     public function setAssetCacheManager(AssetCacheManager $cacheManager)
     {

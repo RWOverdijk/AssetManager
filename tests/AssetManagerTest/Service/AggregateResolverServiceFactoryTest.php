@@ -2,8 +2,6 @@
 
 namespace AssetManagerTest\Service;
 
-require_once __DIR__ . '/../../_files/InterfaceTestResolver.php';
-
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AggregateResolverServiceFactory;
@@ -12,6 +10,14 @@ use Zend\ServiceManager\ServiceManager;
 
 class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function setUp()
+    {
+        require_once __DIR__ . '/../../_files/InterfaceTestResolver.php';
+    }
+
     public function testWillInstantiateEmptyResolver()
     {
         $serviceManager = new ServiceManager();
@@ -54,7 +60,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testInvalidCustomResolverFails()
     {
@@ -75,7 +81,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         );
 
         $factory = new AggregateResolverServiceFactory();
-        $resolver = $factory->createService($serviceManager);
+        $factory->createService($serviceManager);
     }
 
     public function testWillPrioritizeResolversCorrectly()
@@ -173,7 +179,8 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('AssetManager\Service\AssetFilterManager', new AssetFilterManager);
 
         $factory = new AggregateResolverServiceFactory();
-        $resolver = $factory->createService($serviceManager);
+
+        $factory->createService($serviceManager);
 
         $this->assertTrue($interfaceTestResolver->calledMime);
         $this->assertTrue($interfaceTestResolver->calledAggregate);

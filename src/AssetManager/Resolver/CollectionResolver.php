@@ -7,7 +7,6 @@ use Zend\Stdlib\ArrayUtils;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
-use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
 
