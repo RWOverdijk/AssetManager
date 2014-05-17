@@ -91,7 +91,8 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
                      'map 3.3',
                      'map 3.4',
                  )
-            ), $resolver->getConcats()
+            ),
+            $resolver->getConcats()
         );
     }
 
