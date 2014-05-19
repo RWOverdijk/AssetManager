@@ -4,16 +4,19 @@ namespace AssetManager\Asset;
 
 use Assetic\Filter\FilterInterface;
 use Assetic\Asset\BaseAsset;
+use AssetManager\Exception;
 
 /**
  * Represents a concatented string asset.
  */
-class ConcatStringAsset extends BaseAsset
+class AggregateAsset extends BaseAsset
 {
     /**
      * @var int Timestamp of last modified date from asset
      */
     private $lastModified;
+
+    public $mimetype;
 
     /**
      * Constructor.
@@ -23,10 +26,10 @@ class ConcatStringAsset extends BaseAsset
      * @param string $sourceRoot The source asset root directory
      * @param string $sourcePath The source asset path
      */
-    public function __construct($content = '', $filters = array(), $sourceRoot = null, $sourcePath = null)
+    public function __construct(array $content = array(), $filters = array(), $sourceRoot = null, $sourcePath = null)
     {
         parent::__construct($filters, $sourceRoot, $sourcePath);
-        $this->setContent($content);
+        $this->processContent($content);
     }
 
     /**
@@ -62,16 +65,37 @@ class ConcatStringAsset extends BaseAsset
     }
 
     /**
-     * Append content to current content
-     *
      * @param string $content
      *
-     * @return $this
+     * @throws Exception\RuntimeException
      */
-    public function appendContent($content)
+    public function processContent($content)
     {
-        $this->setContent(
-            $this->getContent() . $content
-        );
+        $this->mimetype = null;
+        foreach ($content as $asset) {
+            if (null === $this->mimetype) {
+                $this->mimetype = $asset->mimetype;
+            }
+
+            if ($asset->mimetype !== $this->mimetype) {
+                throw new Exception\RuntimeException(
+                    sprintf(
+                        'Asset "%s" doesn\'t have the expected mime-type "%s".',
+                        $asset->getTargetPath(),
+                        $this->mimetype
+                    )
+                );
+            }
+
+            $this->setLastModified(
+                max(
+                    $asset->getLastModified(),
+                    $this->getLastModified()
+                )
+            );
+            $this->setContent(
+                $this->getContent() . $asset->dump()
+            );
+        }
     }
 }

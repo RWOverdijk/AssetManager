@@ -69,6 +69,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     public function testSetConcatSuccess()
     {
         $resolver = new ConcatResolver;
+        require_once __DIR__ . '/../Service/ConcatIterable.php';
         $resolver->setConcats(new ConcatIterable);
 
         $this->assertEquals(
@@ -164,11 +165,10 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
 
         $asset      = $resolver->resolve('bacon');
 
-        $this->assertTrue($asset instanceof \AssetManager\Asset\ConcatStringAsset);
+        $this->assertTrue($asset instanceof \AssetManager\Asset\AggregateAsset);
         $this->assertEquals(
             $asset->dump(),
-            file_get_contents(__FILE__)
-            .file_get_contents(__FILE__)
+            file_get_contents(__FILE__).file_get_contents(__FILE__)
         );
     }
 }

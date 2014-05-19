@@ -5,7 +5,7 @@ namespace AssetManager\Resolver;
 use Traversable;
 use Zend\Stdlib\ArrayUtils;
 use Assetic\Asset\AssetInterface;
-use AssetManager\Asset\ConcatStringAsset;
+use AssetManager\Asset\AggregateAsset;
 use AssetManager\Exception;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
@@ -125,9 +125,7 @@ class ConcatResolver implements
             return null;
         }
 
-        $stringAsset  = new ConcatStringAsset();
-        $mimeType     = null;
-        $lastModified = 0;
+        $resolvedAssets = array();
 
         foreach ((array) $this->concats[$name] as $assetName) {
 
@@ -148,31 +146,15 @@ class ConcatResolver implements
                 $resolvedAsset->getSourceRoot() . $resolvedAsset->getSourcePath()
             );
 
-            if (null !== $mimeType && $resolvedAsset->mimetype !== $mimeType) {
-                throw new Exception\RuntimeException(
-                    sprintf(
-                        'Asset "%s" from collection "%s" doesn\'t have the expected mime-type "%s".',
-                        $assetName,
-                        $name,
-                        $mimeType
-                    )
-                );
-            }
-
             $this->getAssetFilterManager()->setFilters($assetName, $resolvedAsset);
 
-            $mimeType = $resolvedAsset->mimetype;
-            $stringAsset->appendContent($resolvedAsset->dump());
-
-            $lastModified = max($resolvedAsset->getLastModified(), $lastModified);
+            $resolvedAssets[] = $resolvedAsset;
         }
+        $aggregateAsset = new AggregateAsset($resolvedAssets);
+        $this->getAssetFilterManager()->setFilters($name, $aggregateAsset);
+        $aggregateAsset->setTargetPath($name);
 
-        $stringAsset->setLastModified($lastModified);
-        $stringAsset->mimetype = $mimeType;
-        $this->getAssetFilterManager()->setFilters($name, $stringAsset);
-        $stringAsset->setTargetPath($name);
-
-        return $stringAsset;
+        return $aggregateAsset;
     }
 
     /**
