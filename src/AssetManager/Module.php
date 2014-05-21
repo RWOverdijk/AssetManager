@@ -63,8 +63,36 @@ class Module implements
             return;
         }
 
-        $response->setStatusCode(200);
+        $headers = $response->getHeaders();
 
+        /** @var $lastModified \Zend\Http\Header\LastModified */
+        $lastModified = $headers->get('Last-Modified');
+        if (!$lastModified instanceof \Zend\Http\Header\LastModified) {
+            $lastModified = new \Zend\Http\Header\LastModified();
+            $headers->addHeader($lastModified);
+        }
+
+        /** @var $cacheControl \Zend\Http\Header\CacheControl */
+        $cacheControl = $headers->get('Cache-Control');
+        if (!$cacheControl instanceof \Zend\Http\Header\CacheControl) {
+            $cacheControl = new \Zend\Http\Header\CacheControl();
+            $headers->addHeader($cacheControl);
+        }
+
+        /** @var $modifiedSince \Zend\Http\Header\IfModifiedSince */
+        $modifiedSince = $request->getHeader('If-Modified-Since');
+        if ($modifiedSince instanceof \Zend\Http\Header\IfModifiedSince) {
+            $age = $lastModified->date()->getTimestamp() - $modifiedSince->date()->getTimestamp();
+
+            if ($age < 3600) {
+                $lastModified->setDate($modifiedSince->date());
+                $response->setStatusCode($response::STATUS_CODE_304);
+                $response->setContent(null);
+                return $response;
+            }
+        }
+
+        $response->setStatusCode(200);
         return $assetManager->setAssetOnResponse($response);
     }
 
