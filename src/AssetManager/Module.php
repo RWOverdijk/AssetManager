@@ -82,9 +82,7 @@ class Module implements
         /** @var $modifiedSince \Zend\Http\Header\IfModifiedSince */
         $modifiedSince = $request->getHeader('If-Modified-Since');
         if ($modifiedSince instanceof \Zend\Http\Header\IfModifiedSince) {
-            $age = $lastModified->date()->getTimestamp() - $modifiedSince->date()->getTimestamp();
-
-            if ($age < 3600) {
+            if ($assetManager->getAsset()->getLastModified() < $modifiedSince->date()->getTimestamp()) {
                 $lastModified->setDate($modifiedSince->date());
                 $response->setStatusCode($response::STATUS_CODE_304);
                 $response->setContent(null);
