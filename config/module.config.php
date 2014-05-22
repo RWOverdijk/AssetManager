@@ -11,9 +11,15 @@ return array(
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
             'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
         ),
+
         'invokables' => array(
-            'mime_resolver' => 'AssetManager\Service\MimeResolver',
+            'AssetManager\Service\MimeResolver'                 => 'AssetManager\Service\MimeResolver',
         ),
+
+        'aliases' => array(
+            //Alias left here for BC
+            'mime_resolver'                                     => 'AssetManager\Service\MimeResolver',
+        )
     ),
     'asset_manager' => array(
         'resolvers' => array(
