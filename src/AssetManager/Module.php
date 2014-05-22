@@ -76,6 +76,7 @@ class Module implements
         $cacheControl = $headers->get('Cache-Control');
         if (!$cacheControl instanceof \Zend\Http\Header\CacheControl) {
             $cacheControl = new \Zend\Http\Header\CacheControl();
+            $cacheControl->addDirective('public');
             $headers->addHeader($cacheControl);
         }
 
