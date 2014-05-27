@@ -69,7 +69,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     public function testSetConcatSuccess()
     {
         $resolver = new ConcatResolver;
-        
+
         $resolver->setConcats(new ConcatIterable);
 
         $this->assertEquals(
