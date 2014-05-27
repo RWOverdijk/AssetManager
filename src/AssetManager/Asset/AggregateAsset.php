@@ -71,7 +71,7 @@ class AggregateAsset extends BaseAsset
      *
      * @throws Exception\RuntimeException
      */
-    public function processContent($content)
+    private function processContent($content)
     {
         $this->mimetype = null;
         foreach ($content as $asset) {
