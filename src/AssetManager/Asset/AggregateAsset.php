@@ -21,7 +21,7 @@ class AggregateAsset extends BaseAsset
     /**
      * Constructor.
      *
-     * @param string $content    The content of the asset
+     * @param array  $content    The array of assets to be merged
      * @param array  $filters    Filters for the asset
      * @param string $sourceRoot The source asset root directory
      * @param string $sourcePath The source asset path
@@ -65,6 +65,8 @@ class AggregateAsset extends BaseAsset
     }
 
     /**
+     * Loop through assets and merge content
+     *
      * @param string $content
      *
      * @throws Exception\RuntimeException
