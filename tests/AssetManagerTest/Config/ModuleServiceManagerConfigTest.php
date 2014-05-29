@@ -83,4 +83,40 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * Test for Issue #134 - Test for specific mime_resolver invokable
+     *
+     * @coversNothing
+     */
+
+    public function MimeResolverInvokableTest()
+    {
+        $config = include __DIR__.'/../../../config/module.config.php';
+
+        $serviceManagerConfig = new Config($config['service_manager']);
+        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager->setService('config', $config);
+
+        $this->assertTrue($serviceManager->has('AssetManager\Service\MimeResolver'));
+        $this->assertTrue(is_object($serviceManager->get('AssetManager\Service\MimeResolver')));
+    }
+
+    /**
+     * Test for Issue #134 - Test for specific mime_resolver alias
+     *
+     * @coversNothing
+     */
+
+    public function MimeResolverAliasTest()
+    {
+        $config = include __DIR__.'/../../../config/module.config.php';
+
+        $serviceManagerConfig = new Config($config['service_manager']);
+        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager->setService('config', $config);
+
+        $this->assertTrue($serviceManager->has('mime_resolver'));
+        $this->assertTrue(is_object($serviceManager->get('mime_resolver')));
+    }
+
 }
