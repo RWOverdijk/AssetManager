@@ -88,8 +88,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
      *
      * @coversNothing
      */
-
-    public function MimeResolverInvokableTest()
+    public function mimeResolverInvokableTest()
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
@@ -106,8 +105,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
      *
      * @coversNothing
      */
-
-    public function MimeResolverAliasTest()
+    public function mimeResolverAliasTest()
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
