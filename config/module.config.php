@@ -10,9 +10,15 @@ return array(
             'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
             'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
             'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
+            'AssetManager\Resolver\ConcatResolver'              => 'AssetManager\Service\ConcatResolverServiceFactory',
+            'AssetManager\Resolver\AliasPathStackResolver'      => 'AssetManager\Service\AliasPathStackResolverServiceFactory',
         ),
         'invokables' => array(
-            'mime_resolver' => 'AssetManager\Service\MimeResolver',
+            'AssetManager\Service\MimeResolver'                 => 'AssetManager\Service\MimeResolver',
+        ),
+        'aliases' => array(
+            //Alias left here for BC
+            'mime_resolver'                                     => 'AssetManager\Service\MimeResolver',
         ),
     ),
     'asset_manager' => array(
