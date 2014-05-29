@@ -118,5 +118,4 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($serviceManager->has('mime_resolver'));
         $this->assertTrue(is_object($serviceManager->get('mime_resolver')));
     }
-
 }
