@@ -31,4 +31,25 @@ return array(
             'AssetManager\Resolver\PathStackResolver'           => 500,
         ),
     ),
+    'controllers'     => array(
+        'factories' => array(
+            'AssetManager\Controller\Console' => 'AssetManager\Controller\ConsoleControllerFactory',
+        ),
+    ),
+    'console'         => array(
+        'router' => array(
+            'routes' => array(
+                'AssetManager-warmup' => array(
+                    'options' => array(
+                        'route'    => 'assetmanager warmup',
+                        'defaults' => array(
+                            'controller' => 'AssetManager\Controller\Console',
+                            'action'     => 'warmup',
+                        )
+                    )
+                )
+            )
+        )
+    ),
+
 );

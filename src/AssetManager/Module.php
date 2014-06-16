@@ -9,6 +9,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\Console\Adapter\AdapterInterface;
 
 /**
  * Module class
@@ -81,4 +82,19 @@ class Module implements
         $eventManager->attach(MvcEvent::EVENT_DISPATCH, $callback, $priority);
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $callback, $priority);
     }
+
+    /**
+     * @param \Zend\Console\Adapter\AdapterInterface $console
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getConsoleUsage(AdapterInterface $console)
+    {
+        return array(
+            'Warmup',
+            'assetmanager warmup' => 'Warm AssetManager up',
+        );
+    }
 }
+
