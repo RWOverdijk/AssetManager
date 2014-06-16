@@ -223,4 +223,33 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
         $resolver->addPath(null);
     }
+
+    /**
+     * Test Collect returns valid list of assets
+     *
+     * @covers \AssetManager\Resolver\PrioritizedPathsResolver::collect
+     */
+    public function testCollect()
+    {
+        $resolver = new PrioritizedPathsResolver();
+        $resolver->addPath(__DIR__);
+
+        $this->assertContains(basename(__FILE__), $resolver->collect());
+        $this->assertNotContains('i-do-not-exist.php', $resolver->collect());
+    }
+
+    /**
+     * Test Collect returns valid list of assets
+     *
+     * @covers \AssetManager\Resolver\PrioritizedPathsResolver::collect
+     */
+    public function testCollectDirectory()
+    {
+        $resolver = new PrioritizedPathsResolver();
+        $resolver->addPath(realpath(__DIR__ . '/../'));
+        $dir = substr(__DIR__, strrpos(__DIR__, '/', 0) + 1);
+
+        $this->assertContains($dir . DIRECTORY_SEPARATOR . basename(__FILE__), $resolver->collect());
+        $this->assertNotContains($dir . DIRECTORY_SEPARATOR . 'i-do-not-exist.php', $resolver->collect());
+    }
 }

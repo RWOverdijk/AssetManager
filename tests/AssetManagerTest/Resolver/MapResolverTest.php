@@ -143,4 +143,20 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($asset instanceof Asset\HttpAsset);
         $this->assertSame('text/foo', $asset->mimetype);
     }
+
+    /**
+     * Test Collect returns valid list of assets
+     *
+     * @covers \AssetManager\Resolver\MapResolver::collect
+     */
+    public function testCollect()
+    {
+        $map = array(
+            'foo' => 'bar',
+            'baz' => 'qux',
+        );
+        $resolver = new MapResolver($map);
+
+        $this->assertEquals(array_keys($map), $resolver->collect());
+    }
 }

@@ -113,4 +113,12 @@ class MapResolver implements ResolverInterface, MimeResolverAwareInterface
 
         return $asset;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function collect()
+    {
+        return array_keys($this->map);
+    }
 }
