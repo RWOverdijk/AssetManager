@@ -219,7 +219,7 @@ class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
                 } elseif (!isset($collection[$pathInfo->getPath()])) {
                     $collection[] = substr($pathInfo->getRealPath(), strlen($basePath));
                 }
-        }
+            }
         }
         return $collection;
     }

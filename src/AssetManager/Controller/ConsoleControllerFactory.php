@@ -16,4 +16,3 @@ class ConsoleControllerFactory implements FactoryInterface
         return new ConsoleController($console, $assetManager);
     }
 }
-

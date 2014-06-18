@@ -227,7 +227,7 @@ class PrioritizedPathsResolver implements ResolverInterface, MimeResolverAwareIn
                 } elseif (!isset($collection[$pathInfo->getPath()])) {
                     $collection[] = substr($pathInfo->getRealPath(), strlen($basePath));
                 }
-        }
+            }
         }
         return $collection;
     }
