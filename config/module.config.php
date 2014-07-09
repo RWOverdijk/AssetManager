@@ -41,7 +41,7 @@ return array(
             'routes' => array(
                 'AssetManager-warmup' => array(
                     'options' => array(
-                        'route'    => 'assetmanager warmup',
+                        'route'    => 'assetmanager warmup [--purge]',
                         'defaults' => array(
                             'controller' => 'AssetManager\Controller\Console',
                             'action'     => 'warmup',

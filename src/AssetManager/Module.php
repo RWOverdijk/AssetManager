@@ -93,7 +93,10 @@ class Module implements
     {
         return array(
             'Warmup',
-            'assetmanager warmup' => 'Warm AssetManager up',
+            'assetmanager warmup [--purge]' => 'Warm AssetManager up',
+            array(
+                '--purge' => '(optional) forces cache flushing',
+            ),
         );
     }
 }

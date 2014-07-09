@@ -35,12 +35,49 @@ class ConsoleController extends AbstractActionController
 
     public function warmupAction()
     {
+        $request = $this->getRequest();
+        $purge = $request->getParam('purge', false);
+        $appConfig = $this->getServiceLocator()->get('config');
+
+        // purge cache for every configuration
+        if ($purge && isset($appConfig['asset_manager']) && isset($appConfig['asset_manager']['caching'])) {
+
+            foreach ($appConfig['asset_manager']['caching'] as $configName => $config) {
+                if (isset($config['options']) && isset($config['options']['dir'])) {
+                    $this->console->writeLine(sprintf('Purging %s on "%s"...', $config['options']['dir'], $configName));
+                    self::rRmDir($config['options']['dir']);
+                }
+            }
+        }
+
         $this->console->writeLine('Collecting all assets...');
         $collection = $this->assetManager->getResolver()->collect();
+
         $this->console->writeLine(sprintf('Collected %d assets, warming up', count($collection)));
         foreach ($collection as $path) {
             $asset = $this->assetManager->getResolver()->resolve($path);
             $this->assetManager->getAssetCacheManager()->setCache($path, $asset)->dump();
+        }
+    }
+
+    private static function rRmDir($dir) {
+
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+
+            foreach ($objects as $object) {
+
+                $path = $dir . '/' . $object;
+                if ($object != "." && $object != "..") {
+                    if (is_dir($path)) {
+                        self::rRmDir($path);
+                    } else {
+                        unlink($path);
+                    }
+                }
+            }
+
+            rmdir($dir);
         }
     }
 }
