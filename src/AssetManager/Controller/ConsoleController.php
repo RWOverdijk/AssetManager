@@ -110,7 +110,7 @@ class ConsoleController extends AbstractActionController
 
     /**
      * Removes given node from filesystem (recursively).
-     * @param $node string - uri of node that should be removed from filesystem
+     * @param string $node - uri of node that should be removed from filesystem
      */
     protected function recursiveRemove($node)
     {
@@ -134,7 +134,7 @@ class ConsoleController extends AbstractActionController
     /**
      * Outputs given $line if $verbose i truthy value.
      * @param $line
-     * @param $verbose (bool) verbose flag, default true
+     * @param bool $verbose verbose flag, default true
      */
     protected function output($line, $verbose = true)
     {
