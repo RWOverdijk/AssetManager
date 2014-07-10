@@ -68,16 +68,17 @@ class ConsoleController extends AbstractActionController
     {
         $request    = $this->getRequest();
         $purge      = $request->getParam('purge', false);
+        $verbose    = $request->getParam('verbose', false) || $request->getParam('v', false);
 
         // purge cache for every configuration
         if ($purge && !empty($this->appConfig['asset_manager']['caching'])) {
-            $this->purgeCache();
+            $this->purgeCache($verbose);
         }
 
-        $this->console->writeLine('Collecting all assets...');
+        $this->output('Collecting all assets...', $verbose);
         $collection = $this->assetManager->getResolver()->collect();
 
-        $this->console->writeLine(sprintf('Collected %d assets, warming up', count($collection)));
+        $this->output(sprintf('Collected %d assets, warming up', count($collection)), $verbose);
         foreach ($collection as $path) {
             $asset = $this->assetManager->getResolver()->resolve($path);
             $this->assetManager->getAssetCacheManager()->setCache($path, $asset)->dump();
@@ -86,15 +87,16 @@ class ConsoleController extends AbstractActionController
 
     /**
      * Purges all directories defined as AssetManager cache dir.
+     * @param $verbose (bool) verbose flag, default false
      */
-    protected function purgeCache()
+    protected function purgeCache($verbose = false)
     {
 
         foreach ($this->appConfig['asset_manager']['caching'] as $configName => $config) {
             if (empty($config['options']['dir'])) {
                 continue;
             }
-            $this->console->writeLine(sprintf('Purging %s on "%s"...', $config['options']['dir'], $configName));
+            $this->output(sprintf('Purging %s on "%s"...', $config['options']['dir'], $configName), $verbose);
             self::recursiveRemove($config['options']['dir']);
         }
     }
@@ -119,6 +121,19 @@ class ConsoleController extends AbstractActionController
             rmdir($node);
         } else {
             unlink($node);
+        }
+    }
+
+    /**
+     * Outputs given $line if $verbose i truthy value.
+     * @param $line
+     * @param $verbose (bool) verbose flag, default true
+     */
+    protected function output($line, $verbose = true)
+    {
+
+        if ($verbose) {
+            $this->console->writeLine($line);
         }
     }
 }
