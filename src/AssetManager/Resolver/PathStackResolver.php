@@ -221,6 +221,7 @@ class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
                 }
             }
         }
+
         return $collection;
     }
 }

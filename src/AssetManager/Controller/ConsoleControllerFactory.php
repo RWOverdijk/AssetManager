@@ -12,7 +12,8 @@ class ConsoleControllerFactory implements FactoryInterface
         $serviceLocator = $serviceLocator->getServiceLocator();
         $console        = $serviceLocator->get('Console');
         $assetManager   = $serviceLocator->get('AssetManager\Service\AssetManager');
+        $appConfig      = $serviceLocator->get('config');
 
-        return new ConsoleController($console, $assetManager);
+        return new ConsoleController($console, $assetManager, $appConfig);
     }
 }

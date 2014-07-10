@@ -45,11 +45,11 @@ return array(
                         'defaults' => array(
                             'controller' => 'AssetManager\Controller\Console',
                             'action'     => 'warmup',
-                        )
-                    )
-                )
-            )
-        )
+                        ),
+                    ),
+                ),
+            ),
+        ),
     ),
 
 );
