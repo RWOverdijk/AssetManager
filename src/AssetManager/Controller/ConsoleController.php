@@ -71,7 +71,7 @@ class ConsoleController extends AbstractActionController
         $verbose    = $request->getParam('verbose', false) || $request->getParam('v', false);
 
         // purge cache for every configuration
-        if ($purge && !empty($this->appConfig['asset_manager']['caching'])) {
+        if ($purge) {
             $this->purgeCache($verbose);
         }
 
@@ -85,20 +85,27 @@ class ConsoleController extends AbstractActionController
         }
     }
 
-    /**
-     * Purges all directories defined as AssetManager cache dir.
-     * @param $verbose (bool) verbose flag, default false
+    /** Purges all directories defined as AssetManager cache dir.
+     * @param bool $verbose verbose flag, default false
+     * @return bool false if caching is not set, otherwise true
      */
     protected function purgeCache($verbose = false)
     {
 
+        if (empty($this->appConfig['asset_manager']['caching'])) {
+            return false;
+        }
+
         foreach ($this->appConfig['asset_manager']['caching'] as $configName => $config) {
+
             if (empty($config['options']['dir'])) {
                 continue;
             }
             $this->output(sprintf('Purging %s on "%s"...', $config['options']['dir'], $configName), $verbose);
             self::recursiveRemove($config['options']['dir']);
         }
+
+        return true;
     }
 
     /**
