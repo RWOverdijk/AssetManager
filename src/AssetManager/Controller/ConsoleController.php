@@ -76,16 +76,18 @@ class ConsoleController extends AbstractActionController
         }
 
         $this->output('Collecting all assets...', $verbose);
-        $collection = $this->assetManager->getResolver()->collect();
 
-        $this->output(sprintf('Collected %d assets, warming up', count($collection)), $verbose);
+        $collection = $this->assetManager->getResolver()->collect();
+        $this->output(sprintf('Collected %d assets, warming up...', count($collection)), $verbose);
+
         foreach ($collection as $path) {
             $asset = $this->assetManager->getResolver()->resolve($path);
             $this->assetManager->getAssetCacheManager()->setCache($path, $asset)->dump();
         }
     }
 
-    /** Purges all directories defined as AssetManager cache dir.
+    /**
+     * Purges all directories defined as AssetManager cache dir.
      * @param bool $verbose verbose flag, default false
      * @return bool false if caching is not set, otherwise true
      */
@@ -102,7 +104,7 @@ class ConsoleController extends AbstractActionController
                 continue;
             }
             $this->output(sprintf('Purging %s on "%s"...', $config['options']['dir'], $configName), $verbose);
-            self::recursiveRemove($config['options']['dir']);
+            $this->recursiveRemove($config['options']['dir']);
         }
 
         return true;
@@ -114,7 +116,6 @@ class ConsoleController extends AbstractActionController
      */
     protected function recursiveRemove($node)
     {
-
         if (is_dir($node)) {
             $objects = scandir($node);
 
@@ -138,7 +139,6 @@ class ConsoleController extends AbstractActionController
      */
     protected function output($line, $verbose = true)
     {
-
         if ($verbose) {
             $this->console->writeLine($line);
         }

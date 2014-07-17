@@ -207,6 +207,7 @@ class PrioritizedPathsResolver implements ResolverInterface, MimeResolverAwareIn
     public function collect()
     {
         $collection = array();
+
         foreach ($this->getPaths() as $path) {
             $locations = new SplStack();
             $pathInfo = new SplFileInfo($path);
@@ -217,18 +218,18 @@ class PrioritizedPathsResolver implements ResolverInterface, MimeResolverAwareIn
                 /** @var SplFileInfo $pathInfo */
                 $pathInfo = $locations->pop();
                 if (!$pathInfo->isReadable()) {
-                    continue;
+                    throw new RuntimeException(sprintf('%s is not readable.', $pathInfo->getPath()));
                 }
                 if ($pathInfo->isDir()) {
-                    $dir = new DirectoryResource($pathInfo->getRealPath());
-                    foreach ($dir as $resource) {
+                    foreach (new DirectoryResource($pathInfo->getRealPath()) as $resource) {
                         $locations->push(new SplFileInfo($resource));
                     }
-                } elseif (!isset($collection[$pathInfo->getPath()])) {
+                } else {
                     $collection[] = substr($pathInfo->getRealPath(), strlen($basePath));
                 }
             }
         }
-        return $collection;
+
+        return array_unique($collection);
     }
 }

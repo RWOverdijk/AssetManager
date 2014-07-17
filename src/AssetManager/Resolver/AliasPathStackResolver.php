@@ -5,6 +5,7 @@ namespace AssetManager\Resolver;
 use Assetic\Factory\Resource\DirectoryResource;
 use SplFileInfo;
 use Traversable;
+use Zend\Db\TableGateway\Exception\RuntimeException;
 use Zend\Stdlib\SplStack;
 use Assetic\Asset\FileAsset;
 use AssetManager\Exception;
@@ -165,6 +166,7 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
     public function collect()
     {
         $collection = array();
+
         foreach ($this->aliases as $alias => $path) {
             $locations = new SplStack();
             $pathInfo = new SplFileInfo($path);
@@ -175,18 +177,18 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
                 /** @var SplFileInfo $pathInfo */
                 $pathInfo = $locations->pop();
                 if (!$pathInfo->isReadable()) {
-                    continue;
+                    throw new RuntimeException(sprintf('%s is not readable.', $pathInfo->getPath()));
                 }
                 if ($pathInfo->isDir()) {
-                    $dir = new DirectoryResource($pathInfo->getRealPath());
-                    foreach ($dir as $resource) {
+                    foreach (new DirectoryResource($pathInfo->getRealPath()) as $resource) {
                         $locations->push(new SplFileInfo($resource));
                     }
-                } elseif (!isset($collection[$pathInfo->getPath()])) {
+                } else {
                     $collection[] = $alias . substr($pathInfo->getRealPath(), strlen($basePath));
                 }
             }
         }
-        return $collection;
+
+        return array_unique($collection);
     }
 }
