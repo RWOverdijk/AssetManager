@@ -2,13 +2,13 @@
 
 namespace AssetManagerTest\Service;
 
-use AssetManager\Resolver\GlobPathStackResolver;
-use PHPUnit_Framework_TestCase;
 use ArrayObject;
 use Assetic\Asset;
-use AssetManager\Resolver\ResolverInterface;
+use AssetManager\Resolver\GlobPathStackResolver;
 use AssetManager\Resolver\MimeResolverAwareInterface;
+use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\MimeResolver;
+use PHPUnit_Framework_TestCase;
 
 class GlobPathStackResolverTest extends PHPUnit_Framework_TestCase
 {
@@ -17,8 +17,8 @@ class GlobPathStackResolverTest extends PHPUnit_Framework_TestCase
         $resolver = new GlobPathStackResolver();
         $this->assertEmpty($resolver->getPaths()->toArray());
 
-        $resolver->addPaths(array(__DIR__));
-        $this->assertEquals(array(__DIR__ . DIRECTORY_SEPARATOR), $resolver->getPaths()->toArray());
+        $resolver->addPaths(array( __DIR__ ));
+        $this->assertEquals(array( __DIR__ . DIRECTORY_SEPARATOR ), $resolver->getPaths()->toArray());
 
         $resolver->clearPaths();
         $this->assertEquals(array(), $resolver->getPaths()->toArray());
@@ -53,20 +53,22 @@ class GlobPathStackResolverTest extends PHPUnit_Framework_TestCase
     public function testSetPaths()
     {
         $resolver = new GlobPathStackResolver();
-        $resolver->setPaths(array('dir2', 'dir1'));
+        $resolver->setPaths(array( 'dir2', 'dir1' ));
         // order inverted because of how a stack is traversed
         $this->assertSame(
-            array('dir1' . DIRECTORY_SEPARATOR, 'dir2' . DIRECTORY_SEPARATOR),
+            array( 'dir1' . DIRECTORY_SEPARATOR, 'dir2' . DIRECTORY_SEPARATOR ),
             $resolver->getPaths()->toArray()
         );
 
-        $paths = new ArrayObject(array(
-            'dir4',
-            'dir3',
-        ));
+        $paths = new ArrayObject(
+            array(
+                'dir4',
+                'dir3',
+            )
+        );
         $resolver->setPaths($paths);
         $this->assertSame(
-            array('dir3' . DIRECTORY_SEPARATOR, 'dir4' . DIRECTORY_SEPARATOR),
+            array( 'dir3' . DIRECTORY_SEPARATOR, 'dir4' . DIRECTORY_SEPARATOR ),
             $resolver->getPaths()->toArray()
         );
 
@@ -85,7 +87,7 @@ class GlobPathStackResolverTest extends PHPUnit_Framework_TestCase
 
         $resolver->addPath(__DIR__);
 
-        $fileAsset = new Asset\GlobAsset(__DIR__ . DIRECTORY_SEPARATOR . '*');
+        $fileAsset           = new Asset\GlobAsset(__DIR__ . DIRECTORY_SEPARATOR . '*');
         $fileAsset->mimetype = $mimeResolver->getMimeType(__FILE__);
 
         $this->assertEquals($fileAsset, $resolver->resolve('*'));
@@ -104,16 +106,18 @@ class GlobPathStackResolverTest extends PHPUnit_Framework_TestCase
     public function testLfiProtection()
     {
         $mimeResolver = new MimeResolver;
-        $resolver = new GlobPathStackResolver;
+        $resolver     = new GlobPathStackResolver;
         $resolver->setMimeResolver($mimeResolver);
 
         // should be on by default
         $this->assertTrue($resolver->isLfiProtectionOn());
         $resolver->addPath(__DIR__);
 
-        $this->assertNull($resolver->resolve(
-            '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . '*'
-        ));
+        $this->assertNull(
+            $resolver->resolve(
+                '..' . DIRECTORY_SEPARATOR . basename(__DIR__) . DIRECTORY_SEPARATOR . '*'
+            )
+        );
 
         $resolver->setLfiProtection(false);
 
@@ -131,5 +135,4 @@ class GlobPathStackResolverTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
         $resolver->addPath(null);
     }
-
 }
