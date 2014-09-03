@@ -62,7 +62,7 @@ class GlobPathStackResolver implements ResolverInterface, MimeResolverAwareInter
             return null;
         }
 
-        if (strpbrk('[]*?', $name) === false) { //skip files that don't look like globs
+        if (strpbrk($name, '[]*?') === false) { //skip files that don't look like globs
             return null;
         }
 
