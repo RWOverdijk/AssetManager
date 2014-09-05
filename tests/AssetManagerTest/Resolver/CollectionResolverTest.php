@@ -390,4 +390,28 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($collectionResolved->mimetype, 'text/plain');
         $this->assertTrue($collectionResolved instanceof Asset\AssetCollection);
     }
+
+    /**
+     * Test Collect returns valid list of assets
+     *
+     * @covers \AssetManager\Resolver\CollectionResolver::collect
+     */
+    public function testCollect()
+    {
+        $collections = array(
+            'myCollection' => array(
+                'bacon',
+                'eggs',
+                'mud',
+            ),
+            'my/collect.ion' => array(
+                'bacon',
+                'eggs',
+                'mud',
+            ),
+        );
+        $resolver = new CollectionResolver($collections);
+
+        $this->assertEquals(array_keys($collections), $resolver->collect());
+    }
 }

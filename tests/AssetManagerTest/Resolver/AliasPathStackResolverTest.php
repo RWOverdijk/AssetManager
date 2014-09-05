@@ -259,4 +259,33 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
             )->dump()
         );
     }
+
+    /**
+     * Test Collect returns valid list of assets
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::collect
+     */
+    public function testCollect()
+    {
+        $alias = 'my/alias/';
+        $resolver = new AliasPathStackResolver(array($alias => __DIR__));
+
+        $this->assertContains($alias . basename(__FILE__), $resolver->collect());
+        $this->assertNotContains($alias . 'i-do-not-exist.php', $resolver->collect());
+    }
+
+    /**
+     * Test Collect returns valid list of assets
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::collect
+     */
+    public function testCollectDirectory()
+    {
+        $alias = 'my/alias/';
+        $resolver = new AliasPathStackResolver(array($alias => realpath(__DIR__ . '/../')));
+        $dir = substr(__DIR__, strrpos(__DIR__, '/', 0) + 1);
+
+        $this->assertContains($alias . $dir . DIRECTORY_SEPARATOR . basename(__FILE__), $resolver->collect());
+        $this->assertNotContains($alias . $dir . DIRECTORY_SEPARATOR . 'i-do-not-exist.php', $resolver->collect());
+    }
 }

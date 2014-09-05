@@ -171,4 +171,28 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
             file_get_contents(__FILE__).file_get_contents(__FILE__)
         );
     }
+
+    /**
+     * Test Collect returns valid list of assets
+     *
+     * @covers \AssetManager\Resolver\ConcatResolver::collect
+     */
+    public function testCollect()
+    {
+        $concats = array(
+            'myCollection' => array(
+                'bacon',
+                'eggs',
+                'mud',
+            ),
+            'my/collect.ion' => array(
+                'bacon',
+                'eggs',
+                'mud',
+            ),
+        );
+        $resolver = new ConcatResolver($concats);
+
+        $this->assertEquals(array_keys($concats), $resolver->collect());
+    }
 }

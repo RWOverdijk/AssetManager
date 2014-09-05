@@ -19,6 +19,10 @@ class InterfaceTestResolver implements
     {
     }
 
+    public function collect()
+    {
+    }
+
     public function getAggregateResolver()
     {
 

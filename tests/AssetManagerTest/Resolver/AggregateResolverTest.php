@@ -43,4 +43,31 @@ class AggregateResolverTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('second', $resolver->resolve('to-be-resolved'));
     }
+
+    public function testCollect()
+    {
+        $resolver = new AggregateResolver();
+
+        $lowPriority = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $lowPriority
+            ->expects($this->exactly(2))
+            ->method('collect')
+            ->will($this->returnValue(array('one', 'two')));
+        $resolver->attach($lowPriority);
+
+        $this->assertContains('one', $resolver->collect());
+
+        $highPriority = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $highPriority
+            ->expects($this->once())
+            ->method('collect')
+            ->will($this->returnValue(array('three')));
+        $resolver->attach($highPriority, 1000);
+
+        $collection = $resolver->collect();
+        $this->assertContains('one', $collection);
+        $this->assertContains('three', $collection);
+
+        $this->assertCount(3, $collection);
+    }
 }

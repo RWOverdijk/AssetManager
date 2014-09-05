@@ -51,4 +51,18 @@ class AggregateResolver implements ResolverInterface
 
         return null;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function collect()
+    {
+        $collection = array();
+
+        foreach ($this->queue as $resolver) {
+            $collection = array_merge($resolver->collect(), $collection);
+        }
+
+        return array_unique($collection);
+    }
 }

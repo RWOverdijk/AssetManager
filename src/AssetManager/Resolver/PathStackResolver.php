@@ -2,6 +2,7 @@
 
 namespace AssetManager\Resolver;
 
+use Assetic\Factory\Resource\DirectoryResource;
 use SplFileInfo;
 use Traversable;
 use Zend\Stdlib\SplStack;
@@ -190,5 +191,37 @@ class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function collect()
+    {
+        $collection = array();
+        foreach ($this->getPaths() as $path) {
+            $locations = new SplStack();
+            $pathInfo = new SplFileInfo($path);
+            $locations->push($pathInfo);
+            $basePath = $this->normalizePath($pathInfo->getRealPath());
+
+            while (!$locations->isEmpty()) {
+                /** @var SplFileInfo $pathInfo */
+                $pathInfo = $locations->pop();
+                if (!$pathInfo->isReadable()) {
+                    continue;
+                }
+                if ($pathInfo->isDir()) {
+                    $dir = new DirectoryResource($pathInfo->getRealPath());
+                    foreach ($dir as $resource) {
+                        $locations->push(new SplFileInfo($resource));
+                    }
+                } elseif (!isset($collection[$pathInfo->getPath()])) {
+                    $collection[] = substr($pathInfo->getRealPath(), strlen($basePath));
+                }
+            }
+        }
+
+        return $collection;
     }
 }
