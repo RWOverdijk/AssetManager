@@ -71,7 +71,7 @@ class GlobPathStackResolver implements ResolverInterface, MimeResolverAwareInter
             $glob       = glob($joinedPath);
             if (count($glob)) {
                 // Get the mime type of the first file and assume its the same for all the rest (not ideal).
-                //TODO: maybe this could be refactored into a MimeResolver
+                // @todo Maybe this could be refactored into a MimeResolver
                 $filePath = current($glob);
                 $file     = new SplFileInfo($filePath);
                 $mimeType = $this->getMimeResolver()->getMimeType($file->getRealPath());

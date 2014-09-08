@@ -19,7 +19,7 @@ class GlobPathStackResolverServiceFactory implements FactoryInterface
         $pathStackResolver = new GlobPathStackResolver();
         $paths             = array();
 
-        if (isset( $config['asset_manager']['resolver_configs']['paths'] )) {
+        if (!empty( $config['asset_manager']['resolver_configs']['paths'] )) {
             $paths = $config['asset_manager']['resolver_configs']['paths'];
         }
 

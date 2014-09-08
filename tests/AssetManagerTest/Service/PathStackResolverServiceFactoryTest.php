@@ -33,8 +33,8 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $resolver = $factory->createService($serviceManager);
         $this->assertSame(
             array(
-                'path2/',
-                'path1/',
+                'path2' . DIRECTORY_SEPARATOR,
+                'path1' . DIRECTORY_SEPARATOR,
             ),
             $resolver->getPaths()->toArray()
         );
