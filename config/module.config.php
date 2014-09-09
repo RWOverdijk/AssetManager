@@ -22,6 +22,7 @@ return array(
         ),
     ),
     'asset_manager' => array(
+        'clear_output_buffer' => true,
         'resolvers' => array(
             'AssetManager\Resolver\MapResolver'                 => 3000,
             'AssetManager\Resolver\ConcatResolver'              => 2500,
