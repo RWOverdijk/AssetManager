@@ -155,7 +155,7 @@ class AssetManager implements
         }
         // @codeCoverageIgnoreEnd
 
-        if($this->config['clear_output_buffer']){
+        if(!empty($this->config['clear_output_buffer']) && $this->config['clear_output_buffer']){
             // Only clean the output buffer if it's turned on and something
             // has been buffered.
             if(ini_get('output_buffering') && ob_get_length() > 0) {
