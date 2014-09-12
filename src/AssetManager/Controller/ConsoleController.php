@@ -85,7 +85,7 @@ class ConsoleController extends AbstractActionController
             $this->assetManager->getAssetCacheManager()->setCache($path, $asset)->dump();
         }
 
-        $this->output(sprintf('Warming up finished...', $verbose);
+        $this->output(sprintf('Warming up finished...', $verbose));
     }
 
     /**
