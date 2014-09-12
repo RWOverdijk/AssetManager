@@ -218,7 +218,7 @@ class PrioritizedPathsResolver implements ResolverInterface, MimeResolverAwareIn
                 /** @var SplFileInfo $pathInfo */
                 $pathInfo = $locations->pop();
                 if (!$pathInfo->isReadable()) {
-                    throw new RuntimeException(sprintf('%s is not readable.', $pathInfo->getPath()));
+                    throw new Exception\RuntimeException(sprintf('%s is not readable.', $pathInfo->getPath()));
                 }
                 if ($pathInfo->isDir()) {
                     foreach (new DirectoryResource($pathInfo->getRealPath()) as $resource) {
