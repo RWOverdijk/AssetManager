@@ -135,7 +135,7 @@ class ConsoleController extends AbstractActionController
                 }
                 $this->recursiveRemove($node . '/' . $object);
             }
-        } elseif (is_file($node)){
+        } elseif (is_file($node)) {
             $this->output(sprintf("unlinking %s...", $node), $verbose);
             unlink($node);
         }
