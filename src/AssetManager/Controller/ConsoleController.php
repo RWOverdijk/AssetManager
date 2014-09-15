@@ -122,6 +122,7 @@ class ConsoleController extends AbstractActionController
     /**
      * Removes given node from filesystem (recursively).
      * @param string $node - uri of node that should be removed from filesystem
+     * @param bool $verbose verbose flag, default false
      */
     protected function recursiveRemove($node, $verbose = false)
     {
@@ -134,7 +135,7 @@ class ConsoleController extends AbstractActionController
                 }
                 $this->recursiveRemove($node . '/' . $object);
             }
-        } else if (is_file($node)){
+        } elseif (is_file($node)){
             $this->output(sprintf("unlinking %s...", $node), $verbose);
             unlink($node);
         }
