@@ -1,6 +1,5 @@
 clover.xml
 php-cs-fixer.phar
-composer.json
 composer.lock
 vendor
 .idea
