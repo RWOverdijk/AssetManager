@@ -423,6 +423,29 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($resolvesToAsset);
     }
 
+    public function testClearOutputBufferInSetAssetOnResponse()
+    {
+        $this->expectOutputString(file_get_contents(__FILE__));
+
+        echo "This string would definately break any image source.\n";
+        echo "This one would make it even worse.\n";
+        echo "They all should be gone soon...\n";
+
+        $assetFilterManager = new AssetFilterManager();
+        $assetCacheManager  = $this->getAssetCacheManagerMock();
+        $mimeResolver       = new MimeResolver;
+        $assetManager       = new AssetManager($this->getResolver(), array('clear_output_buffer' => true));
+
+        $assetFilterManager->setMimeResolver($mimeResolver);
+        $assetManager->setAssetFilterManager($assetFilterManager);
+        $assetManager->setAssetCacheManager($assetCacheManager);
+        $assetManager->resolvesToAsset($this->getRequest());
+
+        $response = $assetManager->setAssetOnResponse(new Response);
+
+        echo $response->getContent();
+    }
+
     /**
      * @return string
      */

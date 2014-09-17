@@ -155,6 +155,14 @@ class AssetManager implements
         }
         // @codeCoverageIgnoreEnd
 
+        if (!empty($this->config['clear_output_buffer']) && $this->config['clear_output_buffer']) {
+            // Only clean the output buffer if it's turned on and something
+            // has been buffered.
+            if (ob_get_length() > 0) {
+                ob_clean();
+            }
+        }
+
         $response->getHeaders()
                  ->addHeaderLine('Content-Transfer-Encoding', 'binary')
                  ->addHeaderLine('Content-Type', $mimeType)
