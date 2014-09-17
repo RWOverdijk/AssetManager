@@ -106,7 +106,14 @@ class ConsoleController extends AbstractActionController
                 continue;
             }
             $this->output(sprintf('Purging %s on "%s"...', $config['options']['dir'], $configName), $verbose);
-            $this->recursiveRemove($config['options']['dir']);
+
+            $node = $config['options']['dir'];
+
+            if ($configName !== 'default') {
+                $node .= '/'.$configName;
+            }
+
+            $this->recursiveRemove($node, $verbose);
         }
 
         return true;
@@ -115,8 +122,9 @@ class ConsoleController extends AbstractActionController
     /**
      * Removes given node from filesystem (recursively).
      * @param string $node - uri of node that should be removed from filesystem
+     * @param bool $verbose verbose flag, default false
      */
-    protected function recursiveRemove($node)
+    protected function recursiveRemove($node, $verbose = false)
     {
         if (is_dir($node)) {
             $objects = scandir($node);
@@ -127,9 +135,8 @@ class ConsoleController extends AbstractActionController
                 }
                 $this->recursiveRemove($node . '/' . $object);
             }
-
-            rmdir($node);
-        } else {
+        } elseif (is_file($node)) {
+            $this->output(sprintf("unlinking %s...", $node), $verbose);
             unlink($node);
         }
     }
