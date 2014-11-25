@@ -208,17 +208,19 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testResolve()
     {
-        $resolver = new AliasPathStackResolver(array('my/alias/' => __DIR__));
-        $this->assertTrue($resolver instanceof AliasPathStackResolver);
-
         $mimeResolver = new MimeResolver;
-        $resolver->setMimeResolver($mimeResolver);
 
-        $fileAsset = new Asset\FileAsset(__FILE__);
-        $fileAsset->mimetype = $mimeResolver->getMimeType(__FILE__);
+        foreach(['my/alias/', 'AliasPathStackResolverTest/'] as $alias) {
+            $resolver = new AliasPathStackResolver(array($alias => __DIR__));
+            $this->assertTrue($resolver instanceof AliasPathStackResolver);
+            $resolver->setMimeResolver($mimeResolver);
 
-        $this->assertEquals($fileAsset, $resolver->resolve('my/alias/'.basename(__FILE__)));
-        $this->assertNull($resolver->resolve('i-do-not-exist.php'));
+            $fileAsset = new Asset\FileAsset(__FILE__);
+            $fileAsset->mimetype = $mimeResolver->getMimeType(__FILE__);
+
+            $this->assertEquals($fileAsset, $resolver->resolve($alias.basename(__FILE__)));
+            $this->assertNull($resolver->resolve('i-do-not-exist.php'));
+        }
     }
 
     /**
