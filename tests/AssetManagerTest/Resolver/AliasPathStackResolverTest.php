@@ -210,7 +210,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     {
         $mimeResolver = new MimeResolver;
 
-        foreach(['my/alias/', 'AliasPathStackResolverTest/'] as $alias) {
+        foreach (array('my/alias/', 'AliasPathStackResolverTest/') as $alias) {
             $resolver = new AliasPathStackResolver(array($alias => __DIR__));
             $this->assertTrue($resolver instanceof AliasPathStackResolver);
             $resolver->setMimeResolver($mimeResolver);
