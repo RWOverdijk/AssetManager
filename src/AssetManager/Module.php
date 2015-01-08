@@ -63,6 +63,7 @@ class Module implements
             return;
         }
 
+        $event->stopPropagation();
         $response->setStatusCode(200);
 
         return $assetManager->setAssetOnResponse($response);
