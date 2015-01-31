@@ -1,6 +1,6 @@
 <?php
 
-namespace AssetManager\Cache;
+namespace AssetManagerTest\Cache;
 
 /**
  * Test file for Zend Cache Adapter

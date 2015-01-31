@@ -1,6 +1,6 @@
 <?php
 
-namespace AssetManager\Cache;
+namespace AssetManagerTest\Cache;
 
 use PHPUnit_Framework_TestCase;
 use Assetic\Cache\CacheInterface;
