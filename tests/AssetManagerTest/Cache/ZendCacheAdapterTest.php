@@ -2,6 +2,8 @@
 
 namespace AssetManagerTest\Cache;
 
+use AssetManager\Cache\ZendCacheAdapter;
+
 /**
  * Test file for Zend Cache Adapter
  *
