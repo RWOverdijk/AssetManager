@@ -23,6 +23,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         require_once __DIR__ . '/../../_files/JSMin.inc';
         require_once __DIR__ . '/../../_files/CustomFilter.php';
         require_once __DIR__ . '/../../_files/BrokenFilter.php';
+        require_once __DIR__ . '/../../_files/ReverseFilter.php';
     }
 
     protected function getRequest()
@@ -208,7 +209,63 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetOnResponse($response);
         $this->assertEquals($minified, $response->getBody());
     }
+    public function testSetExtensionFiltersNotDuplicate()
+    {
+        $config = array(
+            'filters' => array(
+                'js' => array(
+                    array(
+                        'filter' => '\ReverseFilter',
+                    ),
+                ),
+            ),
+        );
+        
+        $assetFilterManager = new AssetFilterManager($config['filters']);
+        $assetCacheManager = $this->getAssetCacheManagerMock();
 
+        $mimeResolver = new MimeResolver;
+        $response     = new Response;
+        
+        $collArr = array(
+            'blah.js' => array(
+                'asset-path.js'
+            )
+        );        
+        $resolver = new \AssetManager\Resolver\CollectionResolver($collArr);
+        
+        $asset           = new Asset\FileAsset(__DIR__ . '/../../_files/require-jquery.js');
+        $asset->mimetype = 'application/javascript';
+        
+        $mockedResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $mockedResolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with('asset-path.js')
+            ->willReturn($asset);
+        
+        
+        $resolver->setAssetFilterManager($assetFilterManager);        
+        
+        $request = new Request();
+        $request->setUri('http://localhost/base-path/blah.js');
+        $request->setBasePath('/base-path');       
+
+        $aggregateResolver       = new \AssetManager\Resolver\AggregateResolver();
+        $resolver->setAggregateResolver($aggregateResolver);
+        $aggregateResolver->attach($mockedResolver, 500);
+        $aggregateResolver->attach($resolver, 1000);
+        
+        $assetManager = new AssetManager($aggregateResolver, $config);
+        $reversedOnlyOnce     = strrev(file_get_contents(__DIR__ . '/../../_files/require-jquery.js'));
+        $assetFilterManager->setMimeResolver($mimeResolver);
+        $assetManager->setAssetFilterManager($assetFilterManager);
+        $assetManager->setAssetCacheManager($assetCacheManager);
+        $this->assertTrue($assetManager->resolvesToAsset($request));
+        $assetManager->setAssetOnResponse($response);
+        $this->assertEquals('1' . $reversedOnlyOnce, $response->getBody());
+        
+    }
     public function testSetMimeTypeFilters()
     {
         $config = array(
