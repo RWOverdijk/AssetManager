@@ -231,7 +231,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
             'blah.js' => array(
                 'asset-path.js'
             )
-        );        
+        );
         $resolver = new \AssetManager\Resolver\CollectionResolver($collArr);
         
         $asset           = new Asset\FileAsset(__DIR__ . '/../../_files/require-jquery.js');
@@ -245,11 +245,11 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
             ->willReturn($asset);
         
         
-        $resolver->setAssetFilterManager($assetFilterManager);        
+        $resolver->setAssetFilterManager($assetFilterManager);
         
         $request = new Request();
         $request->setUri('http://localhost/base-path/blah.js');
-        $request->setBasePath('/base-path');       
+        $request->setBasePath('/base-path');
 
         $aggregateResolver       = new \AssetManager\Resolver\AggregateResolver();
         $resolver->setAggregateResolver($aggregateResolver);
@@ -264,7 +264,6 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($assetManager->resolvesToAsset($request));
         $assetManager->setAssetOnResponse($response);
         $this->assertEquals('1' . $reversedOnlyOnce, $response->getBody());
-        
     }
     public function testSetMimeTypeFilters()
     {
@@ -380,7 +379,6 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
     public function testSetAssetOnResponse()
     {
-
         $assetFilterManager = new AssetFilterManager();
         $assetCacheManager  = $this->getAssetCacheManagerMock();
         $mimeResolver       = new MimeResolver;
