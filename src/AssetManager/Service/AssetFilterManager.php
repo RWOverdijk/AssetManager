@@ -28,7 +28,7 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
     
     /**
      * @var FilterInterface[] Filters already instantiated
-     */    
+     */
     protected $filterInstances = array();
     
     /**
