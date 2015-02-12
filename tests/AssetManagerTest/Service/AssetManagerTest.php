@@ -211,6 +211,23 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetOnResponse($response);
         $this->assertEquals($minified, $response->getBody());
     }
+    public function getCollectionResolver()
+    {
+        $aggregateResolver  = new AggregateResolver;
+        $mockedResolver     = $this->getResolver(__DIR__ . '/../../_files/require-jquery.js');
+        $collArr = array(
+            'blah.js' => array(
+                'asset-path'
+            )
+        );
+        $resolver = new CollectionResolver($collArr);
+        $resolver->setAggregateResolver($aggregateResolver);
+
+        $aggregateResolver->attach($mockedResolver, 500);
+        $aggregateResolver->attach($resolver, 1000);
+
+        return $resolver;
+    }
     public function testSetExtensionFiltersNotDuplicate()
     {
         $config = array(
@@ -222,25 +239,12 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
                 ),
             ),
         );
-        
+
+        $resolver           = $this->getCollectionResolver();
         $assetFilterManager = new AssetFilterManager($config['filters']);
         $mimeResolver       = new MimeResolver;
         $assetFilterManager->setMimeResolver($mimeResolver);
-
-        $aggregateResolver  = new AggregateResolver;        
-        $mockedResolver     = $this->getResolver(__DIR__ . '/../../_files/require-jquery.js');
-        $collArr = array(
-            'blah.js' => array(
-                'asset-path'
-            )
-        );
-        $resolver = new CollectionResolver($collArr);
         $resolver->setAssetFilterManager($assetFilterManager);
-        $resolver->setAggregateResolver($aggregateResolver);
-
-        $aggregateResolver->attach($mockedResolver, 500);
-        $aggregateResolver->attach($resolver, 1000);
-
         
         $response     = new Response;
         $request      = $this->getRequest();
@@ -248,7 +252,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $request->setUri('http://localhost/base-path/blah.js');
         
         $assetCacheManager = $this->getAssetCacheManagerMock();
-        $assetManager      = new AssetManager($aggregateResolver, $config);
+        $assetManager      = new AssetManager($resolver->getAggregateResolver(), $config);
         $assetManager->setAssetCacheManager($assetCacheManager);
         $assetManager->setAssetFilterManager($assetFilterManager);
 
