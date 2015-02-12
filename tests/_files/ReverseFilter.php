@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Returns the contents in reverse order
- *
- * @author http://www.github.com/solcre
- */
+
 use Assetic\Asset\AssetInterface;
 class ReverseFilter implements Assetic\Filter\FilterInterface
 {
