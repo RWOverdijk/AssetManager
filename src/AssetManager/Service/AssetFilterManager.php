@@ -27,10 +27,8 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
     protected $mimeResolver;
     
     /**
-     *
-     * @var Filters[] Filters already instanced
-     */
-    
+     * @var FilterInterface[] Filters already instantiated
+     */    
     protected $filterInstances = array();
     
     /**
@@ -151,13 +149,12 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
                 'No filter found for ' . $filter
             );
         }
-        
-        if (!array_key_exists($filterClass, $this->filterInstances)) {
-            $filterInstance = new $filterClass;
-            $this->filterInstances[$filterClass] = $filterInstance;
-        } else {
-            $filterInstance = $this->filterInstances[$filterClass];
+
+        if (!isset($this->filterInstances[$filterClass])) {
+            $this->filterInstances[$filterClass] = new $filterClass();
         }
+
+        $filterInstance = $this->filterInstances[$filterClass];
 
         $asset->ensureFilter($filterInstance);
     }
