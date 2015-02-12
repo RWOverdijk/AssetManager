@@ -57,6 +57,24 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         return $resolver;
     }
 
+    public function getCollectionResolver()
+    {
+        $aggregateResolver  = new AggregateResolver;
+        $mockedResolver     = $this->getResolver(__DIR__ . '/../../_files/require-jquery.js');
+        $collArr = array(
+            'blah.js' => array(
+                'asset-path'
+            )
+        );
+        $resolver = new CollectionResolver($collArr);
+        $resolver->setAggregateResolver($aggregateResolver);
+
+        $aggregateResolver->attach($mockedResolver, 500);
+        $aggregateResolver->attach($resolver, 1000);
+
+        return $resolver;
+    }
+
     public function testConstruct()
     {
         $resolver     = $this->getMock('AssetManager\Resolver\ResolverInterface');
@@ -211,23 +229,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetOnResponse($response);
         $this->assertEquals($minified, $response->getBody());
     }
-    public function getCollectionResolver()
-    {
-        $aggregateResolver  = new AggregateResolver;
-        $mockedResolver     = $this->getResolver(__DIR__ . '/../../_files/require-jquery.js');
-        $collArr = array(
-            'blah.js' => array(
-                'asset-path'
-            )
-        );
-        $resolver = new CollectionResolver($collArr);
-        $resolver->setAggregateResolver($aggregateResolver);
 
-        $aggregateResolver->attach($mockedResolver, 500);
-        $aggregateResolver->attach($resolver, 1000);
-
-        return $resolver;
-    }
     public function testSetExtensionFiltersNotDuplicate()
     {
         $config = array(
@@ -262,6 +264,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $reversedOnlyOnce = '1' . strrev(file_get_contents(__DIR__ . '/../../_files/require-jquery.js'));
         $this->assertEquals($reversedOnlyOnce, $response->getBody());
     }
+
     public function testSetMimeTypeFilters()
     {
         $config = array(
