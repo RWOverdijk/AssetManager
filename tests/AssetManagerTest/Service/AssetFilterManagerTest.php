@@ -95,7 +95,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
         $assetFilterManager->setFilters('test/path.test', $asset);
     }
     
-    public function testFiltersAreInstantiatedOnce() 
+    public function testFiltersAreInstantiatedOnce()
     {
         $assetFilterManager = new AssetFilterManager(array(
             'test/path.test' => array(
@@ -111,7 +111,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
         $asset
             ->expects($this->any())
             ->method('ensureFilter')
-            ->with($this->callback(function(FilterInterface $filter) use (&$filterInstance) {
+            ->with($this->callback(function (FilterInterface $filter) use (&$filterInstance) {
                 if ($filterInstance === null) {
                     $filterInstance = $filter;
                 }
