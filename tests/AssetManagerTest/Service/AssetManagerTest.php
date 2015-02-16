@@ -9,6 +9,8 @@ use Assetic\Asset;
 use AssetManager\Cache\FilePathCache;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
+use AssetManager\Resolver\CollectionResolver;
+use AssetManager\Resolver\AggregateResolver;
 use Zend\Http\Response;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\Console\Request as ConsoleRequest;
@@ -23,6 +25,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         require_once __DIR__ . '/../../_files/JSMin.inc';
         require_once __DIR__ . '/../../_files/CustomFilter.php';
         require_once __DIR__ . '/../../_files/BrokenFilter.php';
+        require_once __DIR__ . '/../../_files/ReverseFilter.php';
     }
 
     protected function getRequest()
@@ -50,6 +53,24 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
             ->method('resolve')
             ->with('asset-path')
             ->will($this->returnValue($asset));
+
+        return $resolver;
+    }
+
+    public function getCollectionResolver()
+    {
+        $aggregateResolver  = new AggregateResolver;
+        $mockedResolver     = $this->getResolver(__DIR__ . '/../../_files/require-jquery.js');
+        $collArr = array(
+            'blah.js' => array(
+                'asset-path'
+            )
+        );
+        $resolver = new CollectionResolver($collArr);
+        $resolver->setAggregateResolver($aggregateResolver);
+
+        $aggregateResolver->attach($mockedResolver, 500);
+        $aggregateResolver->attach($resolver, 1000);
 
         return $resolver;
     }
@@ -209,6 +230,41 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($minified, $response->getBody());
     }
 
+    public function testSetExtensionFiltersNotDuplicate()
+    {
+        $config = array(
+            'filters' => array(
+                'js' => array(
+                    array(
+                        'filter' => '\ReverseFilter',
+                    ),
+                ),
+            ),
+        );
+
+        $resolver           = $this->getCollectionResolver();
+        $assetFilterManager = new AssetFilterManager($config['filters']);
+        $mimeResolver       = new MimeResolver;
+        $assetFilterManager->setMimeResolver($mimeResolver);
+        $resolver->setAssetFilterManager($assetFilterManager);
+        
+        $response     = new Response;
+        $request      = $this->getRequest();
+        // Have to change uri because asset-path would cause an infinite loop
+        $request->setUri('http://localhost/base-path/blah.js');
+        
+        $assetCacheManager = $this->getAssetCacheManagerMock();
+        $assetManager      = new AssetManager($resolver->getAggregateResolver(), $config);
+        $assetManager->setAssetCacheManager($assetCacheManager);
+        $assetManager->setAssetFilterManager($assetFilterManager);
+
+        $this->assertTrue($assetManager->resolvesToAsset($request));
+        $assetManager->setAssetOnResponse($response);
+
+        $reversedOnlyOnce = '1' . strrev(file_get_contents(__DIR__ . '/../../_files/require-jquery.js'));
+        $this->assertEquals($reversedOnlyOnce, $response->getBody());
+    }
+
     public function testSetMimeTypeFilters()
     {
         $config = array(
@@ -323,7 +379,6 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
     public function testSetAssetOnResponse()
     {
-
         $assetFilterManager = new AssetFilterManager();
         $assetCacheManager  = $this->getAssetCacheManagerMock();
         $mimeResolver       = new MimeResolver;

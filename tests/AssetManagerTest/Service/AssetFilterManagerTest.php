@@ -3,6 +3,7 @@
 namespace AssetManagerTest\Service;
 
 use Assetic\Asset\StringAsset;
+use Assetic\Filter\FilterInterface;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetFilterManager;
 use Zend\ServiceManager\ServiceManager;
@@ -91,6 +92,33 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
 
         $asset = new StringAsset('Herp derp');
 
+        $assetFilterManager->setFilters('test/path.test', $asset);
+    }
+    
+    public function testFiltersAreInstantiatedOnce()
+    {
+        $assetFilterManager = new AssetFilterManager(array(
+            'test/path.test' => array(
+                array(
+                    'filter' => 'CustomFilter'
+                ),
+            ),
+        ));
+        
+        $filterInstance = null;
+        
+        $asset = $this->getMock('Assetic\Asset\AssetInterface');
+        $asset
+            ->expects($this->any())
+            ->method('ensureFilter')
+            ->with($this->callback(function (FilterInterface $filter) use (&$filterInstance) {
+                if ($filterInstance === null) {
+                    $filterInstance = $filter;
+                }
+                return  $filter === $filterInstance;
+            }));
+        
+        $assetFilterManager->setFilters('test/path.test', $asset);
         $assetFilterManager->setFilters('test/path.test', $asset);
     }
 }

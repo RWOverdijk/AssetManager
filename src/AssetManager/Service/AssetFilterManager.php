@@ -25,7 +25,12 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
      * @var MimeResolver
      */
     protected $mimeResolver;
-
+    
+    /**
+     * @var FilterInterface[] Filters already instantiated
+     */
+    protected $filterInstances = array();
+    
     /**
      * Construct the AssetFilterManager
      *
@@ -145,7 +150,11 @@ class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAw
             );
         }
 
-        $filterInstance = new $filterClass;
+        if (!isset($this->filterInstances[$filterClass])) {
+            $this->filterInstances[$filterClass] = new $filterClass();
+        }
+
+        $filterInstance = $this->filterInstances[$filterClass];
 
         $asset->ensureFilter($filterInstance);
     }
