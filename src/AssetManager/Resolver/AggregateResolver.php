@@ -60,7 +60,7 @@ class AggregateResolver implements ResolverInterface
         $collection = array();
 
         foreach ($this->queue as $resolver) {
-            if (!method_exists($resolver, 'collect') {
+            if (!method_exists($resolver, 'collect')) {
                 continue;
             }
 

@@ -8,6 +8,11 @@ use AssetManager\Resolver\ResolverInterface;
 
 class AggregateResolverTest extends PHPUnit_Framework_TestCase
 {
+    public function setUp()
+    {
+        require_once __DIR__ . '/../../_files/ResolverWithCollect.php';
+    }
+
     public function testResolve()
     {
         $resolver = new AggregateResolver();
@@ -46,9 +51,9 @@ class AggregateResolverTest extends PHPUnit_Framework_TestCase
 
     public function testCollect()
     {
-        $resolver = new AggregateResolver();
-
-        $lowPriority = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        /* Tests for interfaces that _do_ implement the `collect` method. */
+        $resolver    = new AggregateResolver();
+        $lowPriority = $this->getMock('ResolverWithCollect');
         $lowPriority
             ->expects($this->exactly(2))
             ->method('collect')
@@ -57,7 +62,7 @@ class AggregateResolverTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains('one', $resolver->collect());
 
-        $highPriority = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $highPriority = $this->getMock('ResolverWithCollect');
         $highPriority
             ->expects($this->once())
             ->method('collect')
@@ -69,5 +74,21 @@ class AggregateResolverTest extends PHPUnit_Framework_TestCase
         $this->assertContains('three', $collection);
 
         $this->assertCount(3, $collection);
+
+        /* Tests for interfaces that _don't_ implement the `collect` method. */
+        $resolver    = new AggregateResolver();
+        $lowPriority = $this->getMock('AssetManager\Resolver\ResolverInterface');
+
+        $resolver->attach($lowPriority);
+
+        $this->assertEquals(array(), $resolver->collect());
+
+        $highPriority = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $resolver->attach($highPriority, 1000);
+
+        $collection = $resolver->collect();
+        $this->assertEquals(array(), $collection);
+
+        $this->assertCount(0, $collection);
     }
 }
