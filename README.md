@@ -68,13 +68,12 @@ return array(
 
 ## Questions / support
 If you're having trouble with the asset manager there are a couple of resources that might be of help.
+* Join us on gitter [![Gitter chat](https://badges.gitter.im/SpoonX/Dev.png)](https://gitter.im/SpoonX/Dev)
 * The [FAQ wiki page](https://github.com/RWOverdijk/AssetManager/wiki/FAQ), where you'll perhaps find your answer.
-* [RWOverdijk at irc.freenode.net #zftalk.dev](http://webchat.freenode.net?channels=zftalk.dev%2Czftalk&uio=MTE9MTAz8d)
+* [RWOverdijk at irc.freenode.net #zftalk.dev or #spoonx](http://webchat.freenode.net/?channels=zftalk.dev%2Czftalk%2Cspoonx&uio=MTE9MTAz8d)
 * [Issue tracker](https://github.com/RWOverdijk/AssetManager/issues). (Please try to not submit unrelated issues).
-* By [mail](mailto:r.w.overdijk@gmail.com?Subject=AssetManager%20help)
 
 ## Todo
 The task list has been slimmed down a lot lately. However, there are still a couple of things that should be done.
 
- * Warming up the cache
  * Renewing the cache
