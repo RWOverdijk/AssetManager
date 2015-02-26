@@ -8,11 +8,6 @@ use AssetManager\Resolver\ResolverInterface;
 
 class AggregateResolverTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        require_once __DIR__ . '/../../_files/ResolverWithCollect.php';
-    }
-
     public function testResolve()
     {
         $resolver = new AggregateResolver();
@@ -49,11 +44,10 @@ class AggregateResolverTest extends PHPUnit_Framework_TestCase
         $this->assertSame('second', $resolver->resolve('to-be-resolved'));
     }
 
-    public function testCollect()
+    public function testCollectWithCollectMethod()
     {
-        /* Tests for interfaces that _do_ implement the `collect` method. */
         $resolver    = new AggregateResolver();
-        $lowPriority = $this->getMock('ResolverWithCollect');
+        $lowPriority = $this->getMock('AssetManager\Resolver\ResolverInterface', array('resolve', 'collect'));
         $lowPriority
             ->expects($this->exactly(2))
             ->method('collect')
@@ -62,7 +56,7 @@ class AggregateResolverTest extends PHPUnit_Framework_TestCase
 
         $this->assertContains('one', $resolver->collect());
 
-        $highPriority = $this->getMock('ResolverWithCollect');
+        $highPriority = $this->getMock('AssetManager\Resolver\ResolverInterface', array('resolve', 'collect'));
         $highPriority
             ->expects($this->once())
             ->method('collect')
@@ -74,8 +68,10 @@ class AggregateResolverTest extends PHPUnit_Framework_TestCase
         $this->assertContains('three', $collection);
 
         $this->assertCount(3, $collection);
+    }
 
-        /* Tests for interfaces that _don't_ implement the `collect` method. */
+    public function testCollectWithoutCollectMethod()
+    {
         $resolver    = new AggregateResolver();
         $lowPriority = $this->getMock('AssetManager\Resolver\ResolverInterface');
 
