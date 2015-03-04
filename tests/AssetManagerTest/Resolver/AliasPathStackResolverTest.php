@@ -217,6 +217,21 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test Resolve returns valid asset
+     *
+     * @covers \AssetManager\Resolver\AliasPathStackResolver::resolve
+     */
+    public function testResolveWhenAliasStringDoesnotContainTrailingSlash()
+    {
+        $resolver = new AliasPathStackResolver(array('my/alias' => __DIR__));
+        $mimeResolver = new MimeResolver();
+        $resolver->setMimeResolver($mimeResolver);
+        $fileAsset           = new Asset\FileAsset(__FILE__);
+        $fileAsset->mimetype = $mimeResolver->getMimeType(__FILE__);
+        $this->assertEquals($fileAsset, $resolver->resolve('my/alias/' . basename(__FILE__)));
+    }
+
+    /**
      * @covers \AssetManager\Resolver\AliasPathStackResolver::resolve
      */
     public function testResolveWhenAliasExistsInPath()
