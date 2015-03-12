@@ -142,7 +142,7 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
                 continue;
             }
 
-            $name = substr_replace($name, '', 0, strlen($alias) - 1);
+            $name = substr_replace($name, '', 0, strlen($alias));
 
             $file = new SplFileInfo($path . $name);
 
