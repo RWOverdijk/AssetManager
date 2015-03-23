@@ -2,11 +2,11 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Service\GlobPathStackResolverServiceFactory;
 use PHPUnit_Framework_TestCase;
-use AssetManager\Service\PathStackResolverServiceFactory;
 use Zend\ServiceManager\ServiceManager;
 
-class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
+class GlobPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Mainly to avoid regressions
@@ -20,16 +20,16 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
                 'asset_manager' => array(
                     'resolver_configs' => array(
                         'paths' => array(
-                            'path1/',
-                            'path2/',
+                            'path1' . DIRECTORY_SEPARATOR,
+                            'path2' . DIRECTORY_SEPARATOR,
                         ),
                     ),
                 ),
             )
         );
 
-        $factory = new PathStackResolverServiceFactory();
-        /* @var $resolver \AssetManager\Resolver\PathStackResolver */
+        $factory = new GlobPathStackResolverServiceFactory();
+        /* @var $resolver GlobPathStackResolverServiceFactory */
         $resolver = $factory->createService($serviceManager);
         $this->assertSame(
             array(
@@ -48,7 +48,7 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService('Config', array());
 
-        $factory = new PathStackResolverServiceFactory();
+        $factory = new GlobPathStackResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\PathStackResolver */
         $resolver = $factory->createService($serviceManager);
         $this->assertEmpty($resolver->getPaths()->toArray());
