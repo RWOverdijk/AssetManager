@@ -192,7 +192,7 @@ class AssetManager implements
         /* @var $uri \Zend\Uri\UriInterface */
         $uri        = $request->getUri();
         $fullPath   = $uri->getPath();
-        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
+        $path       = urldecode(substr($fullPath, strlen($request->getBasePath()) + 1));
         $this->path = $path;
         $asset      = $this->getResolver()->resolve($path);
 
