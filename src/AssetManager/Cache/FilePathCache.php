@@ -68,7 +68,7 @@ class FilePathCache implements CacheInterface
     {
         $pathInfo = pathInfo($this->cachedFile());
         $cacheDir = $pathInfo['dirname'];
-        $fileName = $pathInfo['filename'];
+        $fileName = $pathInfo['basename'];
 
         ErrorHandler::start();
 
@@ -88,7 +88,7 @@ class FilePathCache implements CacheInterface
         }
 
         // Use "rename" to achieve atomic writes
-        $tmpFilePath = $cacheDir . '/'.$fileName.'_'. uniqid('AssetManagerFilePathCache', true);
+        $tmpFilePath = $cacheDir . '/AssetManagerFilePathCache_'.$fileName;
 
         if (@file_put_contents($tmpFilePath, $value, LOCK_EX) !== false) {
             rename($tmpFilePath, $this->cachedFile());
