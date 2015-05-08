@@ -88,11 +88,13 @@ class FilePathCache implements CacheInterface
         }
 
         // Use "rename" to achieve atomic writes
-        $tmpFilePath = $cacheDir . '/AssetManagerFilePathCache_'.$fileName;
+        $tmpFilePath = $cacheDir . '/AssetManagerFilePathCache_' . $fileName;
 
-        if (@file_put_contents($tmpFilePath, $value, LOCK_EX) !== false) {
-            rename($tmpFilePath, $this->cachedFile());
+        if (@file_put_contents($tmpFilePath, $value, LOCK_EX) === false) {
+            throw new \RuntimeException('Unable to write file ' . $this->cachedFile());
         }
+
+        rename($tmpFilePath, $this->cachedFile());
     }
 
     /**
