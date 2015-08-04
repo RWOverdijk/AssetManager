@@ -91,9 +91,9 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
         $config = array(
             self::$assetName => array(
                 'cache' => 'FilePathCache',
-                'options' => [
+                'options' => array(
                     'dir' => sys_get_temp_dir()
-                ]
+                )
             ),
         );
         $assetCacheManager = new AssetCacheManager($serviceLocator, $config);
