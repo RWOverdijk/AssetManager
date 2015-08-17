@@ -11,6 +11,7 @@ use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Console\Adapter\AdapterInterface;
+use AssetManager\View\Helper\Asset as AssetViewHelper;
 
 /**
  * Module class
@@ -87,13 +88,13 @@ class Module implements
 
     public function getViewHelperConfig()
     {
-        return [
-            'factories' => [
+        return array(
+            'factories' => array(
                 'asset' => function ($sm) {
                     return new AssetViewHelper($sm->getServiceLocator()->get('config'));
                 },
-            ],
-        ];
+            ),
+        );
     }
 
     /**
