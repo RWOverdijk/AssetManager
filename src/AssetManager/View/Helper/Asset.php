@@ -1,15 +1,25 @@
 <?php
 namespace AssetManager\View\Helper;
 
+use AssetManager\Service\AssetCacheManager;
 use Zend\View\Helper\AbstractHelper;
 
 class Asset extends AbstractHelper
 {
+    /**
+     * @var array
+     */
     private $config;
 
-    public function __construct($config)
+    /**
+     * @var AssetCacheManager The AssetCacheManager service.
+     */
+    protected $cacheManager;
+
+    public function __construct($config, $assetCacheManager)
     {
         $this->config = $config;
+        $this->cacheManager = $assetCacheManager;
     }
 
     public function __invoke($filename)
