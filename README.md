@@ -55,6 +55,10 @@ return array(
                 ),
             ),
         ),
+        'view_helper' => array(
+            // Note: You will need to require the factory used for the cache yourself.
+            'cache'        => 'Application\Cache\Redis',
+        ),
         'caching' => array(
             'js/d.js' => array(
                 'cache'     => 'Apc',

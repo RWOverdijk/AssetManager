@@ -91,8 +91,7 @@ class Module implements
         return array(
             'factories' => array(
                 'asset' => function ($serviceManager) {
-                    $serviceLocator = $serviceManager->getServiceLocator();
-                    return new AssetViewHelper($serviceLocator->get('config'), $serviceLocator->get('AssetManager\Service\AssetCacheManager'));
+                    return new AssetViewHelper($serviceManager->getServiceLocator());
                 },
             ),
         );

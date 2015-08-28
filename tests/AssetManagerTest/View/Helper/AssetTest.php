@@ -3,15 +3,16 @@ namespace AssetManagerTest\View\Helper;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use AssetManager\View\Helper\Asset;
+use Zend\ServiceManager\ServiceManager;
 
 class AssetTest extends TestCase
 {
     public function testInvoke()
     {
-        $filename = '';
-        $config = [];
-        $helper = new Asset($config);
+        $serviceManager = new ServiceManager();
+        $filename = 'js/js.js';
+        $helper = new Asset($serviceManager);
 
-        $this->assertContains("?u=", $helper->__invoke($filename));
+        $this->assertContains('?_=', $helper->__invoke($filename));
     }
 }
