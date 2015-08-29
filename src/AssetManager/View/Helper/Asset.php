@@ -42,6 +42,7 @@ class Asset extends AbstractHelper
         if (file_exists($originalPath)) {
             return $filename . '?' . $queryString . '=' . filemtime($originalPath);
         }
+        return $filename;
     }
 
     /**
@@ -93,7 +94,7 @@ class Asset extends AbstractHelper
                     $filePath = $cache->getItem($cacheKey, $itemIsFoundInCache);
 
                     // if there is no element in the cache, elaborate and cache it
-                    if ($itemIsFoundInCache === false) {
+                    if ($itemIsFoundInCache === false || $filePath === null) {
                         $filePath = $this->elaborateFilePath($assetsPath, $filename, $queryString);
                         $cache->setItem($cacheKey, $filePath);
                     }
