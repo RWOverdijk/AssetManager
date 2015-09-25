@@ -90,9 +90,7 @@ class Module implements
     {
         return array(
             'factories' => array(
-                'asset' => function ($serviceManager) {
-                    return new AssetViewHelper($serviceManager->getServiceLocator());
-                },
+                'asset' => 'AssetManager\Service\AssetViewHelperFactory',
             ),
         );
     }

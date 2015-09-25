@@ -24,7 +24,7 @@ class Asset extends AbstractHelper
     public function __construct(ServiceLocatorInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
-        $this->config = $serviceLocator->get('config')['asset_manager'];
+        $this->config         = $serviceLocator->get('config')['asset_manager'];
     }
 
     /**
@@ -37,11 +37,14 @@ class Asset extends AbstractHelper
      */
     private function elaborateFilePath($assetsPath, $filename, $queryString)
     {
-        // double quotes to single quotes
-        $originalPath = str_replace('//', '/', $assetsPath . $filename);
-        if (file_exists($originalPath)) {
-            return $filename . '?' . $queryString . '=' . filemtime($originalPath);
+        // resolve asset
+        $asset = $this->serviceLocator->get('AssetManager\Service\AssetManager')->getResolver()->resolve($filename);
+        if ($asset !== null) {
+
+            // append last modified date to the filepath and use a custom query string
+            return $filename . '?' . $queryString . '=' . $asset->getLastModified();
         }
+
         return $filename;
     }
 
