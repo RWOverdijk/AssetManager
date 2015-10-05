@@ -8,10 +8,8 @@ use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Console\Adapter\AdapterInterface;
-use AssetManager\View\Helper\Asset as AssetViewHelper;
 
 /**
  * Module class
@@ -22,8 +20,7 @@ use AssetManager\View\Helper\Asset as AssetViewHelper;
 class Module implements
     AutoloaderProviderInterface,
     ConfigProviderInterface,
-    BootstrapListenerInterface,
-    ViewHelperProviderInterface
+    BootstrapListenerInterface
 {
     /**
      * {@inheritDoc}
@@ -84,15 +81,6 @@ class Module implements
         $priority     = -9999999;
         $eventManager->attach(MvcEvent::EVENT_DISPATCH, $callback, $priority);
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $callback, $priority);
-    }
-
-    public function getViewHelperConfig()
-    {
-        return array(
-            'factories' => array(
-                'asset' => 'AssetManager\Service\AssetViewHelperFactory',
-            ),
-        );
     }
 
     /**

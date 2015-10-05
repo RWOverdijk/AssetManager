@@ -37,6 +37,11 @@ return array(
             'AssetManager\Controller\Console' => 'AssetManager\Controller\ConsoleControllerFactory',
         ),
     ),
+    'view_helpers' => array(
+        'factories' => array(
+            'asset' => 'AssetManager\Service\AssetViewHelperFactory',
+        ),
+    ),
     'console'         => array(
         'router' => array(
             'routes' => array(
@@ -52,5 +57,4 @@ return array(
             ),
         ),
     ),
-
 );
