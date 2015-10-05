@@ -63,53 +63,52 @@ class Asset extends AbstractHelper
             $cacheConfig = $this->config['caching']['default'];
         }
 
-        if (isset($cacheConfig) && isset ($cacheConfig['options']['dir'])) {
-
-            // find assets path specified from cache
-            $assetsPath = $cacheConfig['options']['dir'];
-
-            // query string params
-            $queryString = isset($this->config['view_helper']['query_string'])
-                ? $this->config['view_helper']['query_string']
-                : '_';
-
-            // cache
-            if (isset($this->config['view_helper']['cache']) && $this->config['view_helper']['cache'] != null) {
-
-                // get the cache, if it's a string, search it among services
-                $cache = $this->config['view_helper']['cache'];
-                if (is_string($cache)) {
-                    $cache = $this->serviceLocator->get($cache);
-                }
-
-                if ($cache != null) {
-
-                    // exception in case cache is not an Adapter that extend the AbstractAdapter of Zend\Cache\Storage
-                    if (!($cache instanceof AbstractCacheAdapter)) {
-                        throw new InvalidArgumentException(
-                            'Invalid cache provided, you must pass a Cache Adapter that extend Zend\Cache\Storage\Adapter\AbstractAdapter'
-                        );
-                    }
-
-                    // cache key based on the filename
-                    $cacheKey = md5($filename);
-                    $itemIsFoundInCache = false;
-                    $filePath = $cache->getItem($cacheKey, $itemIsFoundInCache);
-
-                    // if there is no element in the cache, elaborate and cache it
-                    if ($itemIsFoundInCache === false || $filePath === null) {
-                        $filePath = $this->elaborateFilePath($assetsPath, $filename, $queryString);
-                        $cache->setItem($cacheKey, $filePath);
-                    }
-
-                    return $filePath;
-                }
-            }
-
-            return $this->elaborateFilePath($assetsPath, $filename, $queryString);
+        // if nothing done, return the original filename
+        if (!isset($cacheConfig['options']['dir'])) {
+            return $filename;
         }
 
-        // if nothing done, return the original filename
-        return $filename;
+        // find assets path specified from cache
+        $assetsPath = $cacheConfig['options']['dir'];
+
+        // query string params
+        $queryString = isset($this->config['view_helper']['query_string'])
+            ? $this->config['view_helper']['query_string']
+            : '_';
+
+        // cache
+        if (isset($this->config['view_helper']['cache']) && $this->config['view_helper']['cache'] != null) {
+
+            // get the cache, if it's a string, search it among services
+            $cache = $this->config['view_helper']['cache'];
+            if (is_string($cache)) {
+                $cache = $this->serviceLocator->get($cache);
+            }
+
+            if ($cache != null) {
+
+                // exception in case cache is not an Adapter that extend the AbstractAdapter of Zend\Cache\Storage
+                if (!($cache instanceof AbstractCacheAdapter)) {
+                    throw new InvalidArgumentException(
+                        'Invalid cache provided, you must pass a Cache Adapter that extend Zend\Cache\Storage\Adapter\AbstractAdapter'
+                    );
+                }
+
+                // cache key based on the filename
+                $cacheKey = md5($filename);
+                $itemIsFoundInCache = false;
+                $filePath = $cache->getItem($cacheKey, $itemIsFoundInCache);
+
+                // if there is no element in the cache, elaborate and cache it
+                if ($itemIsFoundInCache === false || $filePath === null) {
+                    $filePath = $this->elaborateFilePath($assetsPath, $filename, $queryString);
+                    $cache->setItem($cacheKey, $filePath);
+                }
+
+                return $filePath;
+            }
+        }
+
+        return $this->elaborateFilePath($assetsPath, $filename, $queryString);
     }
 }
