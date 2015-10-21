@@ -1,7 +1,9 @@
 <?php
 namespace AssetManager\View\Helper;
 
+use AssetManager\Asset\AggregateAsset;
 use AssetManager\Exception\InvalidArgumentException;
+use AssetManager\Service\AssetManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
@@ -19,33 +21,87 @@ class Asset extends AbstractHelper
     private $serviceLocator;
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @var ServiceLocatorInterface
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator)
+    private $assetManager;
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @param AssetManager            $assetManager
+     * @param array                   $config
+     */
+    public function __construct(ServiceLocatorInterface $serviceLocator, AssetManager $assetManager, $config)
     {
         $this->serviceLocator = $serviceLocator;
-        $this->config         = $serviceLocator->get('config')['asset_manager'];
+        $this->assetManager   = $assetManager;
+        $this->config         = $config;
     }
 
     /**
      * find the file and if it exists, append its unix modification time to the filename
      *
-     * @param string $assetsPath
      * @param string $filename
      * @param string $queryString
      * @return string
      */
-    private function elaborateFilePath($assetsPath, $filename, $queryString)
+    private function elaborateFilePath($filename, $queryString)
     {
-        // resolve asset
+        /** @var AggregateAsset $asset */
         $asset = $this->serviceLocator->get('AssetManager\Service\AssetManager')->getResolver()->resolve($filename);
         if ($asset !== null) {
 
             // append last modified date to the filepath and use a custom query string
-            return $filename . '?' . $queryString . '=' . $asset->getLastModified();
+            return $filename . '?' . urlencode($queryString) . '=' . $asset->getLastModified();
         }
 
         return $filename;
+    }
+
+    /**
+     * Use the cache to get the filePath
+     *
+     * @param string $filename
+     * @param string $queryString
+     *
+     * @return mixed|string
+     */
+    private function getFilePathFromCache($filename, $queryString)
+    {
+        // check if the cache is configured
+        if (!isset($this->config['view_helper']['cache']) || $this->config['view_helper']['cache'] == null) {
+            return null;
+        }
+
+        // get the cache, if it's a string, search it among services
+        $cache = $this->config['view_helper']['cache'];
+        if (is_string($cache)) {
+            $cache = $this->serviceLocator->get($cache);
+        }
+
+        // return if cache not found
+        if ($cache == null) {
+            return null;
+        }
+
+        // exception in case cache is not an Adapter that extend the AbstractAdapter of Zend\Cache\Storage
+        if (!($cache instanceof AbstractCacheAdapter)) {
+            throw new InvalidArgumentException(
+                'Invalid cache provided, you must pass a Cache Adapter that extend Zend\Cache\Storage\Adapter\AbstractAdapter'
+            );
+        }
+
+        // cache key based on the filename
+        $cacheKey = md5($filename);
+        $itemIsFoundInCache = false;
+        $filePath = $cache->getItem($cacheKey, $itemIsFoundInCache);
+
+        // if there is no element in the cache, elaborate and cache it
+        if ($itemIsFoundInCache === false || $filePath === null) {
+            $filePath = $this->elaborateFilePath($filename, $queryString);
+            $cache->setItem($cacheKey, $filePath);
+        }
+
+        return $filePath;
     }
 
     /**
@@ -68,47 +124,17 @@ class Asset extends AbstractHelper
             return $filename;
         }
 
-        // find assets path specified from cache
-        $assetsPath = $cacheConfig['options']['dir'];
-
         // query string params
         $queryString = isset($this->config['view_helper']['query_string'])
             ? $this->config['view_helper']['query_string']
             : '_';
 
-        // cache
-        if (isset($this->config['view_helper']['cache']) && $this->config['view_helper']['cache'] != null) {
-
-            // get the cache, if it's a string, search it among services
-            $cache = $this->config['view_helper']['cache'];
-            if (is_string($cache)) {
-                $cache = $this->serviceLocator->get($cache);
-            }
-
-            if ($cache != null) {
-
-                // exception in case cache is not an Adapter that extend the AbstractAdapter of Zend\Cache\Storage
-                if (!($cache instanceof AbstractCacheAdapter)) {
-                    throw new InvalidArgumentException(
-                        'Invalid cache provided, you must pass a Cache Adapter that extend Zend\Cache\Storage\Adapter\AbstractAdapter'
-                    );
-                }
-
-                // cache key based on the filename
-                $cacheKey = md5($filename);
-                $itemIsFoundInCache = false;
-                $filePath = $cache->getItem($cacheKey, $itemIsFoundInCache);
-
-                // if there is no element in the cache, elaborate and cache it
-                if ($itemIsFoundInCache === false || $filePath === null) {
-                    $filePath = $this->elaborateFilePath($assetsPath, $filename, $queryString);
-                    $cache->setItem($cacheKey, $filePath);
-                }
-
-                return $filePath;
-            }
+        // get the filePath from the cache (if available)
+        $filePath = $this->getFilePathFromCache($filename, $queryString);
+        if ($filePath !== null) {
+            return $filePath;
         }
 
-        return $this->elaborateFilePath($assetsPath, $filename, $queryString);
+        return $this->elaborateFilePath($filename, $queryString);
     }
 }
