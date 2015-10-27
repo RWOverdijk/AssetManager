@@ -3,6 +3,7 @@ namespace AssetManager\View\Helper;
 
 use AssetManager\Asset\AggregateAsset;
 use AssetManager\Exception\InvalidArgumentException;
+use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
@@ -21,20 +22,20 @@ class Asset extends AbstractHelper
     private $serviceLocator;
 
     /**
-     * @var ServiceLocatorInterface
+     * @var ResolverInterface
      */
-    private $assetManager;
+    private $assetManagerResolver;
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @param AssetManager            $assetManager
+     * @param ResolverInterface       $assetManagerResolver
      * @param array                   $config
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, AssetManager $assetManager, $config)
+    public function __construct(ServiceLocatorInterface $serviceLocator, ResolverInterface $assetManagerResolver, $config)
     {
-        $this->serviceLocator = $serviceLocator;
-        $this->assetManager   = $assetManager;
-        $this->config         = $config;
+        $this->serviceLocator       = $serviceLocator;
+        $this->assetManagerResolver = $assetManagerResolver;
+        $this->config               = $config;
     }
 
     /**
@@ -46,8 +47,7 @@ class Asset extends AbstractHelper
      */
     private function elaborateFilePath($filename, $queryString)
     {
-        /** @var AggregateAsset $asset */
-        $asset = $this->serviceLocator->get('AssetManager\Service\AssetManager')->getResolver()->resolve($filename);
+        $asset = $this->assetManagerResolver->resolve($filename);
         if ($asset !== null) {
 
             // append last modified date to the filepath and use a custom query string

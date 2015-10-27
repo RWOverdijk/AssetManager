@@ -2,6 +2,7 @@
 
 namespace AssetManager\Service;
 
+use AssetManager\Resolver\ResolverInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use AssetManager\View\Helper\Asset;
@@ -20,9 +21,9 @@ class AssetViewHelperFactory implements FactoryInterface
 
         $config = $serviceLocator->get('config')['asset_manager'];
 
-        /** @var AssetManager $assetManager */
-        $assetManager = $serviceLocator->get('AssetManager\Service\AssetManager');
+        /** @var ResolverInterface $assetManagerResolver */
+        $assetManagerResolver = $serviceLocator->get('AssetManager\Service\AssetManager')->getResolver();
 
-        return new Asset($serviceLocator, $assetManager, $config);
+        return new Asset($serviceLocator, $assetManagerResolver, $config);
     }
 }
