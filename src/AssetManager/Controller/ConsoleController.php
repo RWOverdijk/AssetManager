@@ -82,6 +82,7 @@ class ConsoleController extends AbstractActionController
 
         foreach ($collection as $path) {
             $asset = $this->assetManager->getResolver()->resolve($path);
+            $this->assetManager->getAssetFilterManager()->setFilters($path, $asset);
             $this->assetManager->getAssetCacheManager()->setCache($path, $asset)->dump();
         }
 
