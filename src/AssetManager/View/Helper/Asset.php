@@ -1,10 +1,7 @@
 <?php
 namespace AssetManager\View\Helper;
 
-use AssetManager\Asset\AggregateAsset;
-use AssetManager\Exception\InvalidArgumentException;
 use AssetManager\Resolver\ResolverInterface;
-use AssetManager\Service\AssetManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
@@ -27,14 +24,16 @@ class Asset extends AbstractHelper
     private $assetManagerResolver;
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param ResolverInterface       $assetManagerResolver
-     * @param array                   $config
+     * @param ServiceLocatorInterface   $serviceLocator
+     * @param ResolverInterface         $assetManagerResolver
+     * @param AbstractCacheAdapter|null $cache
+     * @param array                     $config
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, ResolverInterface $assetManagerResolver, $config)
+    public function __construct(ServiceLocatorInterface $serviceLocator, ResolverInterface $assetManagerResolver, AbstractCacheAdapter $cache, $config)
     {
         $this->serviceLocator       = $serviceLocator;
         $this->assetManagerResolver = $assetManagerResolver;
+        $this->cache                = $cache;
         $this->config               = $config;
     }
 
@@ -67,38 +66,20 @@ class Asset extends AbstractHelper
      */
     private function getFilePathFromCache($filename, $queryString)
     {
-        // check if the cache is configured
-        if (!isset($this->config['view_helper']['cache']) || $this->config['view_helper']['cache'] == null) {
-            return null;
-        }
-
-        // get the cache, if it's a string, search it among services
-        $cache = $this->config['view_helper']['cache'];
-        if (is_string($cache)) {
-            $cache = $this->serviceLocator->get($cache);
-        }
-
         // return if cache not found
-        if ($cache == null) {
+        if ($this->cache == null) {
             return null;
-        }
-
-        // exception in case cache is not an Adapter that extend the AbstractAdapter of Zend\Cache\Storage
-        if (!($cache instanceof AbstractCacheAdapter)) {
-            throw new InvalidArgumentException(
-                'Invalid cache provided, you must pass a Cache Adapter that extend Zend\Cache\Storage\Adapter\AbstractAdapter'
-            );
         }
 
         // cache key based on the filename
         $cacheKey = md5($filename);
         $itemIsFoundInCache = false;
-        $filePath = $cache->getItem($cacheKey, $itemIsFoundInCache);
+        $filePath = $this->cache->getItem($cacheKey, $itemIsFoundInCache);
 
         // if there is no element in the cache, elaborate and cache it
         if ($itemIsFoundInCache === false || $filePath === null) {
             $filePath = $this->elaborateFilePath($filename, $queryString);
-            $cache->setItem($cacheKey, $filePath);
+            $this->cache->setItem($cacheKey, $filePath);
         }
 
         return $filePath;
