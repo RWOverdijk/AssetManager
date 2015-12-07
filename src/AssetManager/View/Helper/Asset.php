@@ -2,7 +2,6 @@
 namespace AssetManager\View\Helper;
 
 use AssetManager\Resolver\ResolverInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
 
@@ -14,24 +13,17 @@ class Asset extends AbstractHelper
     private $config;
 
     /**
-     * @var ServiceLocatorInterface
-     */
-    private $serviceLocator;
-
-    /**
      * @var ResolverInterface
      */
     private $assetManagerResolver;
 
     /**
-     * @param ServiceLocatorInterface   $serviceLocator
      * @param ResolverInterface         $assetManagerResolver
      * @param AbstractCacheAdapter|null $cache
      * @param array                     $config
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, ResolverInterface $assetManagerResolver, AbstractCacheAdapter $cache, $config)
+    public function __construct(ResolverInterface $assetManagerResolver, AbstractCacheAdapter $cache, $config)
     {
-        $this->serviceLocator       = $serviceLocator;
         $this->assetManagerResolver = $assetManagerResolver;
         $this->cache                = $cache;
         $this->config               = $config;

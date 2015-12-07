@@ -59,6 +59,6 @@ class AssetViewHelperFactory implements FactoryInterface
         /** @var AbstractCacheAdapter|null $cache */
         $cache = $this->loadCache($serviceLocator, $config);
 
-        return new Asset($serviceLocator, $assetManagerResolver, $cache, $config);
+        return new Asset($assetManagerResolver, $cache, $config);
     }
 }
