@@ -22,7 +22,7 @@ class Asset extends AbstractHelper
      * @param AbstractCacheAdapter|null $cache
      * @param array                     $config
      */
-    public function __construct(ResolverInterface $assetManagerResolver, AbstractCacheAdapter $cache, $config)
+    public function __construct(ResolverInterface $assetManagerResolver, $cache, $config)
     {
         $this->assetManagerResolver = $assetManagerResolver;
         $this->cache                = $cache;
