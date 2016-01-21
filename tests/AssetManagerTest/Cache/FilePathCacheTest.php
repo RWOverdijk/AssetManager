@@ -88,6 +88,28 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
 
     }
 
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testSetCanNotWriteToFileThatExists()
+    {
+        restore_error_handler(); // Previous test fails, so doesn't unset.
+        $time = time()+333;
+        $sentence = 'I am, what I am. Cached data, please don\'t hate, '
+            . 'for we are all equals. Except you, you\'re a dick.';
+        $base = '/tmp/_cachetest.' . $time . '/';
+        mkdir($base, 0777);
+
+        $fileName = 'sausage.'.$time.'.iceicebaby';
+
+        touch($base.'AssetManagerFilePathCache_' . $fileName);
+        chmod($base.'AssetManagerFilePathCache_' . $fileName, 0400);
+
+        $cache = new FilePathCache($base, $fileName);
+
+        $cache->set('bacon', $sentence);
+    }
+
     public function testSetSuccess()
     {
         $time       = time();
