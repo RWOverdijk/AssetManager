@@ -55,7 +55,7 @@ class FilePathCache implements CacheInterface
         $path = $this->cachedFile();
 
         if (!file_exists($path)) {
-            throw new \RuntimeException('There is no cached value for ' . $this->filename);
+            throw new RuntimeException('There is no cached value for ' . $this->filename);
         }
 
         return file_get_contents($path);
@@ -66,7 +66,9 @@ class FilePathCache implements CacheInterface
      */
     public function set($key, $value)
     {
-        $cacheDir = dirname($this->cachedFile());
+        $pathInfo = pathInfo($this->cachedFile());
+        $cacheDir = $pathInfo['dirname'];
+        $fileName = $pathInfo['basename'];
 
         ErrorHandler::start();
 
@@ -82,12 +84,16 @@ class FilePathCache implements CacheInterface
         ErrorHandler::stop();
 
         if (!is_writable($cacheDir)) {
-            throw new \RuntimeException('Unable to write file ' . $this->cachedFile());
+            throw new RuntimeException('Unable to write file ' . $this->cachedFile());
         }
 
         // Use "rename" to achieve atomic writes
-        $tmpFilePath = $cacheDir . '/' . uniqid('AssetManagerFilePathCache');
-        file_put_contents($tmpFilePath, $value);
+        $tmpFilePath = $cacheDir . '/AssetManagerFilePathCache_' . $fileName;
+
+        if (@file_put_contents($tmpFilePath, $value, LOCK_EX) === false) {
+            throw new RuntimeException('Unable to write file ' . $this->cachedFile());
+        }
+
         rename($tmpFilePath, $this->cachedFile());
     }
 
