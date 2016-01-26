@@ -9,6 +9,19 @@ class AssetTest extends TestCase
 {
     public function testInvoke()
     {
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService(
+            'Config',
+            array(
+                'asset_manager' => array(
+                    'view_helper' => [
+                        'query_string' => '_',
+                        'cache'        => null,
+                    ],
+                ),
+            )
+        );
+
         /* TODO need help
         $serviceManager = new ServiceManager();
         $filename = 'js/js.js';
