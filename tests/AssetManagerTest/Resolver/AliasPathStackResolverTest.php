@@ -242,6 +242,16 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
         $fileAsset           = new Asset\FileAsset(__FILE__);
         $fileAsset->mimetype = $mimeResolver->getMimeType(__FILE__);
         $this->assertEquals($fileAsset, $resolver->resolve('AliasPathStackResolverTest/' . basename(__FILE__)));
+        
+        $map = array(
+            'AliasPathStackResolverTest/' => __DIR__,
+            'prefix/AliasPathStackResolverTest/' =>  __DIR__
+        );
+        $resolver = new AliasPathStackResolver($map);
+        $resolver->setMimeResolver(new MimeResolver());
+        $fileAsset           = new Asset\FileAsset(__FILE__);
+        $fileAsset->mimetype = $mimeResolver->getMimeType(__FILE__);
+        $this->assertEquals($fileAsset, $resolver->resolve('prefix/AliasPathStackResolverTest/' . basename(__FILE__)));
     }
 
     /**
