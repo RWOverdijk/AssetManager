@@ -34,7 +34,8 @@ class AssetViewHelperFactory implements FactoryInterface
         // exception in case cache is not an Adapter that extend the AbstractAdapter of Zend\Cache\Storage
         if ($cache !== null && !($cache instanceof AbstractCacheAdapter)) {
             throw new InvalidArgumentException(
-                'Invalid cache provided, you must pass a Cache Adapter that extend Zend\Cache\Storage\Adapter\AbstractAdapter'
+                'Invalid cache provided, you must pass a Cache Adapter that extend 
+                Zend\Cache\Storage\Adapter\AbstractAdapter'
             );
         }
 

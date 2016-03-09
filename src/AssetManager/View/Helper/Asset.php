@@ -88,7 +88,7 @@ class Asset extends AbstractHelper
         // search the cache config for the specific file requested (if none, use the default one)
         if (isset($this->config['caching'][$filename])) {
             $cacheConfig = $this->config['caching'][$filename];
-        } else if (isset($this->config['caching']['default'])) {
+        } elseif (isset($this->config['caching']['default'])) {
             $cacheConfig = $this->config['caching']['default'];
         }
 
