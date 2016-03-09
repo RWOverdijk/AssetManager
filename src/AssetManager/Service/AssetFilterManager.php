@@ -7,9 +7,8 @@ use Assetic\Filter\FilterInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 
-class AssetFilterManager implements ServiceLocatorAwareInterface, MimeResolverAwareInterface
+class AssetFilterManager implements MimeResolverAwareInterface
 {
     /**
      * @var array Filter configuration.
