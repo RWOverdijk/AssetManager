@@ -21,7 +21,7 @@ class AssetViewHelperFactory implements FactoryInterface
     private function loadCache($serviceLocator, $config)
     {
         // check if the cache is configured
-        if (!isset($config['view_helper']['cache']) || $config['view_helper']['cache'] == null) {
+        if (!isset($config['view_helper']['cache']) || $config['view_helper']['cache'] === null) {
             return null;
         }
 
