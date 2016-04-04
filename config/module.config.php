@@ -31,6 +31,11 @@ return array(
             'AssetManager\Resolver\AliasPathStackResolver'      => 1000,
             'AssetManager\Resolver\PathStackResolver'           => 500,
         ),
+        'view_helper' => array(
+            'cache'            => null,
+            'query_string'     => '_',
+            'development_mode' => false,
+        ),
     ),
     'controllers'     => array(
         'factories' => array(
