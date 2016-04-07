@@ -32,14 +32,17 @@ class Asset extends AbstractHelper
     /**
      * Append timestamp as query param to the filename
      *
-     * @param string $filename
-     * @param string $queryString
-     * @param string $timestamp
+     * @param string   $filename
+     * @param string   $queryString
+     * @param int|null $timestamp
      *
      * @return string
      */
-    private function appendTimestamp($filename, $queryString, $timestamp)
+    private function appendTimestamp($filename, $queryString, $timestamp = null)
     {
+        // current timestamp as default
+        $timestamp = $timestamp === null ? time() : $timestamp;
+
         return $filename . '?' . urlencode($queryString) . '=' . $timestamp;
     }
 
@@ -119,7 +122,7 @@ class Asset extends AbstractHelper
                 && $this->config['view_helper']['development_mode'] === true) {
 
                 // append current timestamp to the filepath and use a custom query string
-                return $this->appendTimestamp($filename, $queryString, time());
+                return $this->appendTimestamp($filename, $queryString);
             }
 
             return $filename;
