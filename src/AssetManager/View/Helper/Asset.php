@@ -118,8 +118,7 @@ class Asset extends AbstractHelper
         if (!isset($cacheConfig['options']['dir'])) {
 
             // development mode enabled
-            if (isset($this->config['view_helper']['development_mode'])
-                && $this->config['view_helper']['development_mode'] === true) {
+            if (!empty($this->config['view_helper']['development_mode'])) {
 
                 // append current timestamp to the filepath and use a custom query string
                 return $this->appendTimestamp($filename, $queryString);
