@@ -26,9 +26,9 @@ class AssetTest extends TestCase
     {
         $configWithCache = array(
             'view_helper' => array(
+                'append_timestamp' => true,
                 'query_string'     => '_',
                 'cache'            => null,
-                'development_mode' => false,
             ),
             'caching' => array(
                 'default' => array(
@@ -42,9 +42,9 @@ class AssetTest extends TestCase
 
         $configWithoutCache = array(
             'view_helper' => array(
+                'append_timestamp' => true,
                 'query_string'     => '_',
                 'cache'            => null,
-                'development_mode' => false,
             ),
         );
 
@@ -57,47 +57,28 @@ class AssetTest extends TestCase
         ));
 
         $helperWithCache = new Asset($resolver, null, $configWithCache);
-        $newFilename = $helperWithCache->__invoke($filename);
+        $newFilenameWithCache = $helperWithCache->__invoke($filename);
 
-        $this->assertContains('?_=', $newFilename);
+        // with cache file should have a timestamp query param
+        $this->assertContains('?_=', $newFilenameWithCache);
 
         $helperWithoutCache = new Asset($resolver, null, $configWithoutCache);
-        $newFilename = $helperWithoutCache->__invoke($filename);
+        $newFilenameWithoutCache = $helperWithoutCache->__invoke($filename);
 
-        $this->assertNotContains('?_=', $newFilename);
+        // without cache file should have a timestamp query param
+        $this->assertContains('?_=', $newFilenameWithoutCache);
+
+        // without cache the timestamp query param should be different than with cache
+        $this->assertNotSame($newFilenameWithCache, $newFilenameWithoutCache);
     }
 
     public function testSameResultWithoutCachingConfig()
     {
         $config = array(
             'view_helper' => array(
+                'append_timestamp' => true,
                 'query_string'     => '_',
                 'cache'            => null,
-                'development_mode' => false,
-            ),
-        );
-
-        $filename = 'porn-food/bac.on';
-
-        $resolver = $this->getGenericResolver();
-
-        $resolver->setMap(array(
-            'porn-food/bac.on' => __FILE__,
-        ));
-
-        $helper = new Asset($resolver, null, $config);
-        $newFilename = $helper->__invoke($filename);
-
-        $this->assertSame($newFilename, $filename);
-    }
-
-    public function testDevelopmentModeWithoutCache()
-    {
-        $config = array(
-            'view_helper' => array(
-                'query_string'     => '_',
-                'cache'            => null,
-                'development_mode' => true,
             ),
         );
 
@@ -113,5 +94,31 @@ class AssetTest extends TestCase
         $newFilename = $helper->__invoke($filename);
 
         $this->assertContains('?_=', $newFilename);
+        $this->assertNotSame($newFilename, $filename);
+    }
+
+    public function testForceToNotAppendTimestampWithoutCache()
+    {
+        $config = array(
+            'view_helper' => array(
+                'append_timestamp' => false,
+                'query_string'     => '_',
+                'cache'            => null,
+            ),
+        );
+
+        $filename = 'porn-food/bac.on';
+
+        $resolver = $this->getGenericResolver();
+
+        $resolver->setMap(array(
+            'porn-food/bac.on' => __FILE__,
+        ));
+
+        $helper = new Asset($resolver, null, $config);
+        $newFilename = $helper->__invoke($filename);
+
+        $this->assertNotContains('?_=', $newFilename);
+        $this->assertSame($newFilename, $filename);
     }
 }

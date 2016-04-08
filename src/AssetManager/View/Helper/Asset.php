@@ -102,6 +102,11 @@ class Asset extends AbstractHelper
      */
     public function __invoke($filename)
     {
+        // nothing to append
+        if (empty($this->config['view_helper']['append_timestamp'])) {
+            return $filename;
+        }
+        
         // search the cache config for the specific file requested (if none, use the default one)
         if (isset($this->config['caching'][$filename])) {
             $cacheConfig = $this->config['caching'][$filename];
@@ -114,17 +119,11 @@ class Asset extends AbstractHelper
             ? $this->config['view_helper']['query_string']
             : '_';
 
-        // if nothing done, return the original filename
+        // no cache dir is defined
         if (!isset($cacheConfig['options']['dir'])) {
 
-            // development mode enabled
-            if (!empty($this->config['view_helper']['development_mode'])) {
-
-                // append current timestamp to the filepath and use a custom query string
-                return $this->appendTimestamp($filename, $queryString);
-            }
-
-            return $filename;
+            // append current timestamp to the filepath and use a custom query string
+            return $this->appendTimestamp($filename, $queryString);
         }
 
         // get the filePath from the cache (if available)

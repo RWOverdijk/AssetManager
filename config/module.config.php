@@ -32,9 +32,9 @@ return array(
             'AssetManager\Resolver\PathStackResolver'           => 500,
         ),
         'view_helper' => array(
-            'cache'            => null,
+            'append_timestamp' => true,
             'query_string'     => '_',
-            'development_mode' => false,
+            'cache'            => null,
         ),
     ),
     'controllers'     => array(
