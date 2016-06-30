@@ -5,12 +5,28 @@ namespace AssetManager\Service;
 use AssetManager\Exception\InvalidArgumentException;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\View\Helper\Asset;
+use Interop\Container\ContainerInterface;
+use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
 
 class AssetViewHelperFactory implements FactoryInterface
 {
+    /**
+     * @inheritDoc
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config')['asset_manager'];
+
+        /** @var ResolverInterface $assetManagerResolver */
+        $assetManagerResolver = $container->get('AssetManager\Service\AssetManager')->getResolver();
+
+        /** @var AbstractCacheAdapter|null $cache */
+        $cache = $this->loadCache($container, $config);
+
+        return new Asset($assetManagerResolver, $cache, $config);
+    }
 
     /**
      * @param ServiceLocatorInterface $serviceLocator
@@ -49,17 +65,7 @@ class AssetViewHelperFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceManager)
     {
-        /** @var ServiceLocatorInterface $serviceLocator */
-        $serviceLocator = $serviceManager->getServiceLocator();
-
-        $config = $serviceLocator->get('config')['asset_manager'];
-
-        /** @var ResolverInterface $assetManagerResolver */
-        $assetManagerResolver = $serviceLocator->get('AssetManager\Service\AssetManager')->getResolver();
-
-        /** @var AbstractCacheAdapter|null $cache */
-        $cache = $this->loadCache($serviceLocator, $config);
-
-        return new Asset($assetManagerResolver, $cache, $config);
+        $container = $serviceManager->getServiceLocator();
+        return $this($container, Asset::class);
     }
 }
