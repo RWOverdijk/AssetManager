@@ -25,17 +25,18 @@
     "require": {
         "php": ">=5.5",
         "zendframework/zend-modulemanager": "2.*",
-        "zendframework/zend-stdlib": "2.* || 3.*",
-        "zendframework/zend-servicemanager": "~2.7 || 3.*",
+        "zendframework/zend-stdlib": "3.*",
+        "zendframework/zend-servicemanager": "3.*",
         "zendframework/zend-loader": "2.*",
-        "zendframework/zend-eventmanager": "~2.7 || 3.*",
-        "zendframework/zend-mvc": "~2.7 || 3.*",
+        "zendframework/zend-eventmanager": "3.*",
+        "zendframework/zend-mvc": "3.*",
         "kriswallsmith/assetic": "~1.2.1"
     },
     "require-dev": {
         "zendframework/zend-view": "~2.6",
         "zendframework/zend-cache": "2.*",
         "zendframework/zend-console": "2.*",
+        "zendframework/zend-mvc-console": "~1.0",
         "phpunit/phpunit": "~4.8",
         "squizlabs/php_codesniffer": "1.5.*"
     },
