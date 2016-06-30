@@ -14,7 +14,7 @@ class AssetFilterManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'filters' => array(

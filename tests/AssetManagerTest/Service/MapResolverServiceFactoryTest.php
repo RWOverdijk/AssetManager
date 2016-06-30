@@ -15,7 +15,7 @@ class MapResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolver_configs' => array(
@@ -46,7 +46,7 @@ class MapResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     public function testCreateServiceWithNoConfig()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', array());
+        $serviceManager->setService('config', array());
 
         $factory = new MapResolverServiceFactory();
         /* @var \AssetManager\Resolver\MapResolver */

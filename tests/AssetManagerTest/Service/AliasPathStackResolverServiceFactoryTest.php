@@ -20,7 +20,7 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolver_configs' => array(
@@ -59,7 +59,7 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
     public function testCreateServiceWithNoConfig()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', array());
+        $serviceManager->setService('config', array());
 
         $factory = new AliasPathStackResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */

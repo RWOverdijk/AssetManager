@@ -19,7 +19,7 @@ class AssetManagerServiceFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config             = $container->get('Config');
+        $config             = $container->get('config');
         $assetManagerConfig = array();
 
         if (!empty($config['asset_manager'])) {
