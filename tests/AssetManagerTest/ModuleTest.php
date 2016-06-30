@@ -150,6 +150,10 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     {
         $applicationEventManager = new EventManager();
 
+        if (!method_exists($applicationEventManager, 'getListeners')) {
+            $this->markTestSkipped();
+        }
+
         $application = $this->getMock('Zend\Mvc\ApplicationInterface');
         $application
             ->expects($this->any())
