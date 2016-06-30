@@ -22,7 +22,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
-        $serviceManagerConfig = new Config($config['service_manager']);
+        $serviceManagerConfig = $config['service_manager'];
         $serviceManager = new ServiceManager($serviceManagerConfig);
         $serviceManager->setService('config', $config);
 
@@ -46,7 +46,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
-        $serviceManagerConfig = new Config($config['service_manager']);
+        $serviceManagerConfig = $config['service_manager'];
         $serviceManager = new ServiceManager($serviceManagerConfig);
         $serviceManager->setService('config', $config);
 
@@ -69,7 +69,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
-        $serviceManagerConfig = new Config($config['service_manager']);
+        $serviceManagerConfig = $config['service_manager'];
         $serviceManager = new ServiceManager($serviceManagerConfig);
         $serviceManager->setService('config', $config);
 
@@ -92,7 +92,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
-        $serviceManagerConfig = new Config($config['service_manager']);
+        $serviceManagerConfig = $config['service_manager'];
         $serviceManager = new ServiceManager($serviceManagerConfig);
         $serviceManager->setService('config', $config);
 
@@ -109,7 +109,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
-        $serviceManagerConfig = new Config($config['service_manager']);
+        $serviceManagerConfig = $config['service_manager'];
         $serviceManager = new ServiceManager($serviceManagerConfig);
         $serviceManager->setService('config', $config);
 
