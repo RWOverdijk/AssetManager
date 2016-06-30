@@ -24,7 +24,7 @@ class AggregateResolverServiceFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config         = $container->get('Config');
+        $config         = $container->get('config');
         $config         = isset($config['asset_manager']) ? $config['asset_manager'] : array();
         $resolver       = new AggregateResolver();
 

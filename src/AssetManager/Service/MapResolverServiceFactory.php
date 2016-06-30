@@ -17,7 +17,7 @@ class MapResolverServiceFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $container->get('Config');
+        $config = $container->get('config');
         $map    = array();
 
         if (isset($config['asset_manager']['resolver_configs']['map'])) {

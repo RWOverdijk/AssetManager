@@ -15,7 +15,7 @@ class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestC
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolver_configs' => array(
@@ -60,7 +60,7 @@ class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestC
     public function testCreateServiceWithNoConfig()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', array());
+        $serviceManager->setService('config', array());
 
         $factory = new PrioritizedPathsResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\PrioritizedPathsResolver */

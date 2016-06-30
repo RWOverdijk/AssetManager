@@ -21,7 +21,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     public function testWillInstantiateEmptyResolver()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', array());
+        $serviceManager->setService('config', array());
         $serviceManager->setService('AssetManager\Service\MimeResolver', new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
@@ -34,7 +34,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolvers' => array(
@@ -66,7 +66,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolvers' => array(
@@ -88,7 +88,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolvers' => array(
@@ -124,7 +124,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolvers' => array(
@@ -162,7 +162,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolvers' => array(
