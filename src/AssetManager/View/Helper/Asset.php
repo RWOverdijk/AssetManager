@@ -30,6 +30,23 @@ class Asset extends AbstractHelper
     }
 
     /**
+     * Append timestamp as query param to the filename
+     *
+     * @param string   $filename
+     * @param string   $queryString
+     * @param int|null $timestamp
+     *
+     * @return string
+     */
+    private function appendTimestamp($filename, $queryString, $timestamp = null)
+    {
+        // current timestamp as default
+        $timestamp = $timestamp === null ? time() : $timestamp;
+
+        return $filename . '?' . urlencode($queryString) . '=' . $timestamp;
+    }
+
+    /**
      * find the file and if it exists, append its unix modification time to the filename
      *
      * @param string $filename
@@ -42,7 +59,7 @@ class Asset extends AbstractHelper
         if ($asset !== null) {
 
             // append last modified date to the filepath and use a custom query string
-            return $filename . '?' . urlencode($queryString) . '=' . $asset->getLastModified();
+            return $this->appendTimestamp($filename, $queryString, $asset->getLastModified());
         }
 
         return $filename;
@@ -85,6 +102,11 @@ class Asset extends AbstractHelper
      */
     public function __invoke($filename)
     {
+        // nothing to append
+        if (empty($this->config['view_helper']['append_timestamp'])) {
+            return $filename;
+        }
+        
         // search the cache config for the specific file requested (if none, use the default one)
         if (isset($this->config['caching'][$filename])) {
             $cacheConfig = $this->config['caching'][$filename];
@@ -92,15 +114,17 @@ class Asset extends AbstractHelper
             $cacheConfig = $this->config['caching']['default'];
         }
 
-        // if nothing done, return the original filename
-        if (!isset($cacheConfig['options']['dir'])) {
-            return $filename;
-        }
-
         // query string params
         $queryString = isset($this->config['view_helper']['query_string'])
             ? $this->config['view_helper']['query_string']
             : '_';
+
+        // no cache dir is defined
+        if (!isset($cacheConfig['options']['dir'])) {
+
+            // append current timestamp to the filepath and use a custom query string
+            return $this->appendTimestamp($filename, $queryString);
+        }
 
         // get the filePath from the cache (if available)
         $filePath = $this->getFilePathFromCache($filename, $queryString);

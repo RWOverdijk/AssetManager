@@ -56,8 +56,9 @@ return array(
             ),
         ),
         'view_helper' => array(
-            // Note: You will need to require the factory used for the cache yourself.
-            'cache'        => 'Application\Cache\Redis',
+            'cache'            => 'Application\Cache\Redis', // You will need to require the factory used for the cache yourself.
+            'append_timestamp' => true,                      // optional, if false never append a query param
+            'query_string'     => '_',                       // optional
         ),
         'caching' => array(
             'js/d.js' => array(
