@@ -47,12 +47,12 @@ class AggregateResolverServiceFactory implements FactoryInterface
             }
 
             if ($resolverService instanceof MimeResolverAwareInterface) {
-                $resolverService->setMimeResolver($container->get('AssetManager\Service\MimeResolver'));
+                $resolverService->setMimeResolver($container->get(MimeResolver::class));
             }
 
             if ($resolverService instanceof AssetFilterManagerAwareInterface) {
                 $resolverService->setAssetFilterManager(
-                    $container->get('AssetManager\Service\AssetFilterManager')
+                    $container->get(AssetFilterManager::class)
                 );
             }
 
