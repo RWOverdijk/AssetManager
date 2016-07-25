@@ -13,12 +13,11 @@ class ConsoleControllerFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $console        = $container->get('Console');
+        $console        = $container->get('console');
         $assetManager   = $container->get('AssetManager\Service\AssetManager');
         $appConfig      = $container->get('config');
 
         return new ConsoleController($console, $assetManager, $appConfig);
-
     }
 
     /**
