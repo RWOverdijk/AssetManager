@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b1cfa670a52ae5a097a647f7dce1da99",
-    "content-hash": "b513b70f0304f77ee117178fbbd603d0",
+    "hash": "71936314ea78bdb959bb55fc4b9a680a",
+    "content-hash": "dbfafe57a427d8723dbba0e137991526",
     "packages": [
         {
             "name": "container-interop/container-interop",
@@ -212,58 +212,6 @@
                 "zf2"
             ],
             "time": "2016-02-04 23:01:10"
-        },
-        {
-            "name": "zendframework/zend-console",
-            "version": "2.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/zend-console.git",
-                "reference": "cbbdfdfa0564aa20d1c6c6ef3daeafe6aec02360"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-console/zipball/cbbdfdfa0564aa20d1c6c6ef3daeafe6aec02360",
-                "reference": "cbbdfdfa0564aa20d1c6c6ef3daeafe6aec02360",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5 || ^7.0",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "^4.0",
-                "zendframework/zend-filter": "^2.6",
-                "zendframework/zend-json": "^2.6",
-                "zendframework/zend-validator": "^2.5"
-            },
-            "suggest": {
-                "zendframework/zend-filter": "To support DefaultRouteMatcher usage",
-                "zendframework/zend-validator": "To support DefaultRouteMatcher usage"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6-dev",
-                    "dev-develop": "2.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zend\\Console\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://github.com/zendframework/zend-console",
-            "keywords": [
-                "console",
-                "zf2"
-            ],
-            "time": "2016-02-09 17:15:12"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -582,72 +530,6 @@
             "time": "2016-06-30 20:30:28"
         },
         {
-            "name": "zendframework/zend-mvc-console",
-            "version": "1.1.10",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/zend-mvc-console.git",
-                "reference": "34f6ffd4b84df614303f4c6e9fd3aebf331dc84b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-mvc-console/zipball/34f6ffd4b84df614303f4c6e9fd3aebf331dc84b",
-                "reference": "34f6ffd4b84df614303f4c6e9fd3aebf331dc84b",
-                "shasum": ""
-            },
-            "require": {
-                "container-interop/container-interop": "^1.1",
-                "php": "^5.6 || ^7.0",
-                "zendframework/zend-console": "^2.6",
-                "zendframework/zend-eventmanager": "^2.6.2 || ^3.0",
-                "zendframework/zend-modulemanager": "^2.7.1",
-                "zendframework/zend-mvc": "^3.0.0-dev || ^3.0",
-                "zendframework/zend-router": "^3.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-stdlib": "^2.7.5 || ^3.0",
-                "zendframework/zend-text": "^2.6",
-                "zendframework/zend-view": "^2.6.3"
-            },
-            "conflict": {
-                "zendframework/zend-mvc": "<3.0.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.5",
-                "squizlabs/php_codesniffer": "^2.3.1",
-                "zendframework/zend-filter": "^2.6.1",
-                "zendframework/zend-form": "^2.7"
-            },
-            "suggest": {
-                "zendframework/zend-filter": "^2.6.1, to filter rendered results"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.1-dev",
-                    "dev-develop": "1.2-dev"
-                },
-                "zf": {
-                    "component": "Zend\\Mvc\\Console"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zend\\Mvc\\Console\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://github.com/zendframework/zend-mvc-console",
-            "keywords": [
-                "console",
-                "mvc",
-                "zf2"
-            ],
-            "time": "2016-05-31 20:51:16"
-        },
-        {
             "name": "zendframework/zend-router",
             "version": "3.0.2",
             "source": {
@@ -807,53 +689,6 @@
                 "zf2"
             ],
             "time": "2016-04-12 21:19:36"
-        },
-        {
-            "name": "zendframework/zend-text",
-            "version": "2.6.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/zendframework/zend-text.git",
-                "reference": "07ad9388e4d4f12620ad37b52a5b0e4ee7845f92"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-text/zipball/07ad9388e4d4f12620ad37b52a5b0e4ee7845f92",
-                "reference": "07ad9388e4d4f12620ad37b52a5b0e4ee7845f92",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5 || ^7.0",
-                "zendframework/zend-servicemanager": "^2.7.5 || ^3.0.3",
-                "zendframework/zend-stdlib": "^2.7 || ^3.0"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "1.7.*",
-                "phpunit/phpunit": "~4.0",
-                "zendframework/zend-config": "^2.6"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6-dev",
-                    "dev-develop": "2.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Zend\\Text\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "homepage": "https://github.com/zendframework/zend-text",
-            "keywords": [
-                "text",
-                "zf2"
-            ],
-            "time": "2016-02-08 19:03:52"
         },
         {
             "name": "zendframework/zend-uri",
@@ -2308,6 +2143,58 @@
                 "zf2"
             ],
             "time": "2016-05-12 21:47:55"
+        },
+        {
+            "name": "zendframework/zend-console",
+            "version": "2.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zendframework/zend-console.git",
+                "reference": "cbbdfdfa0564aa20d1c6c6ef3daeafe6aec02360"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zendframework/zend-console/zipball/cbbdfdfa0564aa20d1c6c6ef3daeafe6aec02360",
+                "reference": "cbbdfdfa0564aa20d1c6c6ef3daeafe6aec02360",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5 || ^7.0",
+                "zendframework/zend-stdlib": "^2.7 || ^3.0"
+            },
+            "require-dev": {
+                "fabpot/php-cs-fixer": "1.7.*",
+                "phpunit/phpunit": "^4.0",
+                "zendframework/zend-filter": "^2.6",
+                "zendframework/zend-json": "^2.6",
+                "zendframework/zend-validator": "^2.5"
+            },
+            "suggest": {
+                "zendframework/zend-filter": "To support DefaultRouteMatcher usage",
+                "zendframework/zend-validator": "To support DefaultRouteMatcher usage"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6-dev",
+                    "dev-develop": "2.7-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zend\\Console\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "homepage": "https://github.com/zendframework/zend-console",
+            "keywords": [
+                "console",
+                "zf2"
+            ],
+            "time": "2016-02-09 17:15:12"
         }
     ],
     "aliases": [],
