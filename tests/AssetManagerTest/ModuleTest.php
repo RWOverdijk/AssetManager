@@ -4,17 +4,21 @@ namespace AssetManagerTest;
 
 use PHPUnit_Framework_TestCase;
 use AssetManager\Module;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 use Zend\Http\Response;
 use Zend\Http\Request;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
 use Zend\Mvc\MvcEvent;
+use Zend\Navigation\Page\Mvc;
 
 /**
 * @covers AssetManager\Module
 */
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
+    use EventListenerIntrospectionTrait;
+
     public function testGetAutoloaderConfig()
     {
         $module = new Module();
@@ -150,10 +154,6 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     {
         $applicationEventManager = new EventManager();
 
-        if (!method_exists($applicationEventManager, 'getListeners')) {
-            $this->markTestSkipped();
-        }
-
         $application = $this->getMock('Zend\Mvc\ApplicationInterface');
         $application
             ->expects($this->any())
@@ -166,28 +166,18 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $module = new Module();
         $module->onBootstrap($event);
 
-        $dispatchListeners = $applicationEventManager->getListeners(MvcEvent::EVENT_DISPATCH);
+        $this->assertListenerAtPriority(
+            [$module, 'onDispatch'],
+            -9999999,
+            MvcEvent::EVENT_DISPATCH,
+            $applicationEventManager
+        );
 
-        foreach ($dispatchListeners as $listener) {
-            $metaData = $listener->getMetadata();
-            $callback = $listener->getCallback();
-
-            $this->assertEquals('onDispatch', $callback[1]);
-            $this->assertEquals(-9999999, $metaData['priority']);
-            $this->assertTrue($callback[0] instanceof Module);
-
-        }
-
-        $dispatchListeners = $applicationEventManager->getListeners(MvcEvent::EVENT_DISPATCH_ERROR);
-
-        foreach ($dispatchListeners as $listener) {
-            $metaData = $listener->getMetadata();
-            $callback = $listener->getCallback();
-
-            $this->assertEquals('onDispatch', $callback[1]);
-            $this->assertEquals(-9999999, $metaData['priority']);
-            $this->assertTrue($callback[0] instanceof Module);
-
-        }
+        $this->assertListenerAtPriority(
+            [$module, 'onDispatch'],
+            -9999999,
+            MvcEvent::EVENT_DISPATCH_ERROR,
+            $applicationEventManager
+        );
     }
 }
