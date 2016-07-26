@@ -66,7 +66,7 @@ class AssetViewHelperFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceManager)
     {
-        $container = $serviceManager->getServiceLocator();
+        $container = $serviceManager->getServiceLocator() ?: $serviceManager;
         return $this($container, Asset::class);
     }
 }

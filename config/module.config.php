@@ -5,7 +5,7 @@ return [
             AssetManager\Service\AssetManager::class              => AssetManager\Service\AssetManagerServiceFactory::class,
             AssetManager\Service\AssetFilterManager::class        => AssetManager\Service\AssetFilterManagerServiceFactory::class,
             AssetManager\Service\AssetCacheManager::class         => AssetManager\Service\AssetCacheManagerServiceFactory::class,
-            'AssetManager\Service\AggregateResolver'              => AssetManager\Service\AggregateResolverServiceFactory::class,
+            AssetManager\Resolver\AggregateResolver::class        => AssetManager\Service\AggregateResolverServiceFactory::class,
             AssetManager\Resolver\MapResolver::class              => AssetManager\Service\MapResolverServiceFactory::class,
             AssetManager\Resolver\PathStackResolver::class        => AssetManager\Service\PathStackResolverServiceFactory::class,
             AssetManager\Resolver\PrioritizedPathsResolver::class => AssetManager\Service\PrioritizedPathsResolverServiceFactory::class,
@@ -18,7 +18,8 @@ return [
         ],
         'aliases'    => [
             //Alias left here for BC
-            'mime_resolver' => AssetManager\Service\MimeResolver::class,
+            'mime_resolver'                             => AssetManager\Service\MimeResolver::class,
+            'AssetManager\Service\AggregateResolver'    => AssetManager\Resolver\AggregateResolver::class
         ],
     ],
     'asset_manager'   => [

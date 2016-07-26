@@ -2,8 +2,11 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Resolver\AggregateResolver;
+use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
+use AssetManager\Service\AssetManager;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetManagerServiceFactory;
 use Zend\ServiceManager\ServiceManager;
@@ -13,23 +16,23 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
     public function testCreateService()
     {
         $assetFilterManager = new AssetFilterManager();
-        $assetCacheManager = $this->getMockBuilder('AssetManager\Service\AssetCacheManager')
+        $assetCacheManager = $this->getMockBuilder(AssetCacheManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'AssetManager\Service\AggregateResolver',
-            $this->getMock('AssetManager\Resolver\ResolverInterface')
+            AggregateResolver::class,
+            $this->getMock(ResolverInterface::class)
         );
 
         $serviceManager->setService(
-            'AssetManager\Service\AssetFilterManager',
+            AssetFilterManager::class,
             $assetFilterManager
         );
 
         $serviceManager->setService(
-            'AssetManager\Service\AssetCacheManager',
+            AssetCacheManager::class,
             $assetCacheManager
         );
 
@@ -41,6 +44,6 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
             ));
 
         $factory = new AssetManagerServiceFactory();
-        $this->assertInstanceOf('AssetManager\Service\AssetManager', $factory->createService($serviceManager));
+        $this->assertInstanceOf(AssetManager::class, $factory->createService($serviceManager));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AssetManager\Service;
 
+use AssetManager\Resolver\AggregateResolver;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -27,7 +28,7 @@ class AssetManagerServiceFactory implements FactoryInterface
         }
 
         $assetManager = new AssetManager(
-            $container->get('AssetManager\Service\AggregateResolver'),
+            $container->get(AggregateResolver::class),
             $assetManagerConfig
         );
 
