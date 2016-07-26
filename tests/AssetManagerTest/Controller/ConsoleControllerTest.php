@@ -12,8 +12,9 @@ use JSMin;
 use PHPUnit_Framework_TestCase;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Console\RouteMatch;
+use Zend\Mvc\Console\Router\RouteMatch;
 use Zend\View\Resolver\ResolverInterface;
+use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
 
 class ConsoleControllerTest extends PHPUnit_Framework_TestCase
 {
@@ -55,10 +56,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetCacheManager($assetCacheManager);
 
         $this->request = new ConsoleRequest();
-        if (!class_exists(RouteMatch::class)) {
-            $this->markTestSkipped();
-        }
-        $this->routeMatch = new RouteMatch(array('controller' => 'console'));
+        $this->routeMatch = $this->createRouteMatch(['controller' => 'console']);
 
         $this->event = new MvcEvent();
         $this->event->setRouteMatch($this->routeMatch);
@@ -69,6 +67,12 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
             array()
         );
         $this->controller->setEvent($this->event);
+    }
+
+    public function createRouteMatch(array $params = [])
+    {
+        $class = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
+        return new $class($params);
     }
 
     /**

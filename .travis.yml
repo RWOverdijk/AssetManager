@@ -24,7 +24,7 @@ before_script:
   - composer self-update
   - if [ -z "$dependencies" ]; then composer install --prefer-dist -n; fi;
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-dist --prefer-lowest -n; fi;
-  - if [ "$dependencies" = "highest" ]; then composer update --prefer-dist -n; fi;
+  - if [ "$dependencies" = "highest" ]; then composer require zendframework/zend-mvc-console:^1.1 --prefer-dist -n; fi;
 
 script:
   - ./vendor/bin/phpunit
