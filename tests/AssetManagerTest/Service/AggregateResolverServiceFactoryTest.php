@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Resolver\ResolverInterface;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AggregateResolverServiceFactory;
@@ -22,11 +23,11 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('config', array());
-        $serviceManager->setService(\AssetManager\Service\MimeResolver::class, new MimeResolver);
+        $serviceManager->setService(MimeResolver::class, new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
-        $this->assertInstanceOf(\AssetManager\Resolver\ResolverInterface::class, $resolver);
+        $this->assertInstanceOf(ResolverInterface::class, $resolver);
         $this->assertNull($resolver->resolve('/some-path'));
     }
 
@@ -44,14 +45,14 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $mockedResolver = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $mockedResolver = $this->getMock(ResolverInterface::class);
         $mockedResolver
             ->expects($this->once())
             ->method('resolve')
             ->with('test-path')
             ->will($this->returnValue('test-resolved-path'));
         $serviceManager->setService('mocked_resolver', $mockedResolver);
-        $serviceManager->setService(\AssetManager\Service\MimeResolver::class, new MimeResolver);
+        $serviceManager->setService(MimeResolver::class, new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
         $resolver = $factory->createService($serviceManager);
@@ -99,7 +100,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $mockedResolver1 = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $mockedResolver1 = $this->getMock(ResolverInterface::class);
         $mockedResolver1
             ->expects($this->once())
             ->method('resolve')
@@ -108,7 +109,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('AssetManager\Service\MimeResolver', new MimeResolver);
         $serviceManager->setService('mocked_resolver_1', $mockedResolver1);
 
-        $mockedResolver2 = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $mockedResolver2 = $this->getMock(ResolverInterface::class);
         $mockedResolver2
             ->expects($this->never())
             ->method('resolve');
@@ -135,7 +136,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $mockedResolver1 = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $mockedResolver1 = $this->getMock(ResolverInterface::class);
         $mockedResolver1
             ->expects($this->once())
             ->method('resolve')
@@ -144,7 +145,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('mocked_resolver_1', $mockedResolver1);
         $serviceManager->setService('AssetManager\Service\MimeResolver', new MimeResolver);
 
-        $mockedResolver2 = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $mockedResolver2 = $this->getMock(ResolverInterface::class);
         $mockedResolver2
             ->expects($this->once())
             ->method('resolve')
@@ -174,9 +175,9 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $interfaceTestResolver = new \InterfaceTestResolver;
 
-        $serviceManager->setService(\AssetManager\Service\MimeResolver::class, new MimeResolver);
+        $serviceManager->setService(MimeResolver::class, new MimeResolver);
         $serviceManager->setService('mocked_resolver', $interfaceTestResolver);
-        $serviceManager->setService(\AssetManager\Service\AssetFilterManager::class, new AssetFilterManager);
+        $serviceManager->setService(AssetFilterManager::class, new AssetFilterManager);
 
         $factory = new AggregateResolverServiceFactory();
 

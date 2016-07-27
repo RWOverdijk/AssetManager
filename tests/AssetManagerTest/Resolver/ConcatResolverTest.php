@@ -2,6 +2,8 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Asset\AggregateAsset;
+use AssetManager\Service\AssetFilterManager;
 use PHPUnit_Framework_TestCase;
 use Assetic\Asset;
 use AssetManager\Resolver\ConcatResolver;
@@ -44,7 +46,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     {
         $resolver = new ConcatResolver;
 
-        $aggregateResolver = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $aggregateResolver = $this->getMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->once())
             ->method('resolve')
@@ -148,14 +150,14 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
             return $asset;
         };
 
-        $aggregateResolver = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $aggregateResolver = $this->getMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->exactly(2))
             ->method('resolve')
             ->will($this->returnCallback($callback));
         $resolver->setAggregateResolver($aggregateResolver);
 
-        $assetFilterManager = new \AssetManager\Service\AssetFilterManager();
+        $assetFilterManager = new AssetFilterManager();
         $mimeResolver = new MimeResolver;
         $assetFilterManager->setMimeResolver($mimeResolver);
         $resolver->setMimeResolver($mimeResolver);
@@ -165,7 +167,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
 
         $asset      = $resolver->resolve('bacon');
 
-        $this->assertTrue($asset instanceof \AssetManager\Asset\AggregateAsset);
+        $this->assertTrue($asset instanceof AggregateAsset);
         $this->assertEquals(
             $asset->dump(),
             file_get_contents(__FILE__).file_get_contents(__FILE__)

@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Resolver\CollectionResolver;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\CollectionResolverServiceFactory;
 use Zend\ServiceManager\ServiceManager;
@@ -29,7 +30,7 @@ class CollectionResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         );
 
         $factory = new CollectionResolverServiceFactory();
-        /* @var \AssetManager\Resolver\CollectionResolver */
+        /* @var CollectionResolver */
         $collectionsResolver = $factory->createService($serviceManager);
         $this->assertSame(
             array(
@@ -49,7 +50,7 @@ class CollectionResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('config', array());
 
         $factory = new CollectionResolverServiceFactory();
-        /* @var \AssetManager\Resolver\CollectionResolver */
+        /* @var CollectionResolver */
         $collectionsResolver = $factory->createService($serviceManager);
         $this->assertEmpty($collectionsResolver->getCollections());
     }

@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Exception\InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Resolver\PrioritizedPathsResolver;
@@ -68,7 +69,7 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
             $fetched
         );
 
-        $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
+        $this->setExpectedException(InvalidArgumentException::class);
         $resolver->setPaths('invalid');
     }
 
@@ -173,7 +174,7 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
     public function testWillValidateGivenPathArray()
     {
         $resolver = new PrioritizedPathsResolver();
-        $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
+        $this->setExpectedException(InvalidArgumentException::class);
         $resolver->addPath(array('invalid'));
     }
 
@@ -220,7 +221,7 @@ class PrioritizedPathsResolverTest extends PHPUnit_Framework_TestCase
     public function testWillRefuseInvalidPath()
     {
         $resolver = new PrioritizedPathsResolver();
-        $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
+        $this->setExpectedException(InvalidArgumentException::class);
         $resolver->addPath(null);
     }
 

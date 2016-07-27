@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Resolver\AliasPathStackResolver;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AliasPathStackResolverServiceFactory;
 use Zend\ServiceManager\ServiceManager;
@@ -35,10 +36,10 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
 
         $factory = new AliasPathStackResolverServiceFactory();
 
-        /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
+        /* @var $resolver AliasPathStackResolver */
         $resolver = $factory->createService($serviceManager);
 
-        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
+        $reflectionClass = new \ReflectionClass(AliasPathStackResolver::class);
         $property = $reflectionClass->getProperty('aliases');
         $property->setAccessible(true);
 
@@ -62,10 +63,10 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
         $serviceManager->setService('config', array());
 
         $factory = new AliasPathStackResolverServiceFactory();
-        /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
+        /* @var $resolver AliasPathStackResolver */
         $resolver = $factory->createService($serviceManager);
 
-        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
+        $reflectionClass = new \ReflectionClass(AliasPathStackResolver::class);
         $property = $reflectionClass->getProperty('aliases');
         $property->setAccessible(true);
 

@@ -2,6 +2,8 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Resolver\CollectionResolver;
+use AssetManager\Resolver\ConcatResolver;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\ConcatResolverServiceFactory;
 use Zend\ServiceManager\ServiceManager;
@@ -29,7 +31,7 @@ class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         );
 
         $factory = new ConcatResolverServiceFactory();
-        /* @var \AssetManager\Resolver\CollectionResolver */
+        /* @var CollectionResolver */
         $concatResolver = $factory->createService($serviceManager);
         $this->assertSame(
             array(
@@ -49,7 +51,7 @@ class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('config', array());
 
         $factory = new ConcatResolverServiceFactory();
-        /* @var \AssetManager\Resolver\ConcatResolver */
+        /* @var ConcatResolver */
         $concatResolver = $factory->createService($serviceManager);
         $this->assertEmpty($concatResolver->getConcats());
     }

@@ -1,6 +1,7 @@
 <?php
 namespace AssetManagerTest\View\Helper;
 
+use AssetManager\Cache\FilePathCache;
 use AssetManager\Resolver\MapResolver;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
@@ -32,7 +33,7 @@ class AssetTest extends TestCase
             ),
             'caching' => array(
                 'default' => array(
-                    'cache' => \AssetManager\Cache\FilePathCache::class,
+                    'cache' => FilePathCache::class,
                     'options' => array(
                         'dir' => 'public/assets',
                     ),

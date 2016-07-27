@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Exception\InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 use ArrayObject;
 use Assetic\Asset;
@@ -70,7 +71,7 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
             $resolver->getPaths()->toArray()
         );
 
-        $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
+        $this->setExpectedException(InvalidArgumentException::class);
         $resolver->setPaths('invalid');
 
     }
@@ -127,7 +128,7 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
     public function testWillRefuseInvalidPath()
     {
         $resolver = new PathStackResolver();
-        $this->setExpectedException('AssetManager\Exception\InvalidArgumentException');
+        $this->setExpectedException(InvalidArgumentException::class);
         $resolver->addPath(null);
     }
 

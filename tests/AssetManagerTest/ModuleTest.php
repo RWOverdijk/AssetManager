@@ -2,14 +2,19 @@
 
 namespace AssetManagerTest;
 
+use AssetManager\Resolver\ResolverInterface;
+use AssetManager\Service\AssetManager;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Module;
+use Zend\Console\Response as ConsoleResponse;
 use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 use Zend\Http\Response;
 use Zend\Http\Request;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
+use Zend\Mvc\ApplicationInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
 * @covers AssetManager\Module
@@ -51,9 +56,9 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function testOnDispatchDoesntResolveToAsset()
     {
-        $resolver     = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $resolver     = $this->getMock(ResolverInterface::class);
         $assetManager = $this->getMock(
-            \AssetManager\Service\AssetManager::class,
+            AssetManager::class,
             array('resolvesToAsset'),
             array($resolver)
         );
@@ -62,13 +67,13 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->method('resolvesToAsset')
             ->will($this->returnValue(false));
 
-        $serviceManager = $this->getMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $serviceManager = $this->getMock(ServiceLocatorInterface::class);
         $serviceManager
             ->expects($this->any())
             ->method('get')
             ->will($this->returnValue($assetManager));
 
-        $application = $this->getMock(\Zend\Mvc\ApplicationInterface::class);
+        $application = $this->getMock(ApplicationInterface::class);
         $application
             ->expects($this->once())
             ->method('getServiceManager')
@@ -91,9 +96,9 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function testOnDispatchStatus200()
     {
-        $resolver     = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
+        $resolver     = $this->getMock(ResolverInterface::class);
         $assetManager = $this->getMock(
-            \AssetManager\Service\AssetManager::class,
+            AssetManager::class,
             array('resolvesToAsset', 'setAssetOnResponse'),
             array($resolver)
         );
@@ -111,13 +116,13 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->method('setAssetOnResponse')
             ->will($this->returnValue($amResponse));
 
-        $serviceManager = $this->getMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
+        $serviceManager = $this->getMock(ServiceLocatorInterface::class);
         $serviceManager
             ->expects($this->any())
             ->method('get')
             ->will($this->returnValue($assetManager));
 
-        $application = $this->getMock(\Zend\Mvc\ApplicationInterface::class);
+        $application = $this->getMock(ApplicationInterface::class);
         $application
             ->expects($this->once())
             ->method('getServiceManager')
@@ -143,8 +148,8 @@ class ModuleTest extends PHPUnit_Framework_TestCase
      */
     public function testWillIgnoreInvalidResponseType()
     {
-        $cliResponse = $this->getMock(\Zend\Console\Response::class, array(), array(), '', false);
-        $mvcEvent   = $this->getMock(\Zend\Mvc\MvcEvent::class);
+        $cliResponse = $this->getMock(ConsoleResponse::class, array(), array(), '', false);
+        $mvcEvent   = $this->getMock(MvcEvent::class);
         $module     = new Module();
 
         $cliResponse->expects($this->never())->method('getStatusCode');
@@ -157,7 +162,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     {
         $applicationEventManager = new EventManager();
 
-        $application = $this->getMock(\Zend\Mvc\ApplicationInterface::class);
+        $application = $this->getMock(ApplicationInterface::class);
         $application
             ->expects($this->any())
             ->method('getEventManager')

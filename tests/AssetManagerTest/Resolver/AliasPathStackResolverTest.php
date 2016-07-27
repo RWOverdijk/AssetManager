@@ -141,7 +141,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAndSetMimeResolver()
     {
-        $mimeReolver = $this->getMockBuilder(\AssetManager\Service\MimeResolver::class)
+        $mimeReolver = $this->getMockBuilder(MimeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 

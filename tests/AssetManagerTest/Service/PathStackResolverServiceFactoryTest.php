@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Resolver\PathStackResolver;
 use PHPUnit_Framework_TestCase;
 use AssetManager\Service\PathStackResolverServiceFactory;
 use Zend\ServiceManager\ServiceManager;
@@ -29,7 +30,7 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         );
 
         $factory = new PathStackResolverServiceFactory();
-        /* @var $resolver \AssetManager\Resolver\PathStackResolver */
+        /* @var $resolver PathStackResolver */
         $resolver = $factory->createService($serviceManager);
         $this->assertSame(
             array(
@@ -49,7 +50,7 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('config', array());
 
         $factory = new PathStackResolverServiceFactory();
-        /* @var $resolver \AssetManager\Resolver\PathStackResolver */
+        /* @var $resolver PathStackResolver */
         $resolver = $factory->createService($serviceManager);
         $this->assertEmpty($resolver->getPaths()->toArray());
     }
