@@ -3,10 +3,10 @@
 namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\ResolverInterface;
-use PHPUnit_Framework_TestCase;
-use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AggregateResolverServiceFactory;
+use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\MimeResolver;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase

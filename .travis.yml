@@ -6,6 +6,8 @@ php:
   - hhvm
 
 matrix:
+  exclude:
+    - php: 5.5
   include:
     - php: 5.5
       env: dependencies=lowest
@@ -17,8 +19,6 @@ matrix:
       env: dependencies=highest
     - php: hhvm
       env: dependencies=highest
-  allow_failures:
-    - php: 5.5
 
 before_script:
   - composer self-update

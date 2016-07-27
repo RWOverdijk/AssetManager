@@ -3,8 +3,8 @@
 namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\CollectionResolver;
-use PHPUnit_Framework_TestCase;
 use AssetManager\Service\CollectionResolverServiceFactory;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class CollectionResolverServiceFactoryTest extends PHPUnit_Framework_TestCase

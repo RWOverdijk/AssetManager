@@ -2,16 +2,16 @@
 
 namespace AssetManagerTest;
 
+use AssetManager\Module;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetManager;
 use PHPUnit_Framework_TestCase;
-use AssetManager\Module;
 use Zend\Console\Response as ConsoleResponse;
-use Zend\EventManager\Test\EventListenerIntrospectionTrait;
-use Zend\Http\Response;
-use Zend\Http\Request;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
+use Zend\Http\Request;
+use Zend\Http\Response;
 use Zend\Mvc\ApplicationInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;

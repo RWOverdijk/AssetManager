@@ -2,9 +2,9 @@
 
 namespace AssetManagerTest\Cache;
 
-use PHPUnit_Framework_TestCase;
 use Assetic\Cache\CacheInterface;
 use AssetManager\Cache\FilePathCache;
+use PHPUnit_Framework_TestCase;
 
 class FilePathCacheTest extends PHPUnit_Framework_TestCase
 {

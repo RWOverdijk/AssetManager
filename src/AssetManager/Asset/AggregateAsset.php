@@ -2,8 +2,8 @@
 
 namespace AssetManager\Asset;
 
-use Assetic\Filter\FilterInterface;
 use Assetic\Asset\BaseAsset;
+use Assetic\Filter\FilterInterface;
 use AssetManager\Exception;
 
 /**

@@ -12,11 +12,11 @@ use JSMin;
 use PHPUnit_Framework_TestCase;
 use Zend\Console\Adapter\AdapterInterface;
 use Zend\Console\Request as ConsoleRequest;
-use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Console\Router\RouteMatch;
+use Zend\Mvc\MvcEvent;
+use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Resolver\ResolverInterface;
-use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
 
 class ConsoleControllerTest extends PHPUnit_Framework_TestCase
 {

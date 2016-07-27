@@ -2,14 +2,14 @@
 
 namespace AssetManagerTest\Service;
 
-use AssetManager\Exception\InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
 use ArrayObject;
 use Assetic\Asset;
+use AssetManager\Exception\InvalidArgumentException;
+use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Resolver\PathStackResolver;
 use AssetManager\Resolver\ResolverInterface;
-use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
+use PHPUnit_Framework_TestCase;
 
 class PathStackResolverTest extends PHPUnit_Framework_TestCase
 {

@@ -3,8 +3,8 @@
 namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\AliasPathStackResolver;
-use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AliasPathStackResolverServiceFactory;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 /**

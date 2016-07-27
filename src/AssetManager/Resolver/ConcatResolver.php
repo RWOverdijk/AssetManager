@@ -2,14 +2,14 @@
 
 namespace AssetManager\Resolver;
 
-use Traversable;
-use Zend\Stdlib\ArrayUtils;
 use Assetic\Asset\AssetInterface;
 use AssetManager\Asset\AggregateAsset;
 use AssetManager\Exception;
-use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
+use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\MimeResolver;
+use Traversable;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * This resolver allows the resolving of concatenated files.

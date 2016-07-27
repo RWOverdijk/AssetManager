@@ -2,15 +2,15 @@
 
 namespace AssetManagerTest\Service;
 
-use Assetic\Cache\CacheInterface;
-use AssetManager\Service\AssetFilterManager;
-use PHPUnit_Framework_TestCase;
-use AssetManager\Resolver\CollectionResolver;
-use AssetManager\Resolver\AggregateResolverAwareInterface;
 use Assetic\Asset;
 use Assetic\Asset\AssetCache;
-use AssetManager\Service\MimeResolver;
+use Assetic\Cache\CacheInterface;
+use AssetManager\Resolver\AggregateResolverAwareInterface;
+use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\ResolverInterface;
+use AssetManager\Service\AssetFilterManager;
+use AssetManager\Service\MimeResolver;
+use PHPUnit_Framework_TestCase;
 
 class CollectionsResolverTest extends PHPUnit_Framework_TestCase
 {

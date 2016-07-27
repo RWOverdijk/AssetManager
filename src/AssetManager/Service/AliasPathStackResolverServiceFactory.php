@@ -3,13 +3,13 @@
 namespace AssetManager\Service;
 
 use AssetManager\Resolver\AliasPathStackResolver;
+use AssetManager\Resolver\PathStackResolver;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use AssetManager\Resolver\PathStackResolver;
 
 class AliasPathStackResolverServiceFactory implements FactoryInterface
 {

@@ -3,8 +3,8 @@
 namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\PathStackResolver;
-use PHPUnit_Framework_TestCase;
 use AssetManager\Service\PathStackResolverServiceFactory;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase

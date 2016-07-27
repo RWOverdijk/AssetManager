@@ -2,8 +2,8 @@
 
 namespace AssetManager\Service;
 
-use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetCache;
+use Assetic\Asset\AssetInterface;
 use Assetic\Cache\CacheInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

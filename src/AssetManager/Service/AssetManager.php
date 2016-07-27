@@ -5,9 +5,9 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
+use Zend\Http\PhpEnvironment\Request;
 use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
-use Zend\Http\PhpEnvironment\Request;
 
 /**
  * @category    AssetManager

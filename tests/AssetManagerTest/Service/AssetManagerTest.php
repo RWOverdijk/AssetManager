@@ -2,19 +2,19 @@
 
 namespace AssetManagerTest\Service;
 
+use Assetic\Asset;
+use AssetManager\Cache\FilePathCache;
+use AssetManager\Resolver\AggregateResolver;
+use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
-use PHPUnit_Framework_TestCase;
-use Assetic\Asset;
-use AssetManager\Cache\FilePathCache;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
-use AssetManager\Resolver\CollectionResolver;
-use AssetManager\Resolver\AggregateResolver;
-use Zend\Http\Response;
-use Zend\Http\PhpEnvironment\Request;
+use PHPUnit_Framework_TestCase;
 use Zend\Console\Request as ConsoleRequest;
+use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\Response;
 
 class AssetManagerTest extends PHPUnit_Framework_TestCase
 {

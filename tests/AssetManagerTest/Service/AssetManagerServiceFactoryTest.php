@@ -7,8 +7,8 @@ use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
-use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetManagerServiceFactory;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase

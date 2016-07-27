@@ -4,8 +4,8 @@ namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\ConcatResolver;
-use PHPUnit_Framework_TestCase;
 use AssetManager\Service\ConcatResolverServiceFactory;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase

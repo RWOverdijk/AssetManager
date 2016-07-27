@@ -2,13 +2,13 @@
 
 namespace AssetManager\Service;
 
+use AssetManager\Resolver\MapResolver;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use AssetManager\Resolver\MapResolver;
 
 class MapResolverServiceFactory implements FactoryInterface
 {
