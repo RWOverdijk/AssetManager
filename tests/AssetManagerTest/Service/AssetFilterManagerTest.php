@@ -107,7 +107,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
         
         $filterInstance = null;
         
-        $asset = $this->getMock('Assetic\Asset\AssetInterface');
+        $asset = $this->getMock(\Assetic\Asset\AssetInterface::class);
         $asset
             ->expects($this->any())
             ->method('ensureFilter')

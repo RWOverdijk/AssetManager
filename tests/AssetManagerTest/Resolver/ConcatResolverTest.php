@@ -44,7 +44,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     {
         $resolver = new ConcatResolver;
 
-        $aggregateResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $aggregateResolver = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
         $aggregateResolver
             ->expects($this->once())
             ->method('resolve')
@@ -148,7 +148,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
             return $asset;
         };
 
-        $aggregateResolver = $this->getMock('AssetManager\Resolver\ResolverInterface');
+        $aggregateResolver = $this->getMock(\AssetManager\Resolver\ResolverInterface::class);
         $aggregateResolver
             ->expects($this->exactly(2))
             ->method('resolve')

@@ -147,7 +147,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
 
     public function testCachedFile()
     {
-        $method = new \ReflectionMethod('AssetManager\Cache\FilePathCache', 'cachedFile');
+        $method = new \ReflectionMethod(\AssetManager\Cache\FilePathCache::class, 'cachedFile');
 
         $method->setAccessible(true);
 

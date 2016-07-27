@@ -32,7 +32,7 @@ class AssetTest extends TestCase
             ),
             'caching' => array(
                 'default' => array(
-                    'cache' => 'AssetManager\Cache\FilePathCache',
+                    'cache' => \AssetManager\Cache\FilePathCache::class,
                     'options' => array(
                         'dir' => 'public/assets',
                     ),

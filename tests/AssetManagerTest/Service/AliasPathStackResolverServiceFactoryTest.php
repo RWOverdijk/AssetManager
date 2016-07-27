@@ -38,7 +38,7 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
         /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
         $resolver = $factory->createService($serviceManager);
 
-        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
         $property = $reflectionClass->getProperty('aliases');
         $property->setAccessible(true);
 
@@ -65,7 +65,7 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
         /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
         $resolver = $factory->createService($serviceManager);
 
-        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
         $property = $reflectionClass->getProperty('aliases');
         $property->setAccessible(true);
 

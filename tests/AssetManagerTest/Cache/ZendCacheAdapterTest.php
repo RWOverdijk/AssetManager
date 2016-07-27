@@ -13,13 +13,13 @@ class ZendCacheAdapterTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstructor()
     {
-        $mockZendCache = $this->getMockBuilder('Zend\Cache\Storage\Adapter\Memory')
+        $mockZendCache = $this->getMockBuilder(\Zend\Cache\Storage\Adapter\Memory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $adapter = new ZendCacheAdapter($mockZendCache);
 
-        $this->assertInstanceOf('AssetManager\Cache\ZendCacheAdapter', $adapter);
+        $this->assertInstanceOf(\AssetManager\Cache\ZendCacheAdapter::class, $adapter);
     }
 
     /**
@@ -32,7 +32,7 @@ class ZendCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testHasMethodCallsZendCacheHasItem()
     {
-        $mockZendCache = $this->getMockBuilder('Zend\Cache\Storage\Adapter\Memory')
+        $mockZendCache = $this->getMockBuilder(\Zend\Cache\Storage\Adapter\Memory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -45,7 +45,7 @@ class ZendCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethodCallsZendCacheGetItem()
     {
-        $mockZendCache = $this->getMockBuilder('Zend\Cache\Storage\Adapter\Memory')
+        $mockZendCache = $this->getMockBuilder(\Zend\Cache\Storage\Adapter\Memory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -58,7 +58,7 @@ class ZendCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMethodCallsZendCacheSetItem()
     {
-        $mockZendCache = $this->getMockBuilder('Zend\Cache\Storage\Adapter\Memory')
+        $mockZendCache = $this->getMockBuilder(\Zend\Cache\Storage\Adapter\Memory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -71,7 +71,7 @@ class ZendCacheAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveMethodCallsZendCacheRemoveItem()
     {
-        $mockZendCache = $this->getMockBuilder('Zend\Cache\Storage\Adapter\Memory')
+        $mockZendCache = $this->getMockBuilder(\Zend\Cache\Storage\Adapter\Memory::class)
             ->disableOriginalConstructor()
             ->getMock();
 

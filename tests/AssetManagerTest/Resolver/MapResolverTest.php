@@ -123,7 +123,7 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
     public function testResolveHttpAssetSuccess()
     {
         $resolver     = new MapResolver;
-        $mimeResolver = $this->getMock('AssetManager\Service\MimeResolver');
+        $mimeResolver = $this->getMock(\AssetManager\Service\MimeResolver::class);
 
         $mimeResolver->expects($this->any())
                 ->method('getMimeType')
