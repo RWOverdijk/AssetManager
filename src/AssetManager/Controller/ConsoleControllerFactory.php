@@ -4,6 +4,7 @@ namespace AssetManager\Controller;
 
 use AssetManager\Service\AssetManager;
 use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -26,7 +27,9 @@ class ConsoleControllerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $container = $serviceLocator->getServiceLocator();
-        return $this($container, ConsoleController::class);
+        if ($serviceLocator instanceof AbstractPluginManager) {
+            $serviceLocator = $serviceLocator->getServiceLocator() ?: $serviceLocator;
+        }
+        return $this($serviceLocator, ConsoleController::class);
     }
 }
