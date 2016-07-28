@@ -30,7 +30,7 @@
         "zendframework/zend-loader": "^2.5.1",
         "zendframework/zend-eventmanager": "^2.6.3 || ^3.0.1",
         "zendframework/zend-mvc": "^2.7.9 || ^3.0.2",
-        "kriswallsmith/assetic": "~1.2.1"
+        "kriswallsmith/assetic": "^1.2.1"
     },
     "require-dev": {
         "zendframework/zend-http": "^2.5.4",
