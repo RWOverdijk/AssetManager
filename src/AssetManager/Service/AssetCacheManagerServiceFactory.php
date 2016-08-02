@@ -2,31 +2,32 @@
 
 namespace AssetManager\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 /**
  * Factory for the Asset Cache Manager Service
  *
  * @package AssetManager\Service
  */
-class AssetCacheManagerServiceFactory implements FactoryInterface
+class AssetCacheManagerServiceFactory
 {
     /**
-     * {@inheritDoc}
+     * Build the Asset Cache Manager
+     * 
+     * @param ContainerInterface $container Container Service
      *
      * @return AssetFilterManager
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
         $config = array();
 
-        $globalConfig = $serviceLocator->get('config');
+        $globalConfig = $container->get('config');
 
         if (!empty($globalConfig['asset_manager']['caching'])) {
             $config = $globalConfig['asset_manager']['caching'];
         }
 
-        return new AssetCacheManager($serviceLocator, $config);
+        return new AssetCacheManager($container, $config);
     }
 }

@@ -2,20 +2,21 @@
 
 namespace AssetManager\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 use AssetManager\Resolver\MapResolver;
 
-class MapResolverServiceFactory implements FactoryInterface
+class MapResolverServiceFactory
 {
     /**
-     * {@inheritDoc}
+     * Build A Map Resolver
+     *
+     * @param ContainerInterface $container Container Service
      *
      * @return MapResolver
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
-        $config = $serviceLocator->get('Config');
+        $config = $container->get('Config');
         $map    = array();
 
         if (isset($config['asset_manager']['resolver_configs']['map'])) {

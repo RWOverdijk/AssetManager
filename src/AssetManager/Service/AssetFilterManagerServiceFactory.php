@@ -2,20 +2,21 @@
 
 namespace AssetManager\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
-class AssetFilterManagerServiceFactory implements FactoryInterface
+class AssetFilterManagerServiceFactory
 {
     /**
-     * {@inheritDoc}
+     * Build the Asset Filter Manager Service
+     * 
+     * @param ContainerInterface $container Container Service
      *
      * @return AssetFilterManager
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
         $filters = array();
-        $config  = $serviceLocator->get('Config');
+        $config  = $container->get('Config');
 
         if (!empty($config['asset_manager']['filters'])) {
             $filters = $config['asset_manager']['filters'];
@@ -23,8 +24,8 @@ class AssetFilterManagerServiceFactory implements FactoryInterface
 
         $assetFilterManager = new AssetFilterManager($filters);
 
-        $assetFilterManager->setServiceLocator($serviceLocator);
-        $assetFilterManager->setMimeResolver($serviceLocator->get('AssetManager\Service\MimeResolver'));
+        $assetFilterManager->setServiceContainer($container);
+        $assetFilterManager->setMimeResolver($container->get('AssetManager\Service\MimeResolver'));
 
         return $assetFilterManager;
     }

@@ -5,7 +5,7 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetCache;
 use Assetic\Cache\CacheInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 /**
  * Asset Cache Manager.  Sets asset cache based on configuration.
@@ -13,9 +13,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AssetCacheManager
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var ContainerInterface
      */
-    protected $serviceLocator;
+    protected $container;
 
     /**
      * @var array Cache configuration.
@@ -25,16 +25,16 @@ class AssetCacheManager
     /**
      * Construct the AssetCacheManager
      *
-     * @param   ServiceLocatorInterface $serviceLocator
+     * @param   ContainerInterface $container
      * @param   array                   $config
      *
      * @return  AssetCacheManager
      */
     public function __construct(
-        ServiceLocatorInterface $serviceLocator,
+        ContainerInterface $container,
         $config
     ) {
-        $this->serviceLocator = $serviceLocator;
+        $this->container = $container;
         $this->config = $config;
     }
 
@@ -62,7 +62,7 @@ class AssetCacheManager
 
     /**
      * Get the cache provider.  First checks to see if the provider is callable,
-     * then will attempt to get it from the service locator, finally will fallback
+     * then will attempt to get it from the service container, finally will fallback
      * to a class mapper.
      *
      * @param $path
@@ -77,11 +77,11 @@ class AssetCacheManager
             return null;
         }
 
-        if ($this->serviceLocator->has($cacheProvider['cache'])) {
-            return $this->serviceLocator->get($cacheProvider['cache']);
+        if ($this->container->has($cacheProvider['cache'])) {
+            return $this->container->get($cacheProvider['cache']);
         }
 
-        // Left here for BC.  Please consider defining a ZF2 service instead.
+        // Left here for BC.  Please consider defining a container service instead.
         if (is_callable($cacheProvider['cache'])) {
             return call_user_func($cacheProvider['cache'], $path);
         }

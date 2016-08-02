@@ -39,7 +39,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      * Test constructor fails when aliases passed in is not an array
      *
      * @covers \AssetManager\Resolver\AliasPathStackResolver::__construct
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \TypeError
      */
     public function testConstructorFail()
     {
@@ -158,7 +158,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      * Test Set Mime Resolver Only Accepts a mime Resolver
      *
      * @covers \AssetManager\Resolver\AliasPathStackResolver::setMimeResolver
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \TypeError
      */
     public function testSetMimeResolverFailObject()
     {

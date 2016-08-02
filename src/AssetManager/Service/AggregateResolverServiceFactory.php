@@ -2,8 +2,7 @@
 
 namespace AssetManager\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 use AssetManager\Resolver\AggregateResolver;
 use AssetManager\Exception;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
@@ -16,17 +15,18 @@ use AssetManager\Resolver\ResolverInterface;
  * @category   AssetManager
  * @package    AssetManager
  */
-class AggregateResolverServiceFactory implements FactoryInterface
+class AggregateResolverServiceFactory
 {
-
     /**
-     * {@inheritDoc}
+     * Build the Aggregate Resolver Service
+     * 
+     * @param ContainerInterface $container Container Service
      *
      * @return AggregateResolver
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
-        $config         = $serviceLocator->get('Config');
+        $config         = $container->get('Config');
         $config         = isset($config['asset_manager']) ? $config['asset_manager'] : array();
         $resolver       = new AggregateResolver();
 
@@ -36,7 +36,7 @@ class AggregateResolverServiceFactory implements FactoryInterface
 
         foreach ($config['resolvers'] as $resolverService => $priority) {
 
-            $resolverService = $serviceLocator->get($resolverService);
+            $resolverService = $container->get($resolverService);
 
             if (!$resolverService instanceof ResolverInterface) {
                 throw new Exception\RuntimeException(
@@ -49,12 +49,12 @@ class AggregateResolverServiceFactory implements FactoryInterface
             }
 
             if ($resolverService instanceof MimeResolverAwareInterface) {
-                $resolverService->setMimeResolver($serviceLocator->get('AssetManager\Service\MimeResolver'));
+                $resolverService->setMimeResolver($container->get('AssetManager\Service\MimeResolver'));
             }
 
             if ($resolverService instanceof AssetFilterManagerAwareInterface) {
                 $resolverService->setAssetFilterManager(
-                    $serviceLocator->get('AssetManager\Service\AssetFilterManager')
+                    $container->get('AssetManager\Service\AssetFilterManager')
                 );
             }
 

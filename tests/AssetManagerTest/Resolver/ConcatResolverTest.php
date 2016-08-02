@@ -57,7 +57,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \TypeError
      */
     public function testSetAggregateResolverFails()
     {

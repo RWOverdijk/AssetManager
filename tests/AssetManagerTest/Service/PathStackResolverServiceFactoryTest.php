@@ -30,7 +30,7 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new PathStackResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\PathStackResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
         $this->assertSame(
             array(
                 'path2/',
@@ -50,7 +50,7 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new PathStackResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\PathStackResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
         $this->assertEmpty($resolver->getPaths()->toArray());
     }
 }

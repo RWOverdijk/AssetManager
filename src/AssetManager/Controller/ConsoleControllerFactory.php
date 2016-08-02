@@ -2,17 +2,15 @@
 
 namespace AssetManager\Controller;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
-class ConsoleControllerFactory implements FactoryInterface
+class ConsoleControllerFactory
 {
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
-        $serviceLocator = $serviceLocator->getServiceLocator();
-        $console        = $serviceLocator->get('Console');
-        $assetManager   = $serviceLocator->get('AssetManager\Service\AssetManager');
-        $appConfig      = $serviceLocator->get('config');
+        $console        = $container->get('Console');
+        $assetManager   = $container->get('AssetManager\Service\AssetManager');
+        $appConfig      = $container->get('config');
 
         return new ConsoleController($console, $assetManager, $appConfig);
     }

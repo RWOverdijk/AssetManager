@@ -6,7 +6,7 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Filter\FilterInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\MimeResolverAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 class AssetFilterManager implements MimeResolverAwareInterface
 {
@@ -16,9 +16,9 @@ class AssetFilterManager implements MimeResolverAwareInterface
     protected $config;
 
     /**
-     * @var ServiceLocatorInterface
+     * @var ContainerInterface
      */
-    protected $serviceLocator;
+    protected $container;
 
     /**
      * @var MimeResolver
@@ -175,18 +175,22 @@ class AssetFilterManager implements MimeResolverAwareInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Get the Container Interop service
+     *
+     * @return ContainerInterface
      */
-    public function getServiceLocator()
+    public function getServiceContainer()
     {
-        return $this->serviceLocator;
+        return $this->container;
     }
 
     /**
-     * {@inheritDoc}
+     * Set a Container-Interop container
+     *
+     * @param ContainerInterface $container
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    public function setServiceContainer(ContainerInterface $container)
     {
-        $this->serviceLocator = $serviceLocator;
+        $this->container = $container;
     }
 }

@@ -30,7 +30,7 @@ class AssetFilterManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $t = new AssetFilterManagerServiceFactory($serviceManager);
 
-        $service = $t->createService($serviceManager);
+        $service = $t($serviceManager);
 
         $this->assertTrue($service instanceof AssetFilterManager);
     }

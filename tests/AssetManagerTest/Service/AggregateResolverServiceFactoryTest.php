@@ -25,7 +25,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('AssetManager\Service\MimeResolver', new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
         $this->assertInstanceOf('AssetManager\Resolver\ResolverInterface', $resolver);
         $this->assertNull($resolver->resolve('/some-path'));
     }
@@ -54,7 +54,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('AssetManager\Service\MimeResolver', new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
 
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
@@ -81,7 +81,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         );
 
         $factory = new AggregateResolverServiceFactory();
-        $factory->createService($serviceManager);
+        $factory($serviceManager);
     }
 
     public function testWillPrioritizeResolversCorrectly()
@@ -115,7 +115,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('mocked_resolver_2', $mockedResolver2);
 
         $factory = new AggregateResolverServiceFactory();
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
 
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
@@ -153,7 +153,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('mocked_resolver_2', $mockedResolver2);
 
         $factory = new AggregateResolverServiceFactory();
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
 
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
@@ -180,7 +180,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new AggregateResolverServiceFactory();
 
-        $factory->createService($serviceManager);
+        $factory($serviceManager);
 
         $this->assertTrue($interfaceTestResolver->calledMime);
         $this->assertTrue($interfaceTestResolver->calledAggregate);

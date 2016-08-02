@@ -2,20 +2,21 @@
 
 namespace AssetManager\Service;
 
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 use AssetManager\Resolver\PathStackResolver;
 
-class PathStackResolverServiceFactory implements FactoryInterface
+class PathStackResolverServiceFactory
 {
     /**
-     * {@inheritDoc}
+     * Build A Map Resolver
+     *
+     * @param ContainerInterface $container Container Service
      *
      * @return PathStackResolver
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
-        $config            = $serviceLocator->get('config');
+        $config            = $container->get('config');
         $pathStackResolver = new PathStackResolver();
         $paths             = array();
 

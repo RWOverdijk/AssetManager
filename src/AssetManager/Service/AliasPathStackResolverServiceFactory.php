@@ -3,20 +3,21 @@
 namespace AssetManager\Service;
 
 use AssetManager\Resolver\AliasPathStackResolver;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 use AssetManager\Resolver\PathStackResolver;
 
-class AliasPathStackResolverServiceFactory implements FactoryInterface
+class AliasPathStackResolverServiceFactory
 {
     /**
-     * {@inheritDoc}
+     * Build the Alias Path Stack Reolver
+     * 
+     * @param ContainerInterface $container Container Service
      *
      * @return PathStackResolver
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container)
     {
-        $config  = $serviceLocator->get('config');
+        $config  = $container->get('config');
         $aliases = array();
 
         if (isset($config['asset_manager']['resolver_configs']['aliases'])) {

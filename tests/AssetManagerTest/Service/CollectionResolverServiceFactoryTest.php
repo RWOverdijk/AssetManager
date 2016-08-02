@@ -30,7 +30,7 @@ class CollectionResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new CollectionResolverServiceFactory();
         /* @var \AssetManager\Resolver\CollectionResolver */
-        $collectionsResolver = $factory->createService($serviceManager);
+        $collectionsResolver = $factory($serviceManager);
         $this->assertSame(
             array(
                 'key1' => 'value1',
@@ -50,7 +50,7 @@ class CollectionResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new CollectionResolverServiceFactory();
         /* @var \AssetManager\Resolver\CollectionResolver */
-        $collectionsResolver = $factory->createService($serviceManager);
+        $collectionsResolver = $factory($serviceManager);
         $this->assertEmpty($collectionsResolver->getCollections());
     }
 }
