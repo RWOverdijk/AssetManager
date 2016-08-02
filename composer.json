@@ -24,16 +24,18 @@
     ],
     "require": {
         "php": ">=5.3.3",
+        "kriswallsmith/assetic": "~1.2.1",
+        "psr/http-message": "~1.0",
+        "container-interop/container-interop": "~1.0"
+    },
+    "require-dev": {
+        "zendframework/zendframework": "2.*",
+        "zendframework/zend-servicemanager": "2.*",
         "zendframework/zend-modulemanager": "2.*",
         "zendframework/zend-stdlib": "2.*",
         "zendframework/zend-loader": "2.*",
         "zendframework/zend-eventmanager": "2.*",
         "zendframework/zend-mvc": "2.*",
-        "kriswallsmith/assetic": "~1.2.1"
-    },
-    "require-dev": {
-        "zendframework/zendframework": "2.*",
-        "zendframework/zend-servicemanager": "2.*",
         "phpunit/phpunit": "~4.0",
         "squizlabs/php_codesniffer": "1.5.*"
     },
@@ -45,6 +47,12 @@
     "autoload-dev": {
         "psr-0": {
             "AssetManagerTest": "tests"
+        }
+    },
+    "extra": {
+        "zf": {
+            "config-provider": "BlazonCms\\Core\\Module",
+            "module" : "AssetManager"
         }
     }
 }
