@@ -4,8 +4,8 @@ namespace AssetManagerTest;
 
 use PHPUnit_Framework_TestCase;
 use AssetManager\Module;
-use Zend\Http\Response;
-use Zend\Http\Request;
+use Zend\Diactoros\Request;
+use Zend\Diactoros\Response;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
 use Zend\Mvc\MvcEvent;
@@ -38,7 +38,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $response   = new Response();
         $module     = new Module();
 
-        $response->setStatusCode(500);
+        $response->withStatus(500);
         $event->setResponse($response);
 
         $response = $module->onDispatch($event);

@@ -16,7 +16,7 @@ class ConcatResolverServiceFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $config      = $container->get('Config');
+        $config      = $container->get('config');
         $files = array();
 
         if (isset($config['asset_manager']['resolver_configs']['concat'])) {

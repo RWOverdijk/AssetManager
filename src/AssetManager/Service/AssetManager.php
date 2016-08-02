@@ -5,9 +5,8 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
-use Zend\Stdlib\RequestInterface;
-use Zend\Stdlib\ResponseInterface;
-use Zend\Http\PhpEnvironment\Request;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @category    AssetManager
@@ -79,10 +78,10 @@ class AssetManager implements
     /**
      * Check if the request resolves to an asset.
      *
-     * @param    RequestInterface $request
+     * @param    ServerRequestInterface $request
      * @return   boolean
      */
-    public function resolvesToAsset(RequestInterface $request)
+    public function resolvesToAsset(ServerRequestInterface $request)
     {
         if (null === $this->asset) {
             $this->asset = $this->resolve($request);
@@ -163,36 +162,30 @@ class AssetManager implements
             }
         }
 
-        $response->getHeaders()
-                 ->addHeaderLine('Content-Transfer-Encoding', 'binary')
-                 ->addHeaderLine('Content-Type', $mimeType)
-                 ->addHeaderLine('Content-Length', $contentLength);
+        /* Build up the response */
+        $encoding = $response->withAddedHeader('Content-Transfer-Encoding', 'binary');
+        $contentType = $encoding->withAddedHeader('Content-Type', $mimeType);
+        $contentLength = $contentType->withAddedHeader('Content-Length', "$contentLength");
 
-        $response->setContent($assetContents);
+        $final = clone $contentLength;
+        $final->getBody()->write($assetContents);
 
         $this->assetSetOnResponse = true;
 
-        return $response;
+        return $final;
     }
 
     /**
      * Resolve the request to a file.
      *
-     * @param RequestInterface $request
+     * @param ServerRequestInterface $request
      *
      * @return mixed false when not found, AssetInterface when resolved.
      */
-    protected function resolve(RequestInterface $request)
+    protected function resolve(ServerRequestInterface $request)
     {
-        if (!$request instanceof Request) {
-            return false;
-        }
-
-        /* @var $request Request */
-        /* @var $uri \Zend\Uri\UriInterface */
         $uri        = $request->getUri();
-        $fullPath   = $uri->getPath();
-        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
+        $path       = $uri->getPath();
         $this->path = $path;
         $asset      = $this->getResolver()->resolve($path);
 

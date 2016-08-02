@@ -16,7 +16,7 @@ class MapResolverServiceFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $config = $container->get('Config');
+        $config = $container->get('config');
         $map    = array();
 
         if (isset($config['asset_manager']['resolver_configs']['map'])) {

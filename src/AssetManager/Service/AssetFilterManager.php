@@ -112,7 +112,7 @@ class AssetFilterManager implements MimeResolverAwareInterface
     protected function ensureByService(AssetInterface $asset, $service)
     {
         if (is_string($service)) {
-            $this->ensureByFilter($asset, $this->getServiceLocator()->get($service));
+            $this->ensureByFilter($asset, $this->getServiceContainer()->get($service));
         } else {
             throw new Exception\RuntimeException(
                 'Unexpected service provided. Expected string or callback.'

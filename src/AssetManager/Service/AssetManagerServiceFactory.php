@@ -22,7 +22,7 @@ class AssetManagerServiceFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $config             = $container->get('Config');
+        $config             = $container->get('config');
         $assetManagerConfig = array();
 
         if (!empty($config['asset_manager'])) {

@@ -26,7 +26,7 @@ class AggregateResolverServiceFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $config         = $container->get('Config');
+        $config         = $container->get('config');
         $config         = isset($config['asset_manager']) ? $config['asset_manager'] : array();
         $resolver       = new AggregateResolver();
 

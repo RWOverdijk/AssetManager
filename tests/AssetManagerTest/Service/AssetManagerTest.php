@@ -11,8 +11,10 @@ use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\AggregateResolver;
-use Zend\Http\Response;
-use Zend\Http\PhpEnvironment\Request;
+use Zend\Diactoros\Request;
+use Zend\Diactoros\Response;
+use Zend\Diactoros\ServerRequest;
+use Zend\Diactoros\Uri;
 use Zend\Console\Request as ConsoleRequest;
 
 class AssetManagerTest extends PHPUnit_Framework_TestCase
@@ -30,11 +32,9 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
     protected function getRequest()
     {
-        $request = new Request();
-        $request->setUri('http://localhost/base-path/asset-path');
-        $request->setBasePath('/base-path');
-
-        return $request;
+        $uri = new Uri('http://localhost/asset-path');
+        $serverRequest = new ServerRequest();
+        return $serverRequest->withUri($uri);
     }
 
     /**
@@ -51,7 +51,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $resolver
             ->expects($this->once())
             ->method('resolve')
-            ->with('asset-path')
+            ->with('/asset-path')
             ->will($this->returnValue($asset));
 
         return $resolver;
@@ -92,6 +92,9 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         new AssetManager('invalid');
     }
 
+    /**
+     * @expectedException \TypeError
+     */
     public function testInvalidRequest()
     {
         $mimeResolver    = new MimeResolver;
@@ -107,9 +110,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $request = new ConsoleRequest();
 
         $assetManager    = new AssetManager($resolver);
-        $resolvesToAsset = $assetManager->resolvesToAsset($request);
-
-        $this->assertFalse($resolvesToAsset);
+        $assetManager->resolvesToAsset($request);
     }
 
     public function testResolvesToAsset()
@@ -188,7 +189,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetFilterManager = new AssetFilterManager($config['filters']);
         $assetCacheManager = $this->getAssetCacheManagerMock();
 
-        $response     = new Response;
+        $response     = new Response();
         $resolver     = $this->getResolver(__DIR__ . '/../../_files/require-jquery.js');
         $request      = $this->getRequest();
         $assetManager = new AssetManager($resolver, $config);
@@ -197,7 +198,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetCacheManager($assetCacheManager);
         $this->assertTrue($assetManager->resolvesToAsset($request));
         $assetManager->setAssetOnResponse($response);
-        $this->assertEquals($minified, $response->getBody());
+        $this->assertEquals($minified, $response->getBody()->getContents());
     }
 
     public function testSetExtensionFilters()

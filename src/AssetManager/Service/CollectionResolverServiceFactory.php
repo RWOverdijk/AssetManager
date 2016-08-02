@@ -16,7 +16,7 @@ class CollectionResolverServiceFactory
      */
     public function __invoke(ContainerInterface $container)
     {
-        $config      = $container->get('Config');
+        $config      = $container->get('config');
         $collections = array();
 
         if (isset($config['asset_manager']['resolver_configs']['collections'])) {
