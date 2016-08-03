@@ -27,6 +27,7 @@
         "kriswallsmith/assetic": "~1.2.1",
         "psr/http-message": "~1.0",
         "container-interop/container-interop": "~1.0",
+        "zendframework/zend-diactoros": "^1.1"
         "zendframework/zend-psr7bridge": "~0.2.2"
     },
     "require-dev": {
