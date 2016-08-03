@@ -142,10 +142,14 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TypeError
+     * @expectedException \PHPUnit_Framework_Error
      */
     public function testSetAggregateResolverFails()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+        
         $resolver = new CollectionResolver;
 
         $resolver->setAggregateResolver(new \stdClass);

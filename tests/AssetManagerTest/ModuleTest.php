@@ -4,7 +4,6 @@ namespace AssetManagerTest;
 
 use PHPUnit_Framework_TestCase;
 use AssetManager\Module;
-use Zend\Diactoros\Request;
 use Zend\Diactoros\Response;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
@@ -35,10 +34,10 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testDispatchListenerIgnoresOtherResponseCodes()
     {
         $event      = new MvcEvent();
-        $response   = new Response();
+        $response   = new \Zend\Http\Response();
         $module     = new Module();
 
-        $response->withStatus(500);
+        $response->setStatusCode(500);
         $event->setResponse($response);
 
         $response = $module->onDispatch($event);
@@ -68,8 +67,8 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($serviceManager));
 
         $event      = new MvcEvent();
-        $response   = new Response();
-        $request    = new Request();
+        $response   = new \Zend\Http\Response();
+        $request    = new \Zend\Http\PhpEnvironment\Request();
         $module     = new Module();
 
         $event->setApplication($application);
@@ -97,7 +96,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
 
         $amResponse = new Response();
-        $amResponse->setContent('bacon');
+        $amResponse->getBody()->write('bacon');
 
         $assetManager
             ->expects($this->once())
@@ -117,8 +116,8 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($serviceManager));
 
         $event      = new MvcEvent();
-        $response   = new Response();
-        $request    = new Request();
+        $response   = new \Zend\Http\Response();
+        $request    = new \Zend\Http\PhpEnvironment\Request();
         $module     = new Module();
 
         $event->setApplication($application);

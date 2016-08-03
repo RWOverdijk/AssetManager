@@ -30,7 +30,7 @@ class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new ConcatResolverServiceFactory();
         /* @var \AssetManager\Resolver\CollectionResolver */
-        $concatResolver = $factory($serviceManager);
+        $concatResolver = $factory->createService($serviceManager);
         $this->assertSame(
             array(
                  'key1' => __FILE__,
@@ -50,7 +50,7 @@ class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new ConcatResolverServiceFactory();
         /* @var \AssetManager\Resolver\ConcatResolver */
-        $concatResolver = $factory($serviceManager);
+        $concatResolver = $factory->createService($serviceManager);
         $this->assertEmpty($concatResolver->getConcats());
     }
 }

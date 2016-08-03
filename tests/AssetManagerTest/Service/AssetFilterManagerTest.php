@@ -45,7 +45,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService('testFilter', new \CustomFilter());
-        $assetFilterManager->setServiceContainer($serviceManager);
+        $assetFilterManager->setServiceLocator($serviceManager);
 
         $asset = new StringAsset('Herp derp');
 
@@ -69,7 +69,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService('testFilter', new \CustomFilter());
-        $assetFilterManager->setServiceContainer($serviceManager);
+        $assetFilterManager->setServiceLocator($serviceManager);
 
         $asset = new StringAsset('Herp derp');
 

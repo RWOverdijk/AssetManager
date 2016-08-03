@@ -23,10 +23,14 @@ class ZendCacheAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TypeError
+     * @expectedException \PHPUnit_Framework_Error
      */
     public function testConstructorOnlyAcceptsAZendCacheStorageInterface()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+        
         new ZendCacheAdapter(new \DateTime());
     }
 
