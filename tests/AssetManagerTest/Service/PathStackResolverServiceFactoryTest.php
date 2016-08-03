@@ -11,11 +11,11 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * Mainly to avoid regressions
      */
-    public function testCreateService()
+    public function testInvoke()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolver_configs' => array(
@@ -30,7 +30,7 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new PathStackResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\PathStackResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
         $this->assertSame(
             array(
                 'path2/',
@@ -43,14 +43,14 @@ class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * Mainly to avoid regressions
      */
-    public function testCreateServiceWithNoConfig()
+    public function testInvokeWithNoConfig()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', array());
+        $serviceManager->setService('config', array());
 
         $factory = new PathStackResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\PathStackResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
         $this->assertEmpty($resolver->getPaths()->toArray());
     }
 }

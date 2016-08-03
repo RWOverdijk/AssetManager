@@ -77,13 +77,13 @@ class AssetCacheManager
             return null;
         }
 
-        if ($this->container->has($cacheProvider['cache'])) {
-            return $this->container->get($cacheProvider['cache']);
-        }
-
         // Left here for BC.  Please consider defining a container service instead.
         if (is_callable($cacheProvider['cache'])) {
             return call_user_func($cacheProvider['cache'], $path);
+        }
+
+        if ($this->container->has($cacheProvider['cache'])) {
+            return $this->container->get($cacheProvider['cache']);
         }
 
         $dir = '';

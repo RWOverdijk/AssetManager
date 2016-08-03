@@ -22,8 +22,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
-        $serviceManagerConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager = new ServiceManager($config['service_manager']);
         $serviceManager->setService('config', $config);
 
         foreach ($config['service_manager']['factories'] as $serviceName => $service) {
@@ -45,9 +44,8 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
     public function testServiceManagerInvokables()
     {
         $config = include __DIR__.'/../../../config/module.config.php';
-
-        $serviceManagerConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager($serviceManagerConfig);
+        
+        $serviceManager = new ServiceManager($config['service_manager']);
         $serviceManager->setService('config', $config);
 
         foreach ($config['service_manager']['invokables'] as $serviceName => $service) {
@@ -69,8 +67,7 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
-        $serviceManagerConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager = new ServiceManager($config['service_manager']);
         $serviceManager->setService('config', $config);
 
         foreach ($config['service_manager']['aliases'] as $serviceName => $service) {

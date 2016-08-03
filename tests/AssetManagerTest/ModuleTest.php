@@ -147,7 +147,18 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function testOnBootstrap()
     {
-        $applicationEventManager = new EventManager();
+        $module = new Module();
+
+        $applicationEventManager = $this->getMockBuilder('Zend\EventManager\EventManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $applicationEventManager->expects($this->exactly(2))
+            ->method('attach')
+            ->withConsecutive(
+                [MvcEvent::EVENT_DISPATCH, array($module, 'onDispatch'), -9999999],
+                [MvcEvent::EVENT_DISPATCH_ERROR, array($module, 'onDispatch'), -9999999]
+            );
 
         $application = $this->getMock('Zend\Mvc\ApplicationInterface');
         $application
@@ -158,31 +169,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $event = new Event();
         $event->setTarget($application);
 
-        $module = new Module();
+
         $module->onBootstrap($event);
-
-        $dispatchListeners = $applicationEventManager->getListeners(MvcEvent::EVENT_DISPATCH);
-
-        foreach ($dispatchListeners as $listener) {
-            $metaData = $listener->getMetadata();
-            $callback = $listener->getCallback();
-
-            $this->assertEquals('onDispatch', $callback[1]);
-            $this->assertEquals(-9999999, $metaData['priority']);
-            $this->assertTrue($callback[0] instanceof Module);
-
-        }
-
-        $dispatchListeners = $applicationEventManager->getListeners(MvcEvent::EVENT_DISPATCH_ERROR);
-
-        foreach ($dispatchListeners as $listener) {
-            $metaData = $listener->getMetadata();
-            $callback = $listener->getCallback();
-
-            $this->assertEquals('onDispatch', $callback[1]);
-            $this->assertEquals(-9999999, $metaData['priority']);
-            $this->assertTrue($callback[0] instanceof Module);
-
-        }
     }
 }

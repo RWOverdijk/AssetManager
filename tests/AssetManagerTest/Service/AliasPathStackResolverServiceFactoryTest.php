@@ -16,11 +16,11 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
      *
      * @covers \AssetManager\Service\AliasPathStackResolverServiceFactory
      */
-    public function testCreateService()
+    public function testInvoke()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'resolver_configs' => array(
@@ -36,7 +36,7 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
         $factory = new AliasPathStackResolverServiceFactory();
 
         /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
 
         $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
         $property = $reflectionClass->getProperty('aliases');
@@ -56,14 +56,14 @@ class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCas
      *
      * @covers \AssetManager\Service\AliasPathStackResolverServiceFactory
      */
-    public function testCreateServiceWithNoConfig()
+    public function testInvokeWithNoConfig()
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('Config', array());
+        $serviceManager->setService('config', array());
 
         $factory = new AliasPathStackResolverServiceFactory();
         /* @var $resolver \AssetManager\Resolver\AliasPathStackResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
 
         $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
         $property = $reflectionClass->getProperty('aliases');

@@ -10,7 +10,7 @@ use Zend\ServiceManager\ServiceManager;
 
 class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 {
-    public function testCreateService()
+    public function testInvoke()
     {
         $assetFilterManager = new AssetFilterManager();
         $assetCacheManager = $this->getMockBuilder('AssetManager\Service\AssetCacheManager')
@@ -33,7 +33,7 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
             $assetCacheManager
         );
 
-        $serviceManager->setService('Config', array(
+        $serviceManager->setService('config', array(
                 'asset_manager' => array(
                     'Dummy data',
                     'Bacon',
@@ -41,6 +41,6 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
             ));
 
         $factory = new AssetManagerServiceFactory();
-        $this->assertInstanceOf('AssetManager\Service\AssetManager', $factory->createService($serviceManager));
+        $this->assertInstanceOf('AssetManager\Service\AssetManager', $factory($serviceManager));
     }
 }
