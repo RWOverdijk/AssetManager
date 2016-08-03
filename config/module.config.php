@@ -36,6 +36,11 @@ return array(
             'query_string'     => '_',
             'cache'            => null,
         ),
+        'resolver_configs' => [
+            'map' => [
+                'test/test.js' => __DIR__ . '/../public/test.js',
+            ],
+        ],
     ),
     'controllers'     => array(
         'factories' => array(

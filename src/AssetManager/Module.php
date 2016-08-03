@@ -10,6 +10,9 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\Console\Adapter\AdapterInterface;
+use Zend\Psr7Bridge\Psr7Response;
+use Zend\Psr7Bridge\Psr7ServerRequest;
+use Zend\Stdlib\RequestInterface;
 
 /**
  * Module class
@@ -60,13 +63,26 @@ class Module implements
         $serviceManager = $event->getApplication()->getServiceManager();
         $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
 
-        if (!$assetManager->resolvesToAsset($request)) {
+        $psr7Request = $this->getPSR7Request($request);
+
+        if (!$assetManager->resolvesToAsset($psr7Request)) {
             return;
         }
+        
+        $response = $assetManager->setAssetOnResponse(Psr7Response::fromZend($response));
+        
+        return Psr7Response::toZend($response);
+    }
+    
+    protected function getPSR7Request(RequestInterface $request)
+    {
+        $uri        = $request->getUri();
+        $fullPath   = $uri->getPath();
+        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
 
-        $response->setStatusCode(200);
-
-        return $assetManager->setAssetOnResponse($response);
+        $psr7Request = Psr7ServerRequest::fromZend($request);
+        $assetRequestUri = $psr7Request->getUri()->withPath($path);
+        return $psr7Request->withUri($assetRequestUri);
     }
 
     /**
