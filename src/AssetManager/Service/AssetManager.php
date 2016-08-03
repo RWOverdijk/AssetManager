@@ -185,7 +185,7 @@ class AssetManager implements
     protected function resolve(ServerRequestInterface $request)
     {
         $uri        = $request->getUri();
-        $path       = $uri->getPath();
+        $path       = ltrim($uri->getPath(), '/');
         $this->path = $path;
         $asset      = $this->getResolver()->resolve($path);
 

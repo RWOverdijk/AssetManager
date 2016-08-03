@@ -33,11 +33,11 @@ return array(
             'query_string'     => '_',
             'cache'            => null,
         ),
-        'resolver_configs' => [
-            'aliases' => [
-                'test/' => __DIR__ . '/../public/',
-            ],
-        ],
+        'resolver_configs' => array(
+            'paths' => array(
+                __DIR__ . '/../public',
+            ),
+        ),
     ),
     
     'view_helpers' => array(
