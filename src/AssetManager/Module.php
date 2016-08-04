@@ -78,7 +78,9 @@ class Module implements
     {
         $uri        = $request->getUri();
         $fullPath   = $uri->getPath();
-        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
+        
+        /* Type cast string added for php 5.6 */
+        $path       = (string) substr($fullPath, strlen($request->getBasePath()) + 1);
 
         $psr7Request = Psr7ServerRequest::fromZend($request);
         $assetRequestUri = $psr7Request->getUri()->withPath($path);
