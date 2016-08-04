@@ -50,7 +50,7 @@
     },
     "extra": {
         "zf": {
-            "config-provider": "BlazonCms\\Core\\Module",
+            "config-provider": "AssetManager\\ExpressiveConfig",
             "module" : "AssetManager"
         }
     }
