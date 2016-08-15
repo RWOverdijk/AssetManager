@@ -10,9 +10,12 @@ use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
 use JSMin;
 use PHPUnit_Framework_TestCase;
+use Zend\Console\Adapter\AdapterInterface;
 use Zend\Console\Request as ConsoleRequest;
+use Zend\Mvc\Console\Router\RouteMatch;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\Console\RouteMatch;
+use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
+use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\View\Resolver\ResolverInterface;
 
 class ConsoleControllerTest extends PHPUnit_Framework_TestCase
@@ -55,17 +58,23 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
         $assetManager->setAssetCacheManager($assetCacheManager);
 
         $this->request = new ConsoleRequest();
-        $this->routeMatch = new RouteMatch(array('controller' => 'console'));
+        $this->routeMatch = $this->createRouteMatch(['controller' => 'console']);
 
         $this->event = new MvcEvent();
         $this->event->setRouteMatch($this->routeMatch);
 
         $this->controller = new ConsoleController(
-            $this->getMock('Zend\Console\Adapter\AdapterInterface'),
+            $this->getMock(AdapterInterface::class),
             $assetManager,
             array()
         );
         $this->controller->setEvent($this->event);
+    }
+
+    public function createRouteMatch(array $params = [])
+    {
+        $class = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
+        return new $class($params);
     }
 
     /**
@@ -87,7 +96,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function getAssetCacheManager()
     {
-        $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceLocator = $this->getMock(ServiceLocatorInterface::class);
         $config = array(
             self::$assetName => array(
                 'cache' => 'FilePathCache',

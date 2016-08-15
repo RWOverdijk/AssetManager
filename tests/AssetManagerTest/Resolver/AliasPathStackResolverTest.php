@@ -2,10 +2,10 @@
 
 namespace AssetManagerTest\Service;
 
-use PHPUnit_Framework_TestCase;
 use Assetic\Asset;
 use AssetManager\Resolver\AliasPathStackResolver;
 use AssetManager\Service\MimeResolver;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Unit Tests for the Alias Path Stack Resolver
@@ -25,7 +25,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
 
         $resolver = new AliasPathStackResolver($aliases);
 
-        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
         $property        = $reflectionClass->getProperty('aliases');
         $property->setAccessible(true);
 
@@ -54,7 +54,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     public function testAddAlias()
     {
         $resolver        = new AliasPathStackResolver(array());
-        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
         $addAlias        = $reflectionClass->getMethod('addAlias');
 
         $addAlias->setAccessible(true);
@@ -80,7 +80,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     public function testAddAliasFailsWithBadKey()
     {
         $resolver        = new AliasPathStackResolver(array());
-        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
         $addAlias        = $reflectionClass->getMethod('addAlias');
 
         $addAlias->setAccessible(true);
@@ -101,7 +101,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     {
         $resolver = new AliasPathStackResolver(array());
 
-        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
 
         $addAlias = $reflectionClass->getMethod('addAlias');
         $addAlias->setAccessible(true);
@@ -120,7 +120,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
     public function testNormalizePath()
     {
         $resolver        = new AliasPathStackResolver(array());
-        $reflectionClass = new \ReflectionClass('AssetManager\Resolver\AliasPathStackResolver');
+        $reflectionClass = new \ReflectionClass(\AssetManager\Resolver\AliasPathStackResolver::class);
         $addAlias        = $reflectionClass->getMethod('normalizePath');
 
         $addAlias->setAccessible(true);
@@ -141,7 +141,7 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAndSetMimeResolver()
     {
-        $mimeReolver = $this->getMockBuilder('AssetManager\Service\MimeResolver')
+        $mimeReolver = $this->getMockBuilder(MimeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
 

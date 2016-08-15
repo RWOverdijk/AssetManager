@@ -2,9 +2,9 @@
 
 namespace AssetManagerTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetCacheManagerServiceFactory;
-use AssetManager\Service\AssetCacheManager      ;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class AssetCacheManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
@@ -13,7 +13,7 @@ class AssetCacheManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
-            'Config',
+            'config',
             array(
                 'asset_manager' => array(
                     'caching' => array(

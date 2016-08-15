@@ -2,13 +2,13 @@
 
 namespace AssetManager\Resolver;
 
-use Traversable;
-use Zend\Stdlib\ArrayUtils;
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
-use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\AssetFilterManager;
+use AssetManager\Service\AssetFilterManagerAwareInterface;
+use Traversable;
+use Zend\Stdlib\ArrayUtils;
 
 /**
  * This resolver allows the resolving of collections.

@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Config;
 
+use AssetManager\Service\MimeResolver;
 use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\ServiceManager;
@@ -23,7 +24,8 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
         $config = include __DIR__.'/../../../config/module.config.php';
 
         $serviceManagerConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager = new ServiceManager();
+        $serviceManagerConfig->configureServiceManager($serviceManager);
         $serviceManager->setService('config', $config);
 
         foreach ($config['service_manager']['factories'] as $serviceName => $service) {
@@ -47,7 +49,8 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
         $config = include __DIR__.'/../../../config/module.config.php';
 
         $serviceManagerConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager = new ServiceManager();
+        $serviceManagerConfig->configureServiceManager($serviceManager);
         $serviceManager->setService('config', $config);
 
         foreach ($config['service_manager']['invokables'] as $serviceName => $service) {
@@ -70,7 +73,8 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
         $config = include __DIR__.'/../../../config/module.config.php';
 
         $serviceManagerConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager = new ServiceManager();
+        $serviceManagerConfig->configureServiceManager($serviceManager);
         $serviceManager->setService('config', $config);
 
         foreach ($config['service_manager']['aliases'] as $serviceName => $service) {
@@ -93,11 +97,12 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
         $config = include __DIR__.'/../../../config/module.config.php';
 
         $serviceManagerConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager = new ServiceManager();
+        $serviceManagerConfig->configureServiceManager($serviceManager);
         $serviceManager->setService('config', $config);
 
-        $this->assertTrue($serviceManager->has('AssetManager\Service\MimeResolver'));
-        $this->assertTrue(is_object($serviceManager->get('AssetManager\Service\MimeResolver')));
+        $this->assertTrue($serviceManager->has(MimeResolver::class));
+        $this->assertTrue(is_object($serviceManager->get(MimeResolver::class)));
     }
 
     /**
@@ -110,7 +115,8 @@ class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
         $config = include __DIR__.'/../../../config/module.config.php';
 
         $serviceManagerConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager($serviceManagerConfig);
+        $serviceManager = new ServiceManager();
+        $serviceManagerConfig->configureServiceManager($serviceManager);
         $serviceManager->setService('config', $config);
 
         $this->assertTrue($serviceManager->has('mime_resolver'));

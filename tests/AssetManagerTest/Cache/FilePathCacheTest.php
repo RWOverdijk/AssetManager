@@ -2,9 +2,9 @@
 
 namespace AssetManagerTest\Cache;
 
-use PHPUnit_Framework_TestCase;
 use Assetic\Cache\CacheInterface;
 use AssetManager\Cache\FilePathCache;
+use PHPUnit_Framework_TestCase;
 
 class FilePathCacheTest extends PHPUnit_Framework_TestCase
 {
@@ -147,7 +147,7 @@ class FilePathCacheTest extends PHPUnit_Framework_TestCase
 
     public function testCachedFile()
     {
-        $method = new \ReflectionMethod('AssetManager\Cache\FilePathCache', 'cachedFile');
+        $method = new \ReflectionMethod(FilePathCache::class, 'cachedFile');
 
         $method->setAccessible(true);
 

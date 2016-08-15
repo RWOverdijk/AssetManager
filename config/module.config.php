@@ -1,65 +1,66 @@
 <?php
-return array(
-    'service_manager' => array (
-        'factories' => array (
-            'AssetManager\Service\AssetManager'                 => 'AssetManager\Service\AssetManagerServiceFactory',
-            'AssetManager\Service\AssetFilterManager'           => 'AssetManager\Service\AssetFilterManagerServiceFactory',
-            'AssetManager\Service\AssetCacheManager'            => 'AssetManager\Service\AssetCacheManagerServiceFactory',
-            'AssetManager\Service\AggregateResolver'            => 'AssetManager\Service\AggregateResolverServiceFactory',
-            'AssetManager\Resolver\MapResolver'                 => 'AssetManager\Service\MapResolverServiceFactory',
-            'AssetManager\Resolver\PathStackResolver'           => 'AssetManager\Service\PathStackResolverServiceFactory',
-            'AssetManager\Resolver\PrioritizedPathsResolver'    => 'AssetManager\Service\PrioritizedPathsResolverServiceFactory',
-            'AssetManager\Resolver\CollectionResolver'          => 'AssetManager\Service\CollectionResolverServiceFactory',
-            'AssetManager\Resolver\ConcatResolver'              => 'AssetManager\Service\ConcatResolverServiceFactory',
-            'AssetManager\Resolver\AliasPathStackResolver'      => 'AssetManager\Service\AliasPathStackResolverServiceFactory',
-        ),
-        'invokables' => array(
-            'AssetManager\Service\MimeResolver'                 => 'AssetManager\Service\MimeResolver',
-        ),
-        'aliases' => array(
+return [
+    'service_manager' => [
+        'factories'  => [
+            AssetManager\Service\AssetManager::class              => AssetManager\Service\AssetManagerServiceFactory::class,
+            AssetManager\Service\AssetFilterManager::class        => AssetManager\Service\AssetFilterManagerServiceFactory::class,
+            AssetManager\Service\AssetCacheManager::class         => AssetManager\Service\AssetCacheManagerServiceFactory::class,
+            AssetManager\Resolver\AggregateResolver::class        => AssetManager\Service\AggregateResolverServiceFactory::class,
+            AssetManager\Resolver\MapResolver::class              => AssetManager\Service\MapResolverServiceFactory::class,
+            AssetManager\Resolver\PathStackResolver::class        => AssetManager\Service\PathStackResolverServiceFactory::class,
+            AssetManager\Resolver\PrioritizedPathsResolver::class => AssetManager\Service\PrioritizedPathsResolverServiceFactory::class,
+            AssetManager\Resolver\CollectionResolver::class       => AssetManager\Service\CollectionResolverServiceFactory::class,
+            AssetManager\Resolver\ConcatResolver::class           => AssetManager\Service\ConcatResolverServiceFactory::class,
+            AssetManager\Resolver\AliasPathStackResolver::class   => AssetManager\Service\AliasPathStackResolverServiceFactory::class,
+        ],
+        'invokables' => [
+            AssetManager\Service\MimeResolver::class => AssetManager\Service\MimeResolver::class,
+        ],
+        'aliases'    => [
             //Alias left here for BC
-            'mime_resolver'                                     => 'AssetManager\Service\MimeResolver',
-        ),
-    ),
-    'asset_manager' => array(
+            'mime_resolver'                             => AssetManager\Service\MimeResolver::class,
+            'AssetManager\Service\AggregateResolver'    => AssetManager\Resolver\AggregateResolver::class
+        ],
+    ],
+    'asset_manager'   => [
         'clear_output_buffer' => true,
-        'resolvers' => array(
-            'AssetManager\Resolver\MapResolver'                 => 3000,
-            'AssetManager\Resolver\ConcatResolver'              => 2500,
-            'AssetManager\Resolver\CollectionResolver'          => 2000,
-            'AssetManager\Resolver\PrioritizedPathsResolver'    => 1500,
-            'AssetManager\Resolver\AliasPathStackResolver'      => 1000,
-            'AssetManager\Resolver\PathStackResolver'           => 500,
-        ),
-        'view_helper' => array(
+        'resolvers'           => [
+            AssetManager\Resolver\MapResolver::class              => 3000,
+            AssetManager\Resolver\ConcatResolver::class           => 2500,
+            AssetManager\Resolver\CollectionResolver::class       => 2000,
+            AssetManager\Resolver\PrioritizedPathsResolver::class => 1500,
+            AssetManager\Resolver\AliasPathStackResolver::class   => 1000,
+            AssetManager\Resolver\PathStackResolver::class        => 500,
+        ],
+        'view_helper'         => [
             'append_timestamp' => true,
             'query_string'     => '_',
             'cache'            => null,
-        ),
-    ),
-    'controllers'     => array(
-        'factories' => array(
-            'AssetManager\Controller\Console' => 'AssetManager\Controller\ConsoleControllerFactory',
-        ),
-    ),
-    'view_helpers' => array(
-        'factories' => array(
-            'asset' => 'AssetManager\Service\AssetViewHelperFactory',
-        ),
-    ),
-    'console'         => array(
-        'router' => array(
-            'routes' => array(
-                'AssetManager-warmup' => array(
-                    'options' => array(
+        ],
+    ],
+    'controllers'     => [
+        'factories' => [
+            'AssetManager\Controller\Console' => AssetManager\Controller\ConsoleControllerFactory::class,
+        ],
+    ],
+    'view_helpers'    => [
+        'factories' => [
+            'asset' => AssetManager\Service\AssetViewHelperFactory::class,
+        ],
+    ],
+    'console'         => [
+        'router' => [
+            'routes' => [
+                'AssetManager-warmup' => [
+                    'options' => [
                         'route'    => 'assetmanager warmup [--purge] [--verbose|-v]',
-                        'defaults' => array(
+                        'defaults' => [
                             'controller' => 'AssetManager\Controller\Console',
                             'action'     => 'warmup',
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-);
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

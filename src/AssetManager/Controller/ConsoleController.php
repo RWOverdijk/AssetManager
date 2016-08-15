@@ -2,13 +2,12 @@
 
 namespace AssetManager\Controller;
 
+use AssetManager\Service\AssetManager;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Stdlib\RequestInterface;
 use Zend\Stdlib\ResponseInterface;
-
-use AssetManager\Service\AssetManager;
 
 /**
  * Class ConsoleController

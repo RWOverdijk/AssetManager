@@ -2,8 +2,8 @@
 
 namespace AssetManager\Service;
 
-use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetCache;
+use Assetic\Asset\AssetInterface;
 use Assetic\Cache\CacheInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -77,7 +77,9 @@ class AssetCacheManager
             return null;
         }
 
-        if ($this->serviceLocator->has($cacheProvider['cache'])) {
+        if (is_string($cacheProvider['cache']) &&
+            $this->serviceLocator->has($cacheProvider['cache'])
+        ) {
             return $this->serviceLocator->get($cacheProvider['cache']);
         }
 

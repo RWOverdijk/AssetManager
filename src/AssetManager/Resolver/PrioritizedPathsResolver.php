@@ -2,14 +2,14 @@
 
 namespace AssetManager\Resolver;
 
-use Assetic\Factory\Resource\DirectoryResource;
-use Traversable;
 use ArrayAccess;
-use SplFileInfo;
-use Zend\Stdlib\PriorityQueue;
 use Assetic\Asset\FileAsset;
+use Assetic\Factory\Resource\DirectoryResource;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
+use SplFileInfo;
+use Traversable;
+use Zend\Stdlib\PriorityQueue;
 use Zend\Stdlib\SplStack;
 
 /**

@@ -2,11 +2,11 @@
 
 namespace AssetManagerTest\Service;
 
-use PHPUnit_Framework_TestCase;
 use Assetic\Asset;
 use AssetManager\Resolver\MapResolver;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
+use PHPUnit_Framework_TestCase;
 
 class MapResolverTest extends PHPUnit_Framework_TestCase
 {
@@ -123,7 +123,7 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
     public function testResolveHttpAssetSuccess()
     {
         $resolver     = new MapResolver;
-        $mimeResolver = $this->getMock('AssetManager\Service\MimeResolver');
+        $mimeResolver = $this->getMock(MimeResolver::class);
 
         $mimeResolver->expects($this->any())
                 ->method('getMimeType')

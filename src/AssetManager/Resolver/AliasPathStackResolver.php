@@ -2,14 +2,13 @@
 
 namespace AssetManager\Resolver;
 
-use Assetic\Factory\Resource\DirectoryResource;
-use SplFileInfo;
-use Traversable;
-use Zend\Db\TableGateway\Exception\RuntimeException;
-use Zend\Stdlib\SplStack;
 use Assetic\Asset\FileAsset;
+use Assetic\Factory\Resource\DirectoryResource;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
+use SplFileInfo;
+use Zend\Db\TableGateway\Exception\RuntimeException;
+use Zend\Stdlib\SplStack;
 
 /**
  * This resolver allows you to resolve from a stack of aliases to a path.
