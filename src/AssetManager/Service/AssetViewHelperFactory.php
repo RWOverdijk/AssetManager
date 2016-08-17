@@ -4,6 +4,7 @@ namespace AssetManager\Service;
 
 use AssetManager\Exception\InvalidArgumentException;
 use AssetManager\Resolver\ResolverInterface;
+use AssetManager\Service\AssetManager;
 use AssetManager\View\Helper\Asset;
 use Interop\Container\ContainerInterface;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
@@ -23,7 +24,7 @@ class AssetViewHelperFactory
         $config = $container->get('config')['asset_manager'];
 
         /** @var ResolverInterface $assetManagerResolver */
-        $assetManagerResolver = $container->get('AssetManager\Service\AssetManager')->getResolver();
+        $assetManagerResolver = $container->get(AssetManager::class)->getResolver();
 
         /** @var AbstractCacheAdapter|null $cache */
         $cache = $this->loadCache($container, $config);

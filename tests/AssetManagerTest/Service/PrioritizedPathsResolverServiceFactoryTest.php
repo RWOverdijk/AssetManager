@@ -2,8 +2,9 @@
 
 namespace AssetManagerTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use AssetManager\Resolver\PrioritizedPathsResolver;
 use AssetManager\Service\PrioritizedPathsResolverServiceFactory;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
@@ -39,7 +40,7 @@ class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestC
         );
 
         $factory = new PrioritizedPathsResolverServiceFactory();
-        /* @var $resolver \AssetManager\Resolver\PrioritizedPathsResolver */
+        /* @var $resolver PrioritizedPathsResolver */
         $resolver = $factory($serviceManager);
 
         $fetched = array();
@@ -63,7 +64,7 @@ class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestC
         $serviceManager->setService('config', array());
 
         $factory = new PrioritizedPathsResolverServiceFactory();
-        /* @var $resolver \AssetManager\Resolver\PrioritizedPathsResolver */
+        /* @var $resolver PrioritizedPathsResolver */
         $resolver = $factory($serviceManager);
         $this->assertEmpty($resolver->getPaths()->toArray());
     }

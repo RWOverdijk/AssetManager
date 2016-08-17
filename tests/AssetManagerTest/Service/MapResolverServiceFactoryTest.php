@@ -2,8 +2,9 @@
 
 namespace AssetManagerTest\Service;
 
-use PHPUnit_Framework_TestCase;
+use AssetManager\Resolver\MapResolver;
 use AssetManager\Service\MapResolverServiceFactory;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class MapResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
@@ -29,7 +30,7 @@ class MapResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         );
 
         $factory = new MapResolverServiceFactory();
-        /* @var \AssetManager\Resolver\MapResolver */
+        /* @var MapResolver */
         $mapResolver = $factory($serviceManager);
         $this->assertSame(
             array(
@@ -49,7 +50,7 @@ class MapResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('config', array());
 
         $factory = new MapResolverServiceFactory();
-        /* @var \AssetManager\Resolver\MapResolver */
+        /* @var MapResolver */
         $mapResolver = $factory($serviceManager);
         $this->assertEmpty($mapResolver->getMap());
     }

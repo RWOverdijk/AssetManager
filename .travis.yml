@@ -12,6 +12,3 @@ before_script:
 script:
   - ./vendor/bin/phpunit
   - ./vendor/bin/phpcs --standard=PSR2 ./src ./tests/AssetManagerTest
-
-notifications:
-  irc: "irc.freenode.org#zftalk.dev"

@@ -2,8 +2,8 @@
 
 namespace AssetManager\Service;
 
-use Assetic\Asset\AssetInterface;
 use Assetic\Asset\AssetCache;
+use Assetic\Asset\AssetInterface;
 use Assetic\Cache\CacheInterface;
 use Interop\Container\ContainerInterface;
 
@@ -77,13 +77,15 @@ class AssetCacheManager
             return null;
         }
 
-        // Left here for BC.  Please consider defining a container service instead.
-        if (is_callable($cacheProvider['cache'])) {
-            return call_user_func($cacheProvider['cache'], $path);
+        if (is_string($cacheProvider['cache']) &&
+            $this->container->has($cacheProvider['cache'])
+        ) {
+            return $this->container->get($cacheProvider['cache']);
         }
 
-        if ($this->container->has($cacheProvider['cache'])) {
-            return $this->container->get($cacheProvider['cache']);
+        // Left here for BC.  Please consider defining a ZF2 service instead.
+        if (is_callable($cacheProvider['cache'])) {
+            return call_user_func($cacheProvider['cache'], $path);
         }
 
         $dir = '';

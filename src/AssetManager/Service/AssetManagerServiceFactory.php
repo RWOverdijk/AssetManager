@@ -30,16 +30,16 @@ class AssetManagerServiceFactory
         }
 
         $assetManager = new AssetManager(
-            $container->get('AssetManager\Service\AggregateResolver'),
+            $container->get(AggregateResolver::class),
             $assetManagerConfig
         );
 
         $assetManager->setAssetFilterManager(
-            $container->get('AssetManager\Service\AssetFilterManager')
+            $container->get(AssetFilterManager::class)
         );
 
         $assetManager->setAssetCacheManager(
-            $container->get('AssetManager\Service\AssetCacheManager')
+            $container->get(AssetCacheManager::class)
         );
 
         return $assetManager;

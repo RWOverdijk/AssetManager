@@ -10,6 +10,7 @@ use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
 use JSMin;
 use PHPUnit_Framework_TestCase;
+use Zend\Console\Adapter\AdapterInterface;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Mvc\MvcEvent;
 use Zend\Mvc\Console\Router\RouteMatch;
@@ -61,7 +62,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
         $this->event->setRouteMatch($this->routeMatch);
 
         $this->controller = new ConsoleController(
-            $this->getMock('Zend\Console\Adapter\AdapterInterface'),
+            $this->getMock(AdapterInterface::class),
             $assetManager,
             array()
         );
@@ -87,7 +88,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function getAssetCacheManager()
     {
-        $serviceLocator = $this->getMock('Zend\ServiceManager\ServiceLocatorInterface');
+        $serviceLocator = $this->getMock(ServiceLocatorInterface::class);
         $config = array(
             self::$assetName => array(
                 'cache' => 'FilePathCache',

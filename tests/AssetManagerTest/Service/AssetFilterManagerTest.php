@@ -2,10 +2,11 @@
 
 namespace AssetManagerTest\Service;
 
+use Assetic\Asset\AssetInterface;
 use Assetic\Asset\StringAsset;
 use Assetic\Filter\FilterInterface;
-use PHPUnit_Framework_TestCase;
 use AssetManager\Service\AssetFilterManager;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
@@ -107,7 +108,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
         
         $filterInstance = null;
         
-        $asset = $this->getMock('Assetic\Asset\AssetInterface');
+        $asset = $this->getMock(AssetInterface::class);
         $asset
             ->expects($this->any())
             ->method('ensureFilter')

@@ -2,13 +2,13 @@
 
 namespace AssetManager\Resolver;
 
+use Assetic\Asset\FileAsset;
 use Assetic\Factory\Resource\DirectoryResource;
+use AssetManager\Exception;
+use AssetManager\Service\MimeResolver;
 use SplFileInfo;
 use Traversable;
 use Zend\Stdlib\SplStack;
-use Assetic\Asset\FileAsset;
-use AssetManager\Exception;
-use AssetManager\Service\MimeResolver;
 
 /**
  * This resolver allows you to resolve from a stack of paths.

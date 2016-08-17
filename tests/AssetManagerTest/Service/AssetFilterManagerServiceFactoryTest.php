@@ -2,10 +2,10 @@
 
 namespace AssetManagerTest\Service;
 
-use PHPUnit_Framework_TestCase;
-use AssetManager\Service\AssetFilterManagerServiceFactory;
 use AssetManager\Service\AssetFilterManager;
+use AssetManager\Service\AssetFilterManagerServiceFactory;
 use AssetManager\Service\MimeResolver;
+use PHPUnit_Framework_TestCase;
 use Zend\ServiceManager\ServiceManager;
 
 class AssetFilterManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
@@ -26,7 +26,7 @@ class AssetFilterManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $serviceManager->setService('AssetManager\Service\MimeResolver', new MimeResolver);
+        $serviceManager->setService(MimeResolver::class, new MimeResolver);
 
         $t = new AssetFilterManagerServiceFactory($serviceManager);
 
