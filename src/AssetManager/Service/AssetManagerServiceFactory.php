@@ -2,6 +2,7 @@
 
 namespace AssetManager\Service;
 
+use AssetManager\Resolver\AggregateResolver;
 use Interop\Container\ContainerInterface;
 
 /**

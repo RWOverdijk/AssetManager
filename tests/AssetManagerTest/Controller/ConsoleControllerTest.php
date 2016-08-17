@@ -8,6 +8,7 @@ use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
+use Interop\Container\ContainerInterface;
 use JSMin;
 use PHPUnit_Framework_TestCase;
 use Zend\Console\Adapter\AdapterInterface;
@@ -50,7 +51,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
         $assetFilterManager = new AssetFilterManager($config['filters']);
         $assetCacheManager = $this->getAssetCacheManager();
 
-        $resolver     = $this->getResolver(__DIR__ . '/../../_files/require-jquery.js');
+        $resolver     = $this->getResolver();
         $assetManager = new AssetManager($resolver, $config);
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
@@ -88,7 +89,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function getAssetCacheManager()
     {
-        $serviceLocator = $this->getMock(ServiceLocatorInterface::class);
+        $container = $this->getMock(ContainerInterface::class);
         $config = array(
             self::$assetName => array(
                 'cache' => 'FilePathCache',
@@ -97,7 +98,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
                 )
             ),
         );
-        $assetCacheManager = new AssetCacheManager($serviceLocator, $config);
+        $assetCacheManager = new AssetCacheManager($container, $config);
         return $assetCacheManager;
     }
 

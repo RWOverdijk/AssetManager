@@ -26,7 +26,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService(MimeResolver::class, new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
         $this->assertInstanceOf(ResolverInterface::class, $resolver);
         $this->assertNull($resolver->resolve('/some-path'));
     }

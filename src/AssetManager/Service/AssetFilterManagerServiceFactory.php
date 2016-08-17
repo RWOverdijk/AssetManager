@@ -24,7 +24,7 @@ class AssetFilterManagerServiceFactory
 
         $assetFilterManager = new AssetFilterManager($filters);
 
-        $assetFilterManager->setServiceLocator($container);
+        $assetFilterManager->setServiceContainer($container);
         $assetFilterManager->setMimeResolver($container->get(MimeResolver::class));
 
         return $assetFilterManager;

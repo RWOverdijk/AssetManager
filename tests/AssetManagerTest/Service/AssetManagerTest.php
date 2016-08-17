@@ -3,7 +3,6 @@
 namespace AssetManagerTest\Service;
 
 use Assetic\Asset;
-use AssetManager\Cache\FilePathCache;
 use AssetManager\Resolver\AggregateResolver;
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\ResolverInterface;
@@ -11,12 +10,9 @@ use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
-use AssetManager\Resolver\CollectionResolver;
-use AssetManager\Resolver\AggregateResolver;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Request;
 use PHPUnit_Framework_TestCase;
-use Zend\Console\Request as ConsoleRequest;
 use Zend\Diactoros\ServerRequest;
 use Zend\Diactoros\Uri;
 

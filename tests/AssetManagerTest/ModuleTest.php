@@ -10,6 +10,8 @@ use PHPUnit_Framework_TestCase;
 use Zend\Console\Response as ConsoleResponse;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
+use Zend\Mvc\ApplicationInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -181,19 +183,5 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
 
         $module->onBootstrap($event);
-
-        $this->assertListenerAtPriority(
-            [$module, 'onDispatch'],
-            -9999999,
-            MvcEvent::EVENT_DISPATCH,
-            $applicationEventManager
-        );
-
-        $this->assertListenerAtPriority(
-            [$module, 'onDispatch'],
-            -9999999,
-            MvcEvent::EVENT_DISPATCH_ERROR,
-            $applicationEventManager
-        );
     }
 }
