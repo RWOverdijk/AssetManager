@@ -8,14 +8,13 @@ use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
+use Interop\Container\ContainerInterface;
 use JSMin;
 use PHPUnit_Framework_TestCase;
 use Zend\Console\Adapter\AdapterInterface;
 use Zend\Console\Request as ConsoleRequest;
-use Zend\Mvc\Console\Router\RouteMatch;
 use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Mvc\Console\Router\RouteMatch;
 use Zend\View\Resolver\ResolverInterface;
 
 class ConsoleControllerTest extends PHPUnit_Framework_TestCase
@@ -52,13 +51,13 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
         $assetFilterManager = new AssetFilterManager($config['filters']);
         $assetCacheManager = $this->getAssetCacheManager();
 
-        $resolver     = $this->getResolver(__DIR__ . '/../../_files/require-jquery.js');
+        $resolver     = $this->getResolver();
         $assetManager = new AssetManager($resolver, $config);
         $assetManager->setAssetFilterManager($assetFilterManager);
         $assetManager->setAssetCacheManager($assetCacheManager);
 
         $this->request = new ConsoleRequest();
-        $this->routeMatch = $this->createRouteMatch(['controller' => 'console']);
+        $this->routeMatch = new RouteMatch(array('controller' => 'console'));
 
         $this->event = new MvcEvent();
         $this->event->setRouteMatch($this->routeMatch);
@@ -69,12 +68,6 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
             array()
         );
         $this->controller->setEvent($this->event);
-    }
-
-    public function createRouteMatch(array $params = [])
-    {
-        $class = class_exists(V2RouteMatch::class) ? V2RouteMatch::class : RouteMatch::class;
-        return new $class($params);
     }
 
     /**
@@ -96,7 +89,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function getAssetCacheManager()
     {
-        $serviceLocator = $this->getMock(ServiceLocatorInterface::class);
+        $container = $this->getMock(ContainerInterface::class);
         $config = array(
             self::$assetName => array(
                 'cache' => 'FilePathCache',
@@ -105,7 +98,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
                 )
             ),
         );
-        $assetCacheManager = new AssetCacheManager($serviceLocator, $config);
+        $assetCacheManager = new AssetCacheManager($container, $config);
         return $assetCacheManager;
     }
 

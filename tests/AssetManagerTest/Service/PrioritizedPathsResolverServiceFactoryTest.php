@@ -12,7 +12,7 @@ class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestC
     /**
      * Mainly to avoid regressions
      */
-    public function testCreateService()
+    public function testInvoke()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -41,7 +41,7 @@ class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestC
 
         $factory = new PrioritizedPathsResolverServiceFactory();
         /* @var $resolver PrioritizedPathsResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
 
         $fetched = array();
 
@@ -58,14 +58,14 @@ class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestC
     /**
      * Mainly to avoid regressions
      */
-    public function testCreateServiceWithNoConfig()
+    public function testInvokeWithNoConfig()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('config', array());
 
         $factory = new PrioritizedPathsResolverServiceFactory();
         /* @var $resolver PrioritizedPathsResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory($serviceManager);
         $this->assertEmpty($resolver->getPaths()->toArray());
     }
 }

@@ -2,14 +2,12 @@
 
 namespace AssetManager\Service;
 
-use AssetManager\Exception;
+use Interop\Container\ContainerInterface;
 use AssetManager\Resolver\AggregateResolver;
+use AssetManager\Exception;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Resolver\ResolverInterface;
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory class for AssetManagerService
@@ -17,12 +15,16 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @category   AssetManager
  * @package    AssetManager
  */
-class AggregateResolverServiceFactory implements FactoryInterface
+class AggregateResolverServiceFactory
 {
     /**
-     * @inheritDoc
+     * Build the Aggregate Resolver Service
+     * 
+     * @param ContainerInterface $container Container Service
+     *
+     * @return AggregateResolver
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container)
     {
         $config         = $container->get('config');
         $config         = isset($config['asset_manager']) ? $config['asset_manager'] : array();
@@ -60,15 +62,5 @@ class AggregateResolverServiceFactory implements FactoryInterface
         }
 
         return $resolver;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return AggregateResolver
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, AggregateResolver::class);
     }
 }

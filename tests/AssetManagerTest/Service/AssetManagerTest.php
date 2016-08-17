@@ -3,7 +3,6 @@
 namespace AssetManagerTest\Service;
 
 use Assetic\Asset;
-use AssetManager\Cache\FilePathCache;
 use AssetManager\Resolver\AggregateResolver;
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\ResolverInterface;
@@ -11,10 +10,11 @@ use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
+use Zend\Diactoros\Response;
+use Zend\Diactoros\Request;
 use PHPUnit_Framework_TestCase;
-use Zend\Console\Request as ConsoleRequest;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Http\Response;
+use Zend\Diactoros\ServerRequest;
+use Zend\Diactoros\Uri;
 
 class AssetManagerTest extends PHPUnit_Framework_TestCase
 {
@@ -29,13 +29,15 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         require_once __DIR__ . '/../../_files/ReverseFilter.php';
     }
 
+    /**
+     * @return ServerRequest
+     */
     protected function getRequest()
     {
-        $request = new Request();
-        $request->setUri('http://localhost/base-path/asset-path');
-        $request->setBasePath('/base-path');
+        $uri = new Uri('http://localhost/asset-path');
+        $request = new ServerRequest();
 
-        return $request;
+        return $request->withUri($uri);
     }
 
     /**
@@ -90,6 +92,10 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructFailsOnOtherType()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         new AssetManager('invalid');
     }
 
@@ -102,10 +108,10 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $resolver
             ->expects($this->any())
             ->method('resolve')
-            ->with('asset-path')
-            ->will($this->returnValue($asset));
+            ->with('')
+            ->willReturn(null);
 
-        $request = new ConsoleRequest();
+        $request = new ServerRequest();
 
         $assetManager    = new AssetManager($resolver);
         $resolvesToAsset = $assetManager->resolvesToAsset($request);
@@ -159,6 +165,10 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetResolverFailsOnInvalidType()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         new AssetManager('invalid');
     }
 
@@ -252,7 +262,8 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $response     = new Response;
         $request      = $this->getRequest();
         // Have to change uri because asset-path would cause an infinite loop
-        $request->setUri('http://localhost/base-path/blah.js');
+        $uri = new Uri('http://localhost/blah.js');
+        $request = $request->withUri($uri);
         
         $assetCacheManager = $this->getAssetCacheManagerMock();
         $assetManager      = new AssetManager($resolver->getAggregateResolver(), $config);
@@ -390,8 +401,9 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $request            = $this->getRequest();
         $assetManager->resolvesToAsset($request);
         $response           = $assetManager->setAssetOnResponse(new Response);
+        $response->getBody()->rewind();
 
-        $this->assertSame(file_get_contents(__FILE__), $response->getContent());
+        $this->assertSame(file_get_contents(__FILE__), $response->getBody()->getContents());
     }
 
     public function testAssetSetOnResponse()
@@ -453,10 +465,13 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
         $mimeType = $mimeResolver->getMimeType(__FILE__);
 
-        $headers = 'Content-Transfer-Encoding: binary' . "\r\n";
-        $headers .= 'Content-Type: ' . $mimeType . "\r\n";
-        $headers .= 'Content-Length: ' . $fileSize . "\r\n";
-        $this->assertSame($headers, $response->getHeaders()->toString());
+        $headers = [
+            'Content-Transfer-Encoding' => ['binary'],
+            'Content-Type' => [$mimeType],
+            'Content-Length' => [$fileSize]
+        ];
+
+        $this->assertEquals($headers, $response->getHeaders());
     }
 
     /**
@@ -474,7 +489,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     {
         $resolver        = $this->getMock(ResolverInterface::class);
         $assetManager    = new AssetManager($resolver);
-        $resolvesToAsset = $assetManager->resolvesToAsset(new Request);
+        $resolvesToAsset = $assetManager->resolvesToAsset(new ServerRequest());
 
         $this->assertFalse($resolvesToAsset);
     }
@@ -498,8 +513,9 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $assetManager->resolvesToAsset($this->getRequest());
 
         $response = $assetManager->setAssetOnResponse(new Response);
+        $response->getBody()->rewind();
 
-        echo $response->getContent();
+        echo $response->getBody()->getContents();
     }
 
     /**

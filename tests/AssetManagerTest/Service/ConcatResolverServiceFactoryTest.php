@@ -13,7 +13,7 @@ class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * Mainly to avoid regressions
      */
-    public function testCreateService()
+    public function testInvoke()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -32,7 +32,7 @@ class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 
         $factory = new ConcatResolverServiceFactory();
         /* @var CollectionResolver */
-        $concatResolver = $factory->createService($serviceManager);
+        $concatResolver = $factory($serviceManager);
         $this->assertSame(
             array(
                  'key1' => __FILE__,
@@ -45,14 +45,14 @@ class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * Mainly to avoid regressions
      */
-    public function testCreateServiceWithNoConfig()
+    public function testInvokeWithNoConfig()
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('config', array());
 
         $factory = new ConcatResolverServiceFactory();
         /* @var ConcatResolver */
-        $concatResolver = $factory->createService($serviceManager);
+        $concatResolver = $factory($serviceManager);
         $this->assertEmpty($concatResolver->getConcats());
     }
 }

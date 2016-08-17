@@ -4,8 +4,6 @@ namespace AssetManager\Service;
 
 use AssetManager\Resolver\AggregateResolver;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory class for AssetManagerService
@@ -13,12 +11,17 @@ use Zend\ServiceManager\ServiceLocatorInterface;
  * @category   AssetManager
  * @package    AssetManager
  */
-class AssetManagerServiceFactory implements FactoryInterface
+class AssetManagerServiceFactory
 {
+
     /**
-     * @inheritDoc
+     * Build the Asset Manager Service
+     * 
+     * @param ContainerInterface $container Container Service
+     *
+     * @return AssetManager
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container)
     {
         $config             = $container->get('config');
         $assetManagerConfig = array();
@@ -41,15 +44,5 @@ class AssetManagerServiceFactory implements FactoryInterface
         );
 
         return $assetManager;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return AssetManager
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, AssetManager::class);
     }
 }

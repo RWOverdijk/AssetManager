@@ -2,17 +2,19 @@
 
 namespace AssetManager\Service;
 
-use AssetManager\Resolver\PrioritizedPathsResolver;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use AssetManager\Resolver\PrioritizedPathsResolver;
 
-class PrioritizedPathsResolverServiceFactory implements FactoryInterface
+class PrioritizedPathsResolverServiceFactory
 {
     /**
-     * @inheritDoc
+     * Build A Map Resolver
+     *
+     * @param ContainerInterface $container Container Service
+     *
+     * @return PrioritizedPathsResolver
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container)
     {
         $config                   = $container->get('config');
         $prioritizedPathsResolver = new PrioritizedPathsResolver();
@@ -22,15 +24,5 @@ class PrioritizedPathsResolverServiceFactory implements FactoryInterface
         $prioritizedPathsResolver->addPaths($paths);
 
         return $prioritizedPathsResolver;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return PrioritizedPathsResolver
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, PrioritizedPathsResolver::class);
     }
 }

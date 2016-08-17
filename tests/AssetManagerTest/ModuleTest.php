@@ -3,6 +3,7 @@
 namespace AssetManagerTest;
 
 use AssetManager\Module;
+use Zend\Diactoros\Response;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetManager;
 use PHPUnit_Framework_TestCase;
@@ -10,8 +11,6 @@ use Zend\Console\Response as ConsoleResponse;
 use Zend\EventManager\Event;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\Test\EventListenerIntrospectionTrait;
-use Zend\Http\Request;
-use Zend\Http\Response;
 use Zend\Mvc\ApplicationInterface;
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -43,7 +42,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     public function testDispatchListenerIgnoresOtherResponseCodes()
     {
         $event      = new MvcEvent();
-        $response   = new Response();
+        $response   = new \Zend\Http\Response();
         $module     = new Module();
 
         $response->setStatusCode(500);
@@ -80,8 +79,8 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($serviceManager));
 
         $event      = new MvcEvent();
-        $response   = new Response();
-        $request    = new Request();
+        $response   = new \Zend\Http\Response();
+        $request    = new \Zend\Http\PhpEnvironment\Request();
         $module     = new Module();
 
         $event->setApplication($application);
@@ -109,7 +108,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
 
         $amResponse = new Response();
-        $amResponse->setContent('bacon');
+        $amResponse->getBody()->write('bacon');
 
         $assetManager
             ->expects($this->once())
@@ -129,8 +128,8 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($serviceManager));
 
         $event      = new MvcEvent();
-        $response   = new Response();
-        $request    = new Request();
+        $response   = new \Zend\Http\Response();
+        $request    = new \Zend\Http\PhpEnvironment\Request();
         $module     = new Module();
 
         $event->setApplication($application);
@@ -160,7 +159,18 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function testOnBootstrap()
     {
-        $applicationEventManager = new EventManager();
+        $module = new Module();
+
+        $applicationEventManager = $this->getMockBuilder('Zend\EventManager\EventManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
+        $applicationEventManager->expects($this->exactly(2))
+            ->method('attach')
+            ->withConsecutive(
+                [MvcEvent::EVENT_DISPATCH, array($module, 'onDispatch'), -9999999],
+                [MvcEvent::EVENT_DISPATCH_ERROR, array($module, 'onDispatch'), -9999999]
+            );
 
         $application = $this->getMock(ApplicationInterface::class);
         $application
@@ -171,21 +181,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $event = new Event();
         $event->setTarget($application);
 
-        $module = new Module();
+
         $module->onBootstrap($event);
-
-        $this->assertListenerAtPriority(
-            [$module, 'onDispatch'],
-            -9999999,
-            MvcEvent::EVENT_DISPATCH,
-            $applicationEventManager
-        );
-
-        $this->assertListenerAtPriority(
-            [$module, 'onDispatch'],
-            -9999999,
-            MvcEvent::EVENT_DISPATCH_ERROR,
-            $applicationEventManager
-        );
     }
 }
