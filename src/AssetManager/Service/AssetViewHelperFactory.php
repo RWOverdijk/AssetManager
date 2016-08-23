@@ -4,12 +4,12 @@ namespace AssetManager\Service;
 
 use AssetManager\Exception\InvalidArgumentException;
 use AssetManager\Resolver\ResolverInterface;
-use AssetManager\Service\AssetManager;
 use AssetManager\View\Helper\Asset;
 use Interop\Container\ContainerInterface;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\AbstractPluginManager;
 
 class AssetViewHelperFactory implements FactoryInterface
 {
