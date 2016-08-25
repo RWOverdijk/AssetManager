@@ -38,6 +38,10 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testSetMimeResolverFailObject()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         $resolver = new PathStackResolver();
         $resolver->setMimeResolver(new \stdClass());
     }
@@ -47,6 +51,10 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testSetMimeResolverFailString()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         $resolver = new PathStackResolver();
         $resolver->setMimeResolver('invalid');
     }

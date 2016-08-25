@@ -63,6 +63,10 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAggregateResolverFails()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         $resolver = new ConcatResolver;
 
         $resolver->setAggregateResolver(new \stdClass);
