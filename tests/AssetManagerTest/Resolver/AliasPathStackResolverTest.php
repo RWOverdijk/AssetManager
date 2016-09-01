@@ -43,6 +43,10 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructorFail()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         new AliasPathStackResolver('this_should_fail');
     }
 
@@ -162,6 +166,10 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testSetMimeResolverFailObject()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         $resolver = new AliasPathStackResolver(array('my/alias/' => __DIR__));
         $resolver->setMimeResolver(new \stdClass());
     }

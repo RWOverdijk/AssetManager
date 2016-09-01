@@ -90,6 +90,10 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testConstructFailsOnOtherType()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         new AssetManager('invalid');
     }
 
@@ -159,6 +163,10 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetResolverFailsOnInvalidType()
     {
+        if (PHP_MAJOR_VERSION >= 7) {
+            $this->setExpectedException('\TypeError');
+        }
+
         new AssetManager('invalid');
     }
 
