@@ -153,6 +153,7 @@ class ConcatResolver implements
         $aggregateAsset = new AggregateAsset($resolvedAssets);
         $this->getAssetFilterManager()->setFilters($name, $aggregateAsset);
         $aggregateAsset->setTargetPath($name);
+        $aggregateAsset->mimetype = $this->getMimeResolver()->getMimeType($name);
 
         return $aggregateAsset;
     }
