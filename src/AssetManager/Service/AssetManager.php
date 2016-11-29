@@ -122,6 +122,16 @@ class AssetManager implements
     }
 
     /**
+     * Get the asset of requested file
+     *
+     * @return string
+     */
+    public function getAsset()
+    {
+        return $this->asset;
+    }
+
+    /**
      * Set the asset on the response, including headers and content.
      *
      * @param    ResponseInterface $response
