@@ -122,13 +122,34 @@ class AssetManager implements
     }
 
     /**
+     * Set the asset to use in the asset manager
+     *
+     * @param AssetInterface $asset
+     */
+    public function setAsset(AssetInterface $asset)
+    {
+        $this->asset = $asset;
+    }
+
+    /**
+     * Get the asset used by the asset manager
+     *
+     * @return AssetInterface
+     */
+    public function getAsset()
+    {
+        return $this->asset;
+    }
+
+    /**
      * Set the asset on the response, including headers and content.
      *
      * @param    ResponseInterface $response
+     * @param    Array $additionalHeaders
      * @return   ResponseInterface
      * @throws   Exception\RuntimeException
      */
-    public function setAssetOnResponse(ResponseInterface $response)
+    public function setAssetOnResponse(ResponseInterface $response, array $additionalHeaders = array())
     {
         if (!$this->asset instanceof AssetInterface) {
             throw new Exception\RuntimeException(
@@ -167,6 +188,11 @@ class AssetManager implements
                  ->addHeaderLine('Content-Transfer-Encoding', 'binary')
                  ->addHeaderLine('Content-Type', $mimeType)
                  ->addHeaderLine('Content-Length', $contentLength);
+
+        foreach($additionalHeaders as $header => $value) {
+            $response->getHeaders()
+                ->addHeaderLine($header, $value);
+        }
 
         $response->setContent($assetContents);
 
