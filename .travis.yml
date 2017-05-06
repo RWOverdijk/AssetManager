@@ -6,26 +6,9 @@ php:
   - 7.1
   - hhvm
 
-matrix:
-  include:
-    - php: 5.6
-      env: dependencies=lowest
-    - php: hhvm
-      env: dependencies=lowest
-    - php: 5.6
-      env: dependencies=highest
-    - php: 7.0
-      env: dependencies=highest
-    - php: 7.1
-      env: dependencies=highest
-    - php: hhvm
-      env: dependencies=highest
-
 before_script:
   - composer self-update
-  - if [ -z "$dependencies" ]; then composer install --prefer-dist -n; fi;
-  - if [ "$dependencies" = "lowest" ]; then composer update --prefer-dist --prefer-lowest -n; fi;
-  - if [ "$dependencies" = "highest" ]; then composer require zendframework/zend-mvc-console:^1.1 --prefer-dist -n; fi;
+  - composer install --prefer-dist -n
 
 script:
   - ./vendor/bin/phpunit

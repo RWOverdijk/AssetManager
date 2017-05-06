@@ -39,7 +39,8 @@
         "zendframework/zend-console": "^2.6",
         "zendframework/zend-servicemanager": "^3.1.1",
         "phpunit/phpunit": "^4.8",
-        "squizlabs/php_codesniffer": "~1.5.0"
+        "squizlabs/php_codesniffer": "~1.5.0",
+        "zendframework/zend-mvc-console": "^1.1"
     },
     "suggest": {
         "zendframework/zend-mvc-console": "zend-mvc-console provides the ability to expose zend-mvc as a console application"
