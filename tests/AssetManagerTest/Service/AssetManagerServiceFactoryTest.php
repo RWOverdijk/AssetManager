@@ -44,6 +44,6 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
             ));
 
         $factory = new AssetManagerServiceFactory();
-        $this->assertInstanceOf(AssetManager::class, $factory->createService($serviceManager));
+        $this->assertInstanceOf(AssetManager::class, $factory($serviceManager));
     }
 }

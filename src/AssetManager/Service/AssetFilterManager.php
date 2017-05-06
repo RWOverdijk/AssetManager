@@ -6,7 +6,7 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Filter\FilterInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\MimeResolverAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
 
 class AssetFilterManager implements MimeResolverAwareInterface
 {
@@ -16,9 +16,9 @@ class AssetFilterManager implements MimeResolverAwareInterface
     protected $config;
 
     /**
-     * @var ServiceLocatorInterface
+     * @var ContainerInterface
      */
-    protected $serviceLocator;
+    protected $container;
 
     /**
      * @var MimeResolver
@@ -112,7 +112,7 @@ class AssetFilterManager implements MimeResolverAwareInterface
     protected function ensureByService(AssetInterface $asset, $service)
     {
         if (is_string($service)) {
-            $this->ensureByFilter($asset, $this->getServiceLocator()->get($service));
+            $this->ensureByFilter($asset, $this->getContainer()->get($service));
         } else {
             throw new Exception\RuntimeException(
                 'Unexpected service provided. Expected string or callback.'
@@ -177,16 +177,16 @@ class AssetFilterManager implements MimeResolverAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function getServiceLocator()
+    public function getContainer()
     {
-        return $this->serviceLocator;
+        return $this->container;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    public function setContainer(ContainerInterface $container)
     {
-        $this->serviceLocator = $serviceLocator;
+        $this->container = $container;
     }
 }

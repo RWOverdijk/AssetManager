@@ -5,18 +5,15 @@ namespace AssetManager\Service;
 use AssetManager\Exception\InvalidArgumentException;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\View\Helper\Asset;
-use Interop\Container\ContainerInterface;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\AbstractPluginManager;
+use Psr\Container\ContainerInterface;
 
-class AssetViewHelperFactory implements FactoryInterface
+class AssetViewHelperFactory
 {
     /**
      * @inheritDoc
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container)
     {
         $config = $container->get('config')['asset_manager'];
 
@@ -30,13 +27,15 @@ class AssetViewHelperFactory implements FactoryInterface
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @param array                   $config
+     * @param ContainerInterface $container
+     * @param array              $config
      *
      * @return null
      */
-    private function loadCache($serviceLocator, $config)
-    {
+    private function loadCache(
+        ContainerInterface $container,
+        $config
+    ) {
         // check if the cache is configured
         if (!isset($config['view_helper']['cache']) || $config['view_helper']['cache'] === null) {
             return null;
@@ -45,7 +44,7 @@ class AssetViewHelperFactory implements FactoryInterface
         // get the cache, if it's a string, search it among services
         $cache = $config['view_helper']['cache'];
         if (is_string($cache)) {
-            $cache = $serviceLocator->get($cache);
+            $cache = $container->get($cache);
         }
 
         // exception in case cache is not an Adapter that extend the AbstractAdapter of Zend\Cache\Storage
@@ -57,18 +56,5 @@ class AssetViewHelperFactory implements FactoryInterface
         }
 
         return $cache;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return Asset
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        if ($serviceLocator instanceof AbstractPluginManager) {
-            $serviceLocator = $serviceLocator->getServiceLocator() ?: $serviceLocator;
-        }
-        return $this($serviceLocator, Asset::class);
     }
 }
