@@ -3,7 +3,7 @@
 namespace AssetManager\Service;
 
 use AssetManager\Resolver\AliasPathStackResolver;
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class AliasPathStackResolverServiceFactory
 {
