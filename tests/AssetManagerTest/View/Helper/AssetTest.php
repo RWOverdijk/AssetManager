@@ -7,6 +7,9 @@ use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
 use AssetManager\View\Helper\Asset;
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\ServiceManager\Config;
+use Zend\ServiceManager\ServiceManager;
+use Zend\View\HelperPluginManager;
 
 class AssetTest extends TestCase
 {
@@ -127,21 +130,25 @@ class AssetTest extends TestCase
     {
         $config = require 'config/module.config.php';
         
-        $serviceManager = new \Zend\ServiceManager\ServiceManager($config['service_manager']);
-        $serviceManager->setService('config',$config);
+        $serviceConfig = new Config($config['service_manager']);
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService('config', $config);
+        $serviceConfig->configureServiceManager($serviceManager);
         
-        $pluginManager = new \Zend\View\HelperPluginManager($serviceManager,$config['view_helpers']);
-        $this->assertInstanceOf(\AssetManager\View\Helper\Asset::class,$pluginManager->get(\AssetManager\View\Helper\Asset::class));
+        $pluginManager = new HelperPluginManager($serviceManager, $config['view_helpers']);
+        $this->assertInstanceOf(Asset::class, $pluginManager->get(Asset::class));
     }
     
     public function testRetrieveHelperFromPluginManagerByAlias()
     {
         $config = require 'config/module.config.php';
         
-        $serviceManager = new \Zend\ServiceManager\ServiceManager($config['service_manager']);
-        $serviceManager->setService('config',$config);
+        $serviceConfig = new Config($config['service_manager']);
+        $serviceManager = new ServiceManager();
+        $serviceManager->setService('config', $config);
+        $serviceConfig->configureServiceManager($serviceManager);
         
-        $pluginManager = new \Zend\View\HelperPluginManager($serviceManager,$config['view_helpers']);
-        $this->assertInstanceOf(\AssetManager\View\Helper\Asset::class,$pluginManager->get('asset'));
+        $pluginManager = new HelperPluginManager($serviceManager, $config['view_helpers']);
+        $this->assertInstanceOf(Asset::class, $pluginManager->get('asset'));
     }
 }
