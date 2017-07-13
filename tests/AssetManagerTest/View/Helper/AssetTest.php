@@ -122,4 +122,26 @@ class AssetTest extends TestCase
         $this->assertNotContains('?_=', $newFilename);
         $this->assertSame($newFilename, $filename);
     }
+    
+    public function testRetrieveHelperFromPluginManagerByClassConstant()
+    {
+        $config = require 'config/module.config.php';
+        
+        $serviceManager = new \Zend\ServiceManager\ServiceManager($config['service_manager']);
+        $serviceManager->setService('config',$config);
+        
+        $pluginManager = new \Zend\View\HelperPluginManager($serviceManager,$config['view_helpers']);
+        $this->assertInstanceOf(\AssetManager\View\Helper\Asset::class,$pluginManager->get(\AssetManager\View\Helper\Asset::class));
+    }
+    
+    public function testRetrieveHelperFromPluginManagerByAlias()
+    {
+        $config = require 'config/module.config.php';
+        
+        $serviceManager = new \Zend\ServiceManager\ServiceManager($config['service_manager']);
+        $serviceManager->setService('config',$config);
+        
+        $pluginManager = new \Zend\View\HelperPluginManager($serviceManager,$config['view_helpers']);
+        $this->assertInstanceOf(\AssetManager\View\Helper\Asset::class,$pluginManager->get('asset'));
+    }
 }
