@@ -46,7 +46,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService('testFilter', new \CustomFilter());
-        $assetFilterManager->setServiceLocator($serviceManager);
+        $assetFilterManager->setContainer($serviceManager);
 
         $asset = new StringAsset('Herp derp');
 
@@ -58,7 +58,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testensureByServiceInvalid()
+    public function testEnsureByServiceInvalid()
     {
         $assetFilterManager = new AssetFilterManager(array(
             'test/path.test' => array(
@@ -70,7 +70,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
 
         $serviceManager = new ServiceManager();
         $serviceManager->setService('testFilter', new \CustomFilter());
-        $assetFilterManager->setServiceLocator($serviceManager);
+        $assetFilterManager->setContainer($serviceManager);
 
         $asset = new StringAsset('Herp derp');
 

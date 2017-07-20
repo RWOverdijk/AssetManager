@@ -1,13 +1,13 @@
 {
     "name": "rwoverdijk/assetmanager",
-    "description": "An assetmanager module for Zend Framework 2.",
+    "description": "An assetmanager module for Zend Framework 3.",
     "license": "BSD-2-Clause",
     "type": "library",
     "keywords": [
         "asset",
         "asset manager",
-        "zf2",
-        "zend framework 2"
+        "zf3",
+        "zend framework"
     ],
     "homepage": "https://github.com/RWOverdijk/AssetManager",
     "authors": [
@@ -23,22 +23,24 @@
         }
     ],
     "require": {
-        "php": "^5.5 || ^7.0",
+        "php": "^5.6 || ^7.0",
+        "psr/container": "^1.0",
         "zendframework/zend-modulemanager": "^2.7.2",
-        "zendframework/zend-stdlib": "^2.7.7 || ^3.0.1",
-        "zendframework/zend-servicemanager": "^2.7.6 || ^3.1.1",
+        "zendframework/zend-stdlib": "^3.1.0",
         "zendframework/zend-loader": "^2.5.1",
-        "zendframework/zend-eventmanager": "^2.6.3 || ^3.0.1",
-        "zendframework/zend-mvc": "^2.7.9 || ^3.0.2",
-        "kriswallsmith/assetic": "^1.2.1"
+        "zendframework/zend-eventmanager": "^3.1.0",
+        "zendframework/zend-mvc": "^3.1.0",
+        "kriswallsmith/assetic": "^1.4.0"
     },
     "require-dev": {
         "zendframework/zend-http": "^2.5.4",
         "zendframework/zend-view": "^2.8.1",
         "zendframework/zend-cache": "^2.7.1",
         "zendframework/zend-console": "^2.6",
+        "zendframework/zend-servicemanager": "^3.1.1",
         "phpunit/phpunit": "^4.8",
-        "squizlabs/php_codesniffer": "~1.5.0"
+        "squizlabs/php_codesniffer": "~1.5.0",
+        "zendframework/zend-mvc-console": "^1.1"
     },
     "suggest": {
         "zendframework/zend-mvc-console": "zend-mvc-console provides the ability to expose zend-mvc as a console application"

@@ -29,8 +29,7 @@ class AssetFilterManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService(MimeResolver::class, new MimeResolver);
 
         $t = new AssetFilterManagerServiceFactory($serviceManager);
-
-        $service = $t->createService($serviceManager);
+        $service = $t($serviceManager);
 
         $this->assertTrue($service instanceof AssetFilterManager);
     }

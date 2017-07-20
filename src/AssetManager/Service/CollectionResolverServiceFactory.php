@@ -3,16 +3,14 @@
 namespace AssetManager\Service;
 
 use AssetManager\Resolver\CollectionResolver;
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
 
-class CollectionResolverServiceFactory implements FactoryInterface
+class CollectionResolverServiceFactory
 {
     /**
      * @inheritDoc
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container)
     {
         $config      = $container->get('config');
         $collections = array();
@@ -24,15 +22,5 @@ class CollectionResolverServiceFactory implements FactoryInterface
         $collectionResolver = new CollectionResolver($collections);
 
         return $collectionResolver;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return CollectionResolver
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, CollectionResolver::class);
     }
 }

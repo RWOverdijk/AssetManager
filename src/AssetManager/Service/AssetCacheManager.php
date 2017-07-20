@@ -5,7 +5,7 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetCache;
 use Assetic\Asset\AssetInterface;
 use Assetic\Cache\CacheInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Asset Cache Manager.  Sets asset cache based on configuration.
@@ -13,9 +13,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AssetCacheManager
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var \Psr\Container\ContainerInterface;
      */
-    protected $serviceLocator;
+    protected $container;
 
     /**
      * @var array Cache configuration.
@@ -25,16 +25,16 @@ class AssetCacheManager
     /**
      * Construct the AssetCacheManager
      *
-     * @param   ServiceLocatorInterface $serviceLocator
-     * @param   array                   $config
+     * @param   ContainerInterface $container
+     * @param   array              $config
      *
      * @return  AssetCacheManager
      */
     public function __construct(
-        ServiceLocatorInterface $serviceLocator,
+        ContainerInterface $container,
         $config
     ) {
-        $this->serviceLocator = $serviceLocator;
+        $this->container = $container;
         $this->config = $config;
     }
 
@@ -78,9 +78,9 @@ class AssetCacheManager
         }
 
         if (is_string($cacheProvider['cache']) &&
-            $this->serviceLocator->has($cacheProvider['cache'])
+            $this->container->has($cacheProvider['cache'])
         ) {
-            return $this->serviceLocator->get($cacheProvider['cache']);
+            return $this->container->get($cacheProvider['cache']);
         }
 
         // Left here for BC.  Please consider defining a ZF2 service instead.
