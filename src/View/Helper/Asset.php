@@ -1,7 +1,7 @@
 <?php
 namespace AssetManager\View\Helper;
 
-use AssetManager\Resolver\ResolverInterface;
+use AssetManager\Core\Resolver\ResolverInterface;
 use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
 use Zend\View\Helper\AbstractHelper;
 
@@ -11,6 +11,9 @@ class Asset extends AbstractHelper
      * @var array
      */
     private $config;
+
+    /** @var null|AbstractCacheAdapter */
+    private $cache;
 
     /**
      * @var ResolverInterface

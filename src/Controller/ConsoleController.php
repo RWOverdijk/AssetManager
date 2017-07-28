@@ -2,7 +2,7 @@
 
 namespace AssetManager\Controller;
 
-use AssetManager\Service\AssetManager;
+use AssetManager\Core\Service\AssetManager;
 use Zend\Console\Adapter\AdapterInterface as Console;
 use Zend\Console\Request as ConsoleRequest;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -23,7 +23,7 @@ class ConsoleController extends AbstractActionController
     protected $console;
 
     /**
-     * @var \AssetManager\Service\AssetManager asset manager object
+     * @var AssetManager asset manager object
      */
     protected $assetManager;
 
