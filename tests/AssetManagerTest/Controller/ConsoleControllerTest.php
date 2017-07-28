@@ -3,11 +3,11 @@
 namespace AssetManagerTest\Controller;
 
 use AssetManager\Controller\ConsoleController;
-use AssetManager\Resolver\MapResolver;
-use AssetManager\Service\AssetCacheManager;
-use AssetManager\Service\AssetFilterManager;
-use AssetManager\Service\AssetManager;
-use AssetManager\Service\MimeResolver;
+use AssetManager\Core\Resolver\MapResolver;
+use AssetManager\Core\Service\AssetCacheManager;
+use AssetManager\Core\Service\AssetFilterManager;
+use AssetManager\Core\Service\AssetManager;
+use AssetManager\Core\Service\MimeResolver;
 use JSMin;
 use PHPUnit_Framework_TestCase;
 use Zend\Console\Adapter\AdapterInterface;
@@ -64,7 +64,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
         $this->event->setRouteMatch($this->routeMatch);
 
         $this->controller = new ConsoleController(
-            $this->getMock(AdapterInterface::class),
+            $this->createMock(AdapterInterface::class),
             $assetManager,
             array()
         );
@@ -96,7 +96,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function getAssetCacheManager()
     {
-        $serviceLocator = $this->getMock(ServiceLocatorInterface::class);
+        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
         $config = array(
             self::$assetName => array(
                 'cache' => 'FilePathCache',

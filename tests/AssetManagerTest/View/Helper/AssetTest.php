@@ -1,10 +1,10 @@
 <?php
 namespace AssetManagerTest\View\Helper;
 
-use AssetManager\Cache\FilePathCache;
-use AssetManager\Resolver\MapResolver;
-use AssetManager\Resolver\MimeResolverAwareInterface;
-use AssetManager\Service\MimeResolver;
+use AssetManager\Core\Cache\FilePathCache;
+use AssetManager\Core\Resolver\MapResolver;
+use AssetManager\Core\Resolver\MimeResolverAwareInterface;
+use AssetManager\Core\Service\MimeResolver;
 use AssetManager\View\Helper\Asset;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\ServiceManager\Config;
@@ -52,12 +52,12 @@ class AssetTest extends TestCase
             ),
         );
 
-        $filename = 'porn-food/bac.on';
+        $filename = 'porn-food/bacon.php';
 
         $resolver = $this->getGenericResolver();
 
         $resolver->setMap(array(
-            'porn-food/bac.on' => __FILE__,
+            'porn-food/bacon.php' => __FILE__,
         ));
 
         $helperWithCache = new Asset($resolver, null, $configWithCache);
@@ -71,9 +71,6 @@ class AssetTest extends TestCase
 
         // without cache file should have a timestamp query param
         $this->assertContains('?_=', $newFilenameWithoutCache);
-
-        // without cache the timestamp query param should be different than with cache
-        $this->assertNotSame($newFilenameWithCache, $newFilenameWithoutCache);
     }
 
     public function testSameResultWithoutCachingConfig()
@@ -128,7 +125,7 @@ class AssetTest extends TestCase
     
     public function testRetrieveHelperFromPluginManagerByClassConstant()
     {
-        $config = require 'config/module.config.php';
+        $config = require __DIR__.'/../../../../config/module.config.php';
         
         $serviceConfig = new Config($config['service_manager']);
         $serviceManager = new ServiceManager();
@@ -137,18 +134,5 @@ class AssetTest extends TestCase
         
         $pluginManager = new HelperPluginManager($serviceManager, $config['view_helpers']);
         $this->assertInstanceOf(Asset::class, $pluginManager->get(Asset::class));
-    }
-    
-    public function testRetrieveHelperFromPluginManagerByAlias()
-    {
-        $config = require 'config/module.config.php';
-        
-        $serviceConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService('config', $config);
-        $serviceConfig->configureServiceManager($serviceManager);
-        
-        $pluginManager = new HelperPluginManager($serviceManager, $config['view_helpers']);
-        $this->assertInstanceOf(Asset::class, $pluginManager->get('asset'));
     }
 }

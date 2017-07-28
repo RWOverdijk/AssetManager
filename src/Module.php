@@ -2,6 +2,7 @@
 
 namespace AssetManager;
 
+use AssetManager\Core\Service\AssetManager;
 use Zend\Console\Adapter\AdapterInterface;
 use Zend\EventManager\EventInterface;
 use Zend\Loader\AutoloaderFactory;
@@ -10,6 +11,8 @@ use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Mvc\MvcEvent;
+use Zend\Psr7Bridge\Psr7Response;
+use Zend\Psr7Bridge\Psr7ServerRequest;
 
 /**
  * Module class
@@ -41,32 +44,38 @@ class Module implements
      */
     public function getConfig()
     {
-        return include __DIR__ . '/../../config/module.config.php';
+        return include __DIR__ . '/../config/module.config.php';
     }
 
     /**
      * Callback method for dispatch and dispatch.error events.
      *
      * @param MvcEvent $event
+     * @return \Zend\Http\Response|null
      */
     public function onDispatch(MvcEvent $event)
     {
-        /* @var $response \Zend\Http\Response */
-        $response = $event->getResponse();
-        if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
-            return;
+        /* @var $zendResponse \Zend\Http\Response */
+        $zendResponse = $event->getResponse();
+        if (!method_exists($zendResponse, 'getStatusCode') || $zendResponse->getStatusCode() !== 404) {
+            return null;
         }
-        $request        = $event->getRequest();
+
+        $response       = Psr7Response::fromZend($zendResponse);
+        $request        = Psr7ServerRequest::fromZend($event->getRequest());
         $serviceManager = $event->getApplication()->getServiceManager();
-        $assetManager   = $serviceManager->get(__NAMESPACE__ . '\Service\AssetManager');
+
+        /** @var AssetManager $assetManager */
+        $assetManager   = $serviceManager->get(AssetManager::class);
 
         if (!$assetManager->resolvesToAsset($request)) {
-            return;
+            return null;
         }
 
-        $response->setStatusCode(200);
+        $zendResponse = Psr7Response::toZend($assetManager->setAssetOnResponse($response));
+        $zendResponse->setStatusCode(200);
 
-        return $assetManager->setAssetOnResponse($response);
+        return $zendResponse;
     }
 
     /**
