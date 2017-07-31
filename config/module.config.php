@@ -44,12 +44,9 @@ return [
         ],
     ],
     'view_helpers'    => [
-        'aliases' => [
-            'asset' => AssetManager\View\Helper\Asset::class
-        ],
         'factories' => [
-            AssetManager\View\Helper\Asset::class => AssetManager\Service\AssetViewHelperFactory::class
-        ]
+            'asset' => AssetManager\Service\AssetViewHelperFactory::class,
+        ],
     ],
     'console'         => [
         'router' => [

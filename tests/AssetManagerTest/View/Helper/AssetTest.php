@@ -7,9 +7,6 @@ use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
 use AssetManager\View\Helper\Asset;
 use PHPUnit_Framework_TestCase as TestCase;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
-use Zend\View\HelperPluginManager;
 
 class AssetTest extends TestCase
 {
@@ -124,31 +121,5 @@ class AssetTest extends TestCase
 
         $this->assertNotContains('?_=', $newFilename);
         $this->assertSame($newFilename, $filename);
-    }
-    
-    public function testRetrieveHelperFromPluginManagerByClassConstant()
-    {
-        $config = require 'config/module.config.php';
-        
-        $serviceConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService('config', $config);
-        $serviceConfig->configureServiceManager($serviceManager);
-        
-        $pluginManager = new HelperPluginManager($serviceManager, $config['view_helpers']);
-        $this->assertInstanceOf(Asset::class, $pluginManager->get(Asset::class));
-    }
-    
-    public function testRetrieveHelperFromPluginManagerByAlias()
-    {
-        $config = require 'config/module.config.php';
-        
-        $serviceConfig = new Config($config['service_manager']);
-        $serviceManager = new ServiceManager();
-        $serviceManager->setService('config', $config);
-        $serviceConfig->configureServiceManager($serviceManager);
-        
-        $pluginManager = new HelperPluginManager($serviceManager, $config['view_helpers']);
-        $this->assertInstanceOf(Asset::class, $pluginManager->get('asset'));
     }
 }
