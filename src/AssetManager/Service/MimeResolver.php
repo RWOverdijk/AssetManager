@@ -569,10 +569,13 @@ class MimeResolver
             return $this->mimeTypes[$extension];
         }
         
-        $mimetype = mime_content_type($filename);
-        if( $mimetype != ""){
-            return $mimetype;
+        if (file_exists($filename)) {
+            $mimetype = mime_content_type($filename);
+            if ($mimetype != "") {
+                return $mimetype;
+            }
         }
+        
 
         return 'text/plain';
     }
