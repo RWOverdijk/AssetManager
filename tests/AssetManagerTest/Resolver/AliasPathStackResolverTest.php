@@ -5,12 +5,12 @@ namespace AssetManagerTest\Service;
 use Assetic\Asset;
 use AssetManager\Resolver\AliasPathStackResolver;
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit Tests for the Alias Path Stack Resolver
  */
-class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
+class AliasPathStackResolverTest extends TestCase
 {
     /**
      * Test constructor passes
@@ -39,12 +39,12 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      * Test constructor fails when aliases passed in is not an array
      *
      * @covers \AssetManager\Resolver\AliasPathStackResolver::__construct
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testConstructorFail()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         new AliasPathStackResolver('this_should_fail');
@@ -162,12 +162,12 @@ class AliasPathStackResolverTest extends PHPUnit_Framework_TestCase
      * Test Set Mime Resolver Only Accepts a mime Resolver
      *
      * @covers \AssetManager\Resolver\AliasPathStackResolver::setMimeResolver
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testSetMimeResolverFailObject()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         $resolver = new AliasPathStackResolver(array('my/alias/' => __DIR__));

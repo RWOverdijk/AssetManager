@@ -4,13 +4,13 @@ namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\AliasPathStackResolver;
 use AssetManager\Service\AliasPathStackResolverServiceFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Unit Tests the factory for the Alias Path Stack Resolver
  */
-class AliasPathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
+class AliasPathStackResolverServiceFactoryTest extends TestCase
 {
     /**
      * Mainly to avoid regressions

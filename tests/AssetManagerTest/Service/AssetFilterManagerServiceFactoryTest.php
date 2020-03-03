@@ -5,10 +5,10 @@ namespace AssetManagerTest\Service;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetFilterManagerServiceFactory;
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Laminas\ServiceManager\ServiceManager;
 
-class AssetFilterManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
+class AssetFilterManagerServiceFactoryTest extends TestCase
 {
     public function testConstruct()
     {

@@ -4,10 +4,10 @@ namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\PrioritizedPathsResolver;
 use AssetManager\Service\PrioritizedPathsResolverServiceFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Laminas\ServiceManager\ServiceManager;
 
-class PrioritizedPathsResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
+class PrioritizedPathsResolverServiceFactoryTest extends TestCase
 {
     /**
      * Mainly to avoid regressions

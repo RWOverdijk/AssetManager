@@ -3,7 +3,7 @@
 namespace AssetManagerTest\Config;
 
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Laminas\ServiceManager\Config;
 use Laminas\ServiceManager\ServiceManager;
 
@@ -12,7 +12,7 @@ use Laminas\ServiceManager\ServiceManager;
  *
  * @package AssetManagerTest\Config
  */
-class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
+class ModuleServiceManagerConfigTest extends TestCase
 {
     /**
      * Test the Service Managers Factories.

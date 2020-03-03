@@ -10,7 +10,7 @@ use Laminas\Cache\Storage\Adapter\Memory;
  *
  * @package AssetManager\Cache
  */
-class LaminasCacheAdapterTest extends \PHPUnit_Framework_TestCase
+class LaminasCacheAdapterTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructor()
     {
@@ -24,12 +24,12 @@ class LaminasCacheAdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testConstructorOnlyAcceptsALaminasCacheStorageInterface()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         new LaminasCacheAdapter(new \DateTime());

@@ -11,12 +11,13 @@ use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Laminas\Console\Request as ConsoleRequest;
 use Laminas\Http\PhpEnvironment\Request;
 use Laminas\Http\Response;
 
-class AssetManagerTest extends PHPUnit_Framework_TestCase
+class AssetManagerTest extends TestCase
 {
     /**
      * {@inheritDoc}
@@ -41,14 +42,14 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     /**
      * @param string $resolveTo
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     * @return MockObject|ResolverInterface
      */
     protected function getResolver($resolveTo = __FILE__)
     {
         $mimeResolver    = new MimeResolver;
         $asset           = new Asset\FileAsset($resolveTo);
         $asset->mimetype = $mimeResolver->getMimeType($resolveTo);
-        $resolver        = $this->getMock(ResolverInterface::class);
+        $resolver        = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -78,7 +79,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
     public function testConstruct()
     {
-        $resolver     = $this->getMock(ResolverInterface::class);
+        $resolver     = $this->createMock(ResolverInterface::class);
         $assetManager = new AssetManager($resolver, array('herp', 'derp'));
 
         $this->assertSame($resolver, $assetManager->getResolver());
@@ -86,12 +87,12 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testConstructFailsOnOtherType()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         new AssetManager('invalid');
@@ -102,7 +103,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
         $mimeResolver    = new MimeResolver;
         $asset           = new Asset\FileAsset(__FILE__);
         $asset->mimetype = $mimeResolver->getMimeType(__FILE__);
-        $resolver        = $this->getMock(ResolverInterface::class);
+        $resolver        = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->any())
             ->method('resolve')
@@ -150,21 +151,21 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
     public function testSetResolver()
     {
-        $assetManager = new AssetManager($this->getMock(ResolverInterface::class));
+        $assetManager = new AssetManager($this->createMock(ResolverInterface::class));
 
-        $newResolver = $this->getMock(ResolverInterface::class);
+        $newResolver = $this->createMock(ResolverInterface::class);
         $assetManager->setResolver($newResolver);
 
         $this->assertSame($newResolver, $assetManager->getResolver());
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testSetResolverFailsOnInvalidType()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         new AssetManager('invalid');
@@ -176,7 +177,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
     public function testGetResolver()
     {
-        $resolver     = $this->getMock(ResolverInterface::class);
+        $resolver     = $this->createMock(ResolverInterface::class);
         $assetManager = new AssetManager($resolver);
 
         $this->assertSame($resolver, $assetManager->getResolver());
@@ -424,7 +425,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     public function testSetAssetOnResponseNoMimeType()
     {
         $asset    = new Asset\FileAsset(__FILE__);
-        $resolver = $this->getMock(ResolverInterface::class);
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -472,7 +473,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testSetAssetOnReponseFailsWhenNotResolved()
     {
-        $resolver     = $this->getMock(ResolverInterface::class);
+        $resolver     = $this->createMock(ResolverInterface::class);
         $assetManager = new AssetManager($resolver);
 
         $assetManager->setAssetOnResponse(new Response);
@@ -480,7 +481,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
 
     public function testResolvesToAssetNotFound()
     {
-        $resolver        = $this->getMock(ResolverInterface::class);
+        $resolver        = $this->createMock(ResolverInterface::class);
         $assetManager    = new AssetManager($resolver);
         $resolvesToAsset = $assetManager->resolvesToAsset(new Request);
 
@@ -523,7 +524,7 @@ class AssetManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getAssetCacheManagerMock()
     {

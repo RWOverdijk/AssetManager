@@ -9,16 +9,16 @@ use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
 use JSMin;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Laminas\Console\Adapter\AdapterInterface;
 use Laminas\Console\Request as ConsoleRequest;
-use Laminas\Mvc\Console\Router\RouteMatch;
+use Laminas\Router\RouteMatch;
+use Laminas\Router\RouteMatch as V2RouteMatch;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Mvc\Router\RouteMatch as V2RouteMatch;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Resolver\ResolverInterface;
 
-class ConsoleControllerTest extends PHPUnit_Framework_TestCase
+class ConsoleControllerTest extends TestCase
 {
     /**
      *
@@ -64,7 +64,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
         $this->event->setRouteMatch($this->routeMatch);
 
         $this->controller = new ConsoleController(
-            $this->getMock(AdapterInterface::class),
+            $this->createMock(AdapterInterface::class),
             $assetManager,
             array()
         );
@@ -96,7 +96,7 @@ class ConsoleControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function getAssetCacheManager()
     {
-        $serviceLocator = $this->getMock(ServiceLocatorInterface::class);
+        $serviceLocator = $this->createMock(ServiceLocatorInterface::class);
         $config = array(
             self::$assetName => array(
                 'cache' => 'FilePathCache',

@@ -6,9 +6,9 @@ use Assetic\Asset;
 use AssetManager\Resolver\MapResolver;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class MapResolverTest extends PHPUnit_Framework_TestCase
+class MapResolverTest extends TestCase
 {
     public function testConstruct()
     {
@@ -123,7 +123,7 @@ class MapResolverTest extends PHPUnit_Framework_TestCase
     public function testResolveHttpAssetSuccess()
     {
         $resolver     = new MapResolver;
-        $mimeResolver = $this->getMock(MimeResolver::class);
+        $mimeResolver = $this->createMock(MimeResolver::class);
 
         $mimeResolver->expects($this->any())
                 ->method('getMimeType')

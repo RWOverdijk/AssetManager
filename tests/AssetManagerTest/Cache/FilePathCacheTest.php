@@ -4,9 +4,9 @@ namespace AssetManagerTest\Cache;
 
 use Assetic\Cache\CacheInterface;
 use AssetManager\Cache\FilePathCache;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FilePathCacheTest extends PHPUnit_Framework_TestCase
+class FilePathCacheTest extends TestCase
 {
     public function testConstruct()
     {

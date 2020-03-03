@@ -6,10 +6,10 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Asset\StringAsset;
 use Assetic\Filter\FilterInterface;
 use AssetManager\Service\AssetFilterManager;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Laminas\ServiceManager\ServiceManager;
 
-class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
+class AssetFilterManagerTest extends TestCase
 {
     /**
      * {@inheritDoc}
@@ -108,7 +108,7 @@ class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
         
         $filterInstance = null;
         
-        $asset = $this->getMock(AssetInterface::class);
+        $asset = $this->createMock(AssetInterface::class);
         $asset
             ->expects($this->any())
             ->method('ensureFilter')

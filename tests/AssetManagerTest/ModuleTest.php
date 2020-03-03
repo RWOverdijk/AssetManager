@@ -5,7 +5,7 @@ namespace AssetManagerTest;
 use AssetManager\Module;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetManager;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Laminas\Console\Response as ConsoleResponse;
 use Laminas\EventManager\Event;
 use Laminas\EventManager\EventManager;
@@ -19,7 +19,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 /**
 * @covers AssetManager\Module
 */
-class ModuleTest extends PHPUnit_Framework_TestCase
+class ModuleTest extends TestCase
 {
     use EventListenerIntrospectionTrait;
 
@@ -56,8 +56,8 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function testOnDispatchDoesntResolveToAsset()
     {
-        $resolver     = $this->getMock(ResolverInterface::class);
-        $assetManager = $this->getMock(
+        $resolver     = $this->createMock(ResolverInterface::class);
+        $assetManager = $this->createMock(
             AssetManager::class,
             array('resolvesToAsset'),
             array($resolver)
@@ -67,13 +67,13 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->method('resolvesToAsset')
             ->will($this->returnValue(false));
 
-        $serviceManager = $this->getMock(ServiceLocatorInterface::class);
+        $serviceManager = $this->createMock(ServiceLocatorInterface::class);
         $serviceManager
             ->expects($this->any())
             ->method('get')
             ->will($this->returnValue($assetManager));
 
-        $application = $this->getMock(ApplicationInterface::class);
+        $application = $this->createMock(ApplicationInterface::class);
         $application
             ->expects($this->once())
             ->method('getServiceManager')
@@ -96,8 +96,8 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 
     public function testOnDispatchStatus200()
     {
-        $resolver     = $this->getMock(ResolverInterface::class);
-        $assetManager = $this->getMock(
+        $resolver     = $this->createMock(ResolverInterface::class);
+        $assetManager = $this->createMock(
             AssetManager::class,
             array('resolvesToAsset', 'setAssetOnResponse'),
             array($resolver)
@@ -116,13 +116,13 @@ class ModuleTest extends PHPUnit_Framework_TestCase
             ->method('setAssetOnResponse')
             ->will($this->returnValue($amResponse));
 
-        $serviceManager = $this->getMock(ServiceLocatorInterface::class);
+        $serviceManager = $this->createMock(ServiceLocatorInterface::class);
         $serviceManager
             ->expects($this->any())
             ->method('get')
             ->will($this->returnValue($assetManager));
 
-        $application = $this->getMock(ApplicationInterface::class);
+        $application = $this->createMock(ApplicationInterface::class);
         $application
             ->expects($this->once())
             ->method('getServiceManager')
@@ -148,11 +148,11 @@ class ModuleTest extends PHPUnit_Framework_TestCase
      */
     public function testWillIgnoreInvalidResponseType()
     {
-        $cliResponse = $this->getMock(ConsoleResponse::class, array(), array(), '', false);
-        $mvcEvent   = $this->getMock(MvcEvent::class);
+        $cliResponse = $this->createMock(ConsoleResponse::class, array(), array(), '', false);
+        $mvcEvent   = $this->createMock(MvcEvent::class);
         $module     = new Module();
 
-        $cliResponse->expects($this->never())->method('getStatusCode');
+        $cliResponse->expects($this->never())->method('getErrorLevel');
         $mvcEvent->expects($this->once())->method('getResponse')->will($this->returnValue($cliResponse));
 
         $this->assertNull($module->onDispatch($mvcEvent));
@@ -162,7 +162,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
     {
         $applicationEventManager = new EventManager();
 
-        $application = $this->getMock(ApplicationInterface::class);
+        $application = $this->createMock(ApplicationInterface::class);
         $application
             ->expects($this->any())
             ->method('getEventManager')
