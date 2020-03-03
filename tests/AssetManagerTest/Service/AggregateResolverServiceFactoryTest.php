@@ -7,7 +7,7 @@ use AssetManager\Service\AggregateResolverServiceFactory;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\MimeResolver;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 {

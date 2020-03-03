@@ -5,7 +5,7 @@ namespace AssetManagerTest\Service;
 use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetCacheManagerServiceFactory;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class AssetCacheManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 {

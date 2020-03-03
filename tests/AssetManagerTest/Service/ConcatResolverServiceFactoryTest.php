@@ -6,7 +6,7 @@ use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\ConcatResolver;
 use AssetManager\Service\ConcatResolverServiceFactory;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class ConcatResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
 {

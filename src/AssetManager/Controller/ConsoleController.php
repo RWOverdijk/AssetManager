@@ -3,11 +3,11 @@
 namespace AssetManager\Controller;
 
 use AssetManager\Service\AssetManager;
-use Zend\Console\Adapter\AdapterInterface as Console;
-use Zend\Console\Request as ConsoleRequest;
-use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Stdlib\RequestInterface;
-use Zend\Stdlib\ResponseInterface;
+use Laminas\Console\Adapter\AdapterInterface as Console;
+use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Mvc\Controller\AbstractActionController;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\Stdlib\ResponseInterface;
 
 /**
  * Class ConsoleController
@@ -18,7 +18,7 @@ class ConsoleController extends AbstractActionController
 {
 
     /**
-     * @var \Zend\Console\Adapter\AdapterInterface console object
+     * @var \Laminas\Console\Adapter\AdapterInterface console object
      */
     protected $console;
 

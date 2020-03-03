@@ -8,8 +8,8 @@ use AssetManager\Resolver\AggregateResolverAwareInterface;
 use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Resolver\ResolverInterface;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory class for AssetManagerService

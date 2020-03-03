@@ -6,7 +6,7 @@ use Assetic\Asset\AssetInterface;
 use Assetic\Filter\FilterInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\MimeResolverAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class AssetFilterManager implements MimeResolverAwareInterface
 {

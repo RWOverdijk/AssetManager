@@ -7,7 +7,7 @@ use Assetic\Asset\HttpAsset;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 use Traversable;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ArrayUtils;
 
 /**
  * This resolver allows you to resolve using a 1 on 1 mapping to a file.

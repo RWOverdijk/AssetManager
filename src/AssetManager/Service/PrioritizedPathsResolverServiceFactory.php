@@ -4,8 +4,8 @@ namespace AssetManager\Service;
 
 use AssetManager\Resolver\PrioritizedPathsResolver;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 class PrioritizedPathsResolverServiceFactory implements FactoryInterface
 {

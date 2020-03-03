@@ -6,15 +6,15 @@ use AssetManager\Module;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetManager;
 use PHPUnit_Framework_TestCase;
-use Zend\Console\Response as ConsoleResponse;
-use Zend\EventManager\Event;
-use Zend\EventManager\EventManager;
-use Zend\EventManager\Test\EventListenerIntrospectionTrait;
-use Zend\Http\Request;
-use Zend\Http\Response;
-use Zend\Mvc\ApplicationInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\Console\Response as ConsoleResponse;
+use Laminas\EventManager\Event;
+use Laminas\EventManager\EventManager;
+use Laminas\EventManager\Test\EventListenerIntrospectionTrait;
+use Laminas\Http\Request;
+use Laminas\Http\Response;
+use Laminas\Mvc\ApplicationInterface;
+use Laminas\Mvc\MvcEvent;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
 * @covers AssetManager\Module

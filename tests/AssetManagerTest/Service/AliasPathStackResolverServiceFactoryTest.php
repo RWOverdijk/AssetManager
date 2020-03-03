@@ -5,7 +5,7 @@ namespace AssetManagerTest\Service;
 use AssetManager\Resolver\AliasPathStackResolver;
 use AssetManager\Service\AliasPathStackResolverServiceFactory;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Unit Tests the factory for the Alias Path Stack Resolver

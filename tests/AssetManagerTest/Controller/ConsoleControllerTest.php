@@ -10,13 +10,13 @@ use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
 use JSMin;
 use PHPUnit_Framework_TestCase;
-use Zend\Console\Adapter\AdapterInterface;
-use Zend\Console\Request as ConsoleRequest;
-use Zend\Mvc\Console\Router\RouteMatch;
-use Zend\Mvc\MvcEvent;
-use Zend\Mvc\Router\RouteMatch as V2RouteMatch;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\View\Resolver\ResolverInterface;
+use Laminas\Console\Adapter\AdapterInterface;
+use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Mvc\Console\Router\RouteMatch;
+use Laminas\Mvc\MvcEvent;
+use Laminas\Mvc\Router\RouteMatch as V2RouteMatch;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\View\Resolver\ResolverInterface;
 
 class ConsoleControllerTest extends PHPUnit_Framework_TestCase
 {

@@ -6,7 +6,7 @@ use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetFilterManagerServiceFactory;
 use AssetManager\Service\MimeResolver;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class AssetFilterManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 {

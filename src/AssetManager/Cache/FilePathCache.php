@@ -4,7 +4,7 @@ namespace AssetManager\Cache;
 
 use Assetic\Cache\CacheInterface;
 use AssetManager\Exception\RuntimeException;
-use Zend\Stdlib\ErrorHandler;
+use Laminas\Stdlib\ErrorHandler;
 
 /**
  * A file path cache. Same as FilesystemCache, except for the fact that this will create the

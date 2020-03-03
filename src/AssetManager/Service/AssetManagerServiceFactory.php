@@ -4,8 +4,8 @@ namespace AssetManager\Service;
 
 use AssetManager\Resolver\AggregateResolver;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Factory class for AssetManagerService

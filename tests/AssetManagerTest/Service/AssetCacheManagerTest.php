@@ -10,7 +10,7 @@ use Assetic\Cache\FilesystemCache;
 use AssetManager\Cache\FilePathCache;
 use AssetManager\Service\AssetCacheManager;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Test file for the Asset Cache Manager

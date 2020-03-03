@@ -12,9 +12,9 @@ use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\MimeResolver;
 use PHPUnit_Framework_TestCase;
-use Zend\Console\Request as ConsoleRequest;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Http\Response;
+use Laminas\Console\Request as ConsoleRequest;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Http\Response;
 
 class AssetManagerTest extends PHPUnit_Framework_TestCase
 {

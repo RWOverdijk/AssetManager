@@ -104,7 +104,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Zend\Stdlib\Exception\InvalidArgumentException
+     * @expectedException \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetConcatFails()
     {

@@ -9,7 +9,7 @@ use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\AssetManagerServiceFactory;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
 {

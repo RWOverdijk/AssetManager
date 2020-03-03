@@ -6,10 +6,10 @@ use AssetManager\Exception\InvalidArgumentException;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\View\Helper\Asset;
 use Interop\Container\ContainerInterface;
-use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\AbstractPluginManager;
+use Laminas\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\AbstractPluginManager;
 
 class AssetViewHelperFactory implements FactoryInterface
 {
@@ -48,11 +48,11 @@ class AssetViewHelperFactory implements FactoryInterface
             $cache = $serviceLocator->get($cache);
         }
 
-        // exception in case cache is not an Adapter that extend the AbstractAdapter of Zend\Cache\Storage
+        // exception in case cache is not an Adapter that extend the AbstractAdapter of Laminas\Cache\Storage
         if ($cache !== null && !($cache instanceof AbstractCacheAdapter)) {
             throw new InvalidArgumentException(
                 'Invalid cache provided, you must pass a Cache Adapter that extend 
-                Zend\Cache\Storage\Adapter\AbstractAdapter'
+                Laminas\Cache\Storage\Adapter\AbstractAdapter'
             );
         }
 

@@ -9,7 +9,7 @@ use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetFilterManagerAwareInterface;
 use AssetManager\Service\MimeResolver;
 use Traversable;
-use Zend\Stdlib\ArrayUtils;
+use Laminas\Stdlib\ArrayUtils;
 
 /**
  * This resolver allows the resolving of concatenated files.

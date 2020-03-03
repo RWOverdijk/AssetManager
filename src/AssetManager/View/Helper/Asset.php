@@ -2,8 +2,8 @@
 namespace AssetManager\View\Helper;
 
 use AssetManager\Resolver\ResolverInterface;
-use Zend\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
-use Zend\View\Helper\AbstractHelper;
+use Laminas\Cache\Storage\Adapter\AbstractAdapter as AbstractCacheAdapter;
+use Laminas\View\Helper\AbstractHelper;
 
 class Asset extends AbstractHelper
 {

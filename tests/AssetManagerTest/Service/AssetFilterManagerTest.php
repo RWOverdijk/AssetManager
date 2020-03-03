@@ -7,7 +7,7 @@ use Assetic\Asset\StringAsset;
 use Assetic\Filter\FilterInterface;
 use AssetManager\Service\AssetFilterManager;
 use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\ServiceManager\ServiceManager;
 
 class AssetFilterManagerTest extends PHPUnit_Framework_TestCase
 {
