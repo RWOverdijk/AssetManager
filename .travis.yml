@@ -18,7 +18,6 @@ matrix:
 
 before_script:
   - composer self-update
-  - composer require global hirak/prestissimo
   - if [ -z "$dependencies" ]; then composer install --prefer-dist -n; fi;
   - if [ "$dependencies" = "lowest" ]; then composer update --prefer-dist --prefer-lowest -n; fi;
   - if [ "$dependencies" = "highest" ]; then composer require laminas/laminas-mvc-console:^1.1 --prefer-dist -n; fi;
