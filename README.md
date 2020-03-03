@@ -18,7 +18,7 @@ In a nutshell, this module allows you to package assets with your module working
 
 ```sh
 ./composer.phar require rwoverdijk/assetmanager
-#when asked for a version, type "1.*".
+# When asked for a version, type "2.*" when using Laminas. When using Zend Framework type "1.*"
 ```
 
 ## Usage
