@@ -9,9 +9,9 @@ use AssetManager\Resolver\ConcatResolver;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ConcatResolverTest extends PHPUnit_Framework_TestCase
+class ConcatResolverTest extends TestCase
 {
     public function testConstruct()
     {
@@ -46,7 +46,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     {
         $resolver = new ConcatResolver;
 
-        $aggregateResolver = $this->getMock(ResolverInterface::class);
+        $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->once())
             ->method('resolve')
@@ -59,12 +59,12 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testSetAggregateResolverFails()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         $resolver = new ConcatResolver;
@@ -104,7 +104,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Zend\Stdlib\Exception\InvalidArgumentException
+     * @expectedException \Laminas\Stdlib\Exception\InvalidArgumentException
      */
     public function testSetConcatFails()
     {
@@ -154,7 +154,7 @@ class ConcatResolverTest extends PHPUnit_Framework_TestCase
             return $asset;
         };
 
-        $aggregateResolver = $this->getMock(ResolverInterface::class);
+        $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->exactly(2))
             ->method('resolve')

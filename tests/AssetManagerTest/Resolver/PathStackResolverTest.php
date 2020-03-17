@@ -9,9 +9,9 @@ use AssetManager\Resolver\MimeResolverAwareInterface;
 use AssetManager\Resolver\PathStackResolver;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PathStackResolverTest extends PHPUnit_Framework_TestCase
+class PathStackResolverTest extends TestCase
 {
     public function testConstructor()
     {
@@ -34,12 +34,12 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testSetMimeResolverFailObject()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         $resolver = new PathStackResolver();
@@ -47,12 +47,12 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testSetMimeResolverFailString()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         $resolver = new PathStackResolver();
@@ -79,7 +79,7 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
             $resolver->getPaths()->toArray()
         );
 
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $resolver->setPaths('invalid');
 
     }
@@ -136,7 +136,7 @@ class PathStackResolverTest extends PHPUnit_Framework_TestCase
     public function testWillRefuseInvalidPath()
     {
         $resolver = new PathStackResolver();
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $resolver->addPath(null);
     }
 

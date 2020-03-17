@@ -2,7 +2,7 @@
 
 namespace AssetManager\Resolver;
 
-use Zend\Stdlib\PriorityQueue;
+use Laminas\Stdlib\PriorityQueue;
 
 /**
  * The aggregate resolver consists out of a multitude of

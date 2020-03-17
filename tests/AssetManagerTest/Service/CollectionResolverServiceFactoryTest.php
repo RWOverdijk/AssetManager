@@ -4,10 +4,10 @@ namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Service\CollectionResolverServiceFactory;
-use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
+use Laminas\ServiceManager\ServiceManager;
 
-class CollectionResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
+class CollectionResolverServiceFactoryTest extends TestCase
 {
     /**
      * Mainly to avoid regressions

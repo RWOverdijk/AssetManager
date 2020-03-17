@@ -3,16 +3,16 @@
 namespace AssetManagerTest\Config;
 
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
+use Laminas\ServiceManager\Config;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Test to ensure config file is properly setup and all services are retrievable
  *
  * @package AssetManagerTest\Config
  */
-class ModuleServiceManagerConfigTest extends PHPUnit_Framework_TestCase
+class ModuleServiceManagerConfigTest extends TestCase
 {
     /**
      * Test the Service Managers Factories.

@@ -9,8 +9,8 @@ use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 use SplFileInfo;
 use Traversable;
-use Zend\Stdlib\PriorityQueue;
-use Zend\Stdlib\SplStack;
+use Laminas\Stdlib\PriorityQueue;
+use Laminas\Stdlib\SplStack;
 
 /**
  * This resolver allows you to resolve from a multitude of prioritized paths.

@@ -1,9 +1,9 @@
 <?php
 namespace AssetManager\Service;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class MimeResolverTest extends PHPUnit_Framework_TestCase
+class MimeResolverTest extends TestCase
 {
     public function testGetMimeType()
     {

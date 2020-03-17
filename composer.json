@@ -1,13 +1,12 @@
 {
     "name": "rwoverdijk/assetmanager",
-    "description": "An assetmanager module for Zend Framework 2.",
+    "description": "An assetmanager module for Laminas.",
     "license": "BSD-2-Clause",
     "type": "library",
     "keywords": [
         "asset",
         "asset manager",
-        "zf2",
-        "zend framework 2"
+        "laminas"
     ],
     "homepage": "https://github.com/RWOverdijk/AssetManager",
     "authors": [
@@ -23,25 +22,26 @@
         }
     ],
     "require": {
-        "php": "^5.5 || ^7.0",
-        "zendframework/zend-modulemanager": "^2.7.2",
-        "zendframework/zend-stdlib": "^2.7.7 || ^3.0.1",
-        "zendframework/zend-servicemanager": "^2.7.6 || ^3.1.1",
-        "zendframework/zend-loader": "^2.5.1",
-        "zendframework/zend-eventmanager": "^2.6.3 || ^3.0.1",
-        "zendframework/zend-mvc": "^2.7.9 || ^3.0.2",
-        "kriswallsmith/assetic": "^1.4.0"
+        "php": "^7.2",
+        "laminas/laminas-modulemanager": "^2.7.2",
+        "laminas/laminas-stdlib": "^2.7.7 || ^3.0.1",
+        "laminas/laminas-servicemanager": "^2.7.6 || ^3.1.1",
+        "laminas/laminas-loader": "^2.5.1",
+        "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
+        "laminas/laminas-mvc": "^2.7.9 || ^3.0.2",
+        "kriswallsmith/assetic": "^1.4.0",
+        "laminas/laminas-dependency-plugin": "^1.0"
     },
     "require-dev": {
-        "zendframework/zend-http": "^2.5.4",
-        "zendframework/zend-view": "^2.8.1",
-        "zendframework/zend-cache": "^2.7.1",
-        "zendframework/zend-console": "^2.6",
-        "phpunit/phpunit": "^4.8",
-        "squizlabs/php_codesniffer": "~1.5.0"
+        "laminas/laminas-http": "^2.5.4",
+        "laminas/laminas-view": "^2.8.1",
+        "laminas/laminas-cache": "^2.7.1",
+        "laminas/laminas-console": "^2.6",
+        "squizlabs/php_codesniffer": "~1.5.0",
+        "phpunit/phpunit": "^7.0"
     },
     "suggest": {
-        "zendframework/zend-mvc-console": "zend-mvc-console provides the ability to expose zend-mvc as a console application"
+        "laminas/laminas-mvc-console": "laminas-mvc-console provides the ability to expose laminas-mvc as a console application"
     },
     "autoload": {
         "psr-0": {

@@ -5,7 +5,7 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetCache;
 use Assetic\Asset\AssetInterface;
 use Assetic\Cache\CacheInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Asset Cache Manager.  Sets asset cache based on configuration.
@@ -13,7 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AssetCacheManager
 {
     /**
-     * @var \Zend\ServiceManager\ServiceLocatorInterface
+     * @var \Laminas\ServiceManager\ServiceLocatorInterface
      */
     protected $serviceLocator;
 

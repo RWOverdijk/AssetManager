@@ -2,14 +2,14 @@
 
 namespace AssetManager;
 
-use Zend\Console\Adapter\AdapterInterface;
-use Zend\EventManager\EventInterface;
-use Zend\Loader\AutoloaderFactory;
-use Zend\Loader\StandardAutoloader;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\BootstrapListenerInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\Mvc\MvcEvent;
+use Laminas\Console\Adapter\AdapterInterface;
+use Laminas\EventManager\EventInterface;
+use Laminas\Loader\AutoloaderFactory;
+use Laminas\Loader\StandardAutoloader;
+use Laminas\ModuleManager\Feature\AutoloaderProviderInterface;
+use Laminas\ModuleManager\Feature\BootstrapListenerInterface;
+use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+use Laminas\Mvc\MvcEvent;
 
 /**
  * Module class
@@ -51,7 +51,7 @@ class Module implements
      */
     public function onDispatch(MvcEvent $event)
     {
-        /* @var $response \Zend\Http\Response */
+        /* @var $response \Laminas\Http\Response */
         $response = $event->getResponse();
         if (!method_exists($response, 'getStatusCode') || $response->getStatusCode() !== 404) {
             return;
@@ -75,7 +75,7 @@ class Module implements
     public function onBootstrap(EventInterface $event)
     {
         // Attach for dispatch, and dispatch.error (with low priority to make sure statusCode gets set)
-        /* @var $eventManager \Zend\EventManager\EventManagerInterface */
+        /* @var $eventManager \Laminas\EventManager\EventManagerInterface */
         $eventManager = $event->getTarget()->getEventManager();
         $callback     = array($this, 'onDispatch');
         $priority     = -9999999;
@@ -84,7 +84,7 @@ class Module implements
     }
 
     /**
-     * @param \Zend\Console\Adapter\AdapterInterface $console
+     * @param \Laminas\Console\Adapter\AdapterInterface $console
      * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

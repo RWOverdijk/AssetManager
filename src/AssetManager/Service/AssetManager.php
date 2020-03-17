@@ -5,9 +5,9 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\ResolverInterface;
-use Zend\Http\PhpEnvironment\Request;
-use Zend\Stdlib\RequestInterface;
-use Zend\Stdlib\ResponseInterface;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Stdlib\RequestInterface;
+use Laminas\Stdlib\ResponseInterface;
 
 /**
  * @category    AssetManager
@@ -189,7 +189,7 @@ class AssetManager implements
         }
 
         /* @var $request Request */
-        /* @var $uri \Zend\Uri\UriInterface */
+        /* @var $uri \Laminas\Uri\UriInterface */
         $uri        = $request->getUri();
         $fullPath   = $uri->getPath();
         $path       = substr($fullPath, strlen($request->getBasePath()) + 1);

@@ -6,10 +6,10 @@ use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AggregateResolverServiceFactory;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
+use Laminas\ServiceManager\ServiceManager;
 
-class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
+class AggregateResolverServiceFactoryTest extends TestCase
 {
     /**
      * {@inheritDoc}
@@ -45,7 +45,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $mockedResolver = $this->getMock(ResolverInterface::class);
+        $mockedResolver = $this->createMock(ResolverInterface::class);
         $mockedResolver
             ->expects($this->once())
             ->method('resolve')
@@ -100,7 +100,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $mockedResolver1 = $this->getMock(ResolverInterface::class);
+        $mockedResolver1 = $this->createMock(ResolverInterface::class);
         $mockedResolver1
             ->expects($this->once())
             ->method('resolve')
@@ -109,7 +109,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('AssetManager\Service\MimeResolver', new MimeResolver);
         $serviceManager->setService('mocked_resolver_1', $mockedResolver1);
 
-        $mockedResolver2 = $this->getMock(ResolverInterface::class);
+        $mockedResolver2 = $this->createMock(ResolverInterface::class);
         $mockedResolver2
             ->expects($this->never())
             ->method('resolve');
@@ -136,7 +136,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $mockedResolver1 = $this->getMock(ResolverInterface::class);
+        $mockedResolver1 = $this->createMock(ResolverInterface::class);
         $mockedResolver1
             ->expects($this->once())
             ->method('resolve')
@@ -145,7 +145,7 @@ class AggregateResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager->setService('mocked_resolver_1', $mockedResolver1);
         $serviceManager->setService('AssetManager\Service\MimeResolver', new MimeResolver);
 
-        $mockedResolver2 = $this->getMock(ResolverInterface::class);
+        $mockedResolver2 = $this->createMock(ResolverInterface::class);
         $mockedResolver2
             ->expects($this->once())
             ->method('resolve')

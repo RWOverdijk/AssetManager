@@ -7,8 +7,8 @@ use Assetic\Factory\Resource\DirectoryResource;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 use SplFileInfo;
-use Zend\Db\TableGateway\Exception\RuntimeException;
-use Zend\Stdlib\SplStack;
+use Laminas\Db\TableGateway\Exception\RuntimeException;
+use Laminas\Stdlib\SplStack;
 
 /**
  * This resolver allows you to resolve from a stack of aliases to a path.

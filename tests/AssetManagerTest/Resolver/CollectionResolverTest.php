@@ -10,13 +10,13 @@ use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\MimeResolver;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CollectionsResolverTest extends PHPUnit_Framework_TestCase
+class CollectionsResolverTest extends TestCase
 {
     public function getResolverMock()
     {
-        $resolver = $this->getMock(ResolverInterface::class);
+        $resolver = $this->createMock(ResolverInterface::class);
         $resolver
             ->expects($this->once())
             ->method('resolve')
@@ -130,7 +130,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     {
         $resolver = new CollectionResolver;
 
-        $aggregateResolver = $this->getMock(ResolverInterface::class);
+        $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->once())
             ->method('resolve')
@@ -143,12 +143,12 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \PHPUnit\Framework\Error\Error
      */
     public function testSetAggregateResolverFails()
     {
         if (PHP_MAJOR_VERSION >= 7) {
-            $this->setExpectedException('\TypeError');
+            $this->expectException('\TypeError');
         }
 
         $resolver = new CollectionResolver;
@@ -194,7 +194,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testCouldNotResolve()
     {
-        $aggregateResolver = $this->getMock(ResolverInterface::class);
+        $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->once())
             ->method('resolve')
@@ -215,7 +215,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
      */
     public function testResolvesToNonAsset()
     {
-        $aggregateResolver = $this->getMock(ResolverInterface::class);
+        $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->once())
             ->method('resolve')
@@ -252,13 +252,13 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
             return $$assetName;
         };
 
-        $aggregateResolver = $this->getMock(ResolverInterface::class);
+        $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->exactly(2))
             ->method('resolve')
             ->will($this->returnCallback($callback));
 
-        $assetFilterManager = $this->getMock(AssetFilterManager::class);
+        $assetFilterManager = $this->createMock(AssetFilterManager::class);
         $assetFilterManager
             ->expects($this->once())
             ->method('setFilters')
@@ -280,7 +280,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
 
     public function testTwoCollectionsHasDifferentCacheKey()
     {
-        $aggregateResolver = $this->getMock(ResolverInterface::class);
+        $aggregateResolver = $this->createMock(ResolverInterface::class);
 
         //assets with same 'last modifled time'.
         $now = time();
@@ -321,7 +321,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
         $collection1 = $resolver->resolve('collection1');
         $collection2 = $resolver->resolve('collection2');
 
-        $cacheInterface = $this->getMock(CacheInterface::class);
+        $cacheInterface = $this->createMock(CacheInterface::class);
 
         $cacheKeys = new \ArrayObject();
         $callback = function ($key) use ($cacheKeys) {
@@ -367,7 +367,7 @@ class CollectionsResolverTest extends PHPUnit_Framework_TestCase
             return $$assetName;
         };
 
-        $aggregateResolver = $this->getMock(ResolverInterface::class);
+        $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
             ->expects($this->exactly(3))
             ->method('resolve')

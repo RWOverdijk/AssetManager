@@ -4,10 +4,10 @@ namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\PathStackResolver;
 use AssetManager\Service\PathStackResolverServiceFactory;
-use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
+use Laminas\ServiceManager\ServiceManager;
 
-class PathStackResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
+class PathStackResolverServiceFactoryTest extends TestCase
 {
     /**
      * Mainly to avoid regressions

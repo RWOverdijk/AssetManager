@@ -9,15 +9,15 @@ use Assetic\Cache\CacheInterface;
 use Assetic\Cache\FilesystemCache;
 use AssetManager\Cache\FilePathCache;
 use AssetManager\Service\AssetCacheManager;
-use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Test file for the Asset Cache Manager
  *
  * @package AssetManagerTest\Service
  */
-class AssetCacheManagerTest extends PHPUnit_Framework_TestCase
+class AssetCacheManagerTest extends TestCase
 {
     /**
      * @covers \AssetManager\Service\AssetCacheManager::setCache

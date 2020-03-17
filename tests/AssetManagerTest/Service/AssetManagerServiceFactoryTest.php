@@ -8,10 +8,10 @@ use AssetManager\Service\AssetCacheManager;
 use AssetManager\Service\AssetFilterManager;
 use AssetManager\Service\AssetManager;
 use AssetManager\Service\AssetManagerServiceFactory;
-use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
+use Laminas\ServiceManager\ServiceManager;
 
-class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
+class AssetManagerServiceFactoryTest extends TestCase
 {
     public function testCreateService()
     {
@@ -23,7 +23,7 @@ class AssetManagerServiceFactoryTest extends PHPUnit_Framework_TestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             AggregateResolver::class,
-            $this->getMock(ResolverInterface::class)
+            $this->createMock(ResolverInterface::class)
         );
 
         $serviceManager->setService(

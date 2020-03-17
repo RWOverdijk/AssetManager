@@ -6,7 +6,7 @@ By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius
 
 ## Introduction
 This module is intended for usage with a default directory structure of a
-[ZendSkeletonApplication](https://github.com/zendframework/ZendSkeletonApplication/). It provides functionality to load
+[LaminasSkeletonApplication](https://github.com/laminas/laminas-mvc-skeleton/). It provides functionality to load
 assets and static files from your module directories through simple configuration.
 This allows you to avoid having to copy your files over to the `public/` directory, and makes usage of assets very
 similar to what already is possible with view scripts, which can be overridden by other modules.
@@ -18,7 +18,7 @@ In a nutshell, this module allows you to package assets with your module working
 
 ```sh
 ./composer.phar require rwoverdijk/assetmanager
-#when asked for a version, type "1.*".
+# When asked for a version, type "2.*" when using Laminas. When using Zend Framework type "1.*"
 ```
 
 ## Usage

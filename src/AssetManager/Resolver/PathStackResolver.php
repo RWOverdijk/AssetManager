@@ -8,7 +8,7 @@ use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 use SplFileInfo;
 use Traversable;
-use Zend\Stdlib\SplStack;
+use Laminas\Stdlib\SplStack;
 
 /**
  * This resolver allows you to resolve from a stack of paths.

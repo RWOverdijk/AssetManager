@@ -4,10 +4,10 @@ namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\MapResolver;
 use AssetManager\Service\MapResolverServiceFactory;
-use PHPUnit_Framework_TestCase;
-use Zend\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
+use Laminas\ServiceManager\ServiceManager;
 
-class MapResolverServiceFactoryTest extends PHPUnit_Framework_TestCase
+class MapResolverServiceFactoryTest extends TestCase
 {
     /**
      * Mainly to avoid regressions
