@@ -4,7 +4,7 @@ namespace AssetManagerTest\Service;
 
 use Assetic\Asset;
 use Assetic\Asset\AssetCache;
-use Assetic\Cache\CacheInterface;
+use Assetic\Contracts\Cache\CacheInterface;
 use AssetManager\Resolver\AggregateResolverAwareInterface;
 use AssetManager\Resolver\CollectionResolver;
 use AssetManager\Resolver\ResolverInterface;

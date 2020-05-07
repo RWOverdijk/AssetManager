@@ -2,7 +2,7 @@
 
 namespace AssetManagerTest\Cache;
 
-use Assetic\Cache\CacheInterface;
+use Assetic\Contracts\Cache\CacheInterface;
 use AssetManager\Cache\FilePathCache;
 use PHPUnit\Framework\TestCase;
 
