@@ -2,7 +2,7 @@
 
 namespace AssetManager\Cache;
 
-use Assetic\Cache\CacheInterface;
+use Assetic\Contracts\Cache\CacheInterface;
 use Laminas\Cache\Storage\StorageInterface;
 
 /**
