@@ -116,7 +116,9 @@ class AssetFilterManagerTest extends TestCase
                 if ($filterInstance === null) {
                     $filterInstance = $filter;
                 }
-                return  $filter === $filterInstance;
+                $this->assertSame($filter, $filterInstance);
+
+                return $filter === $filterInstance;
             }));
         
         $assetFilterManager->setFilters('test/path.test', $asset);
