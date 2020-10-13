@@ -23,7 +23,7 @@ class AssetTest extends TestCase
         return $resolver;
     }
 
-    public function testInvoke()
+    public function testInvoke(): void
     {
         $configWithCache = array(
             'view_helper' => array(
@@ -61,19 +61,19 @@ class AssetTest extends TestCase
         $newFilenameWithCache = $helperWithCache->__invoke($filename);
 
         // with cache file should have a timestamp query param
-        $this->assertContains('?_=', $newFilenameWithCache);
+        $this->assertStringContainsString('?_=', $newFilenameWithCache);
 
         $helperWithoutCache = new Asset($resolver, null, $configWithoutCache);
         $newFilenameWithoutCache = $helperWithoutCache->__invoke($filename);
 
         // without cache file should have a timestamp query param
-        $this->assertContains('?_=', $newFilenameWithoutCache);
+        $this->assertStringContainsString('?_=', $newFilenameWithoutCache);
 
         // without cache the timestamp query param should be different than with cache
         $this->assertNotSame($newFilenameWithCache, $newFilenameWithoutCache);
     }
 
-    public function testSameResultWithoutCachingConfig()
+    public function testSameResultWithoutCachingConfig(): void
     {
         $config = array(
             'view_helper' => array(
@@ -94,11 +94,11 @@ class AssetTest extends TestCase
         $helper = new Asset($resolver, null, $config);
         $newFilename = $helper->__invoke($filename);
 
-        $this->assertContains('?_=', $newFilename);
+        $this->assertStringContainsString('?_=', $newFilename);
         $this->assertNotSame($newFilename, $filename);
     }
 
-    public function testForceToNotAppendTimestampWithoutCache()
+    public function testForceToNotAppendTimestampWithoutCache(): void
     {
         $config = array(
             'view_helper' => array(
@@ -119,7 +119,7 @@ class AssetTest extends TestCase
         $helper = new Asset($resolver, null, $config);
         $newFilename = $helper->__invoke($filename);
 
-        $this->assertNotContains('?_=', $newFilename);
+        $this->assertStringNotContainsString('?_=', $newFilename);
         $this->assertSame($newFilename, $filename);
     }
 }

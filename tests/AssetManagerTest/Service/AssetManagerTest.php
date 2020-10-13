@@ -22,7 +22,7 @@ class AssetManagerTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         require_once __DIR__ . '/../../_files/JSMin.inc';
         require_once __DIR__ . '/../../_files/CustomFilter.php';
@@ -77,20 +77,22 @@ class AssetManagerTest extends TestCase
         return $resolver;
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $resolver     = $this->createMock(ResolverInterface::class);
         $assetManager = new AssetManager($resolver, array('herp', 'derp'));
 
+        $refClass = new \ReflectionClass(AssetManager::class);
+        $configProp = $refClass->getProperty('config');
+        $configProp->setAccessible(true);
+
         $this->assertSame($resolver, $assetManager->getResolver());
-        $this->assertAttributeEquals(array('herp', 'derp'), 'config', $assetManager);
+        $this->assertSame(array('herp', 'derp'), $configProp->getValue($assetManager));
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\Error\Error
-     */
-    public function testConstructFailsOnOtherType()
+    public function testConstructFailsOnOtherType(): void
     {
+        $this->expectError();
         if (PHP_MAJOR_VERSION >= 7) {
             $this->expectException('\TypeError');
         }
@@ -98,7 +100,7 @@ class AssetManagerTest extends TestCase
         new AssetManager('invalid');
     }
 
-    public function testInvalidRequest()
+    public function testInvalidRequest(): void
     {
         $mimeResolver    = new MimeResolver;
         $asset           = new Asset\FileAsset(__FILE__);
@@ -118,7 +120,7 @@ class AssetManagerTest extends TestCase
         $this->assertFalse($resolvesToAsset);
     }
 
-    public function testResolvesToAsset()
+    public function testResolvesToAsset(): void
     {
         $assetManager    = new AssetManager($this->getResolver());
         $resolvesToAsset = $assetManager->resolvesToAsset($this->getRequest());
@@ -130,14 +132,14 @@ class AssetManagerTest extends TestCase
      * Mock will throw error if called more than once
      */
 
-    public function testResolvesToAssetCalledOnce()
+    public function testResolvesToAssetCalledOnce(): void
     {
         $assetManager = new AssetManager($this->getResolver());
         $assetManager->resolvesToAsset($this->getRequest());
         $assetManager->resolvesToAsset($this->getRequest());
     }
 
-    public function testResolvesToAssetReturnsBoolean()
+    public function testResolvesToAssetReturnsBoolean(): void
     {
         $assetManager    = new AssetManager($this->getResolver());
         $resolvesToAsset = $assetManager->resolvesToAsset($this->getRequest());
@@ -149,7 +151,7 @@ class AssetManagerTest extends TestCase
      * Test if works by checking if is same reference to instance
      */
 
-    public function testSetResolver()
+    public function testSetResolver(): void
     {
         $assetManager = new AssetManager($this->createMock(ResolverInterface::class));
 
@@ -159,11 +161,9 @@ class AssetManagerTest extends TestCase
         $this->assertSame($newResolver, $assetManager->getResolver());
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\Error\Error
-     */
-    public function testSetResolverFailsOnInvalidType()
+    public function testSetResolverFailsOnInvalidType(): void
     {
+        $this->expectError();
         if (PHP_MAJOR_VERSION >= 7) {
             $this->expectException('\TypeError');
         }
@@ -175,7 +175,7 @@ class AssetManagerTest extends TestCase
      * Added for the sake of method coverage.
      */
 
-    public function testGetResolver()
+    public function testGetResolver(): void
     {
         $resolver     = $this->createMock(ResolverInterface::class);
         $assetManager = new AssetManager($resolver);
@@ -183,7 +183,7 @@ class AssetManagerTest extends TestCase
         $this->assertSame($resolver, $assetManager->getResolver());
     }
 
-    public function testSetStandardFilters()
+    public function testSetStandardFilters(): void
     {
         $config = array(
             'filters' => array(
@@ -210,7 +210,7 @@ class AssetManagerTest extends TestCase
         $this->assertEquals($minified, $response->getBody());
     }
 
-    public function testSetExtensionFilters()
+    public function testSetExtensionFilters(): void
     {
         $config = array(
             'filters' => array(
@@ -240,7 +240,7 @@ class AssetManagerTest extends TestCase
         $this->assertEquals($minified, $response->getBody());
     }
 
-    public function testSetExtensionFiltersNotDuplicate()
+    public function testSetExtensionFiltersNotDuplicate(): void
     {
         $config = array(
             'filters' => array(
@@ -275,7 +275,7 @@ class AssetManagerTest extends TestCase
         $this->assertEquals($reversedOnlyOnce, $response->getBody());
     }
 
-    public function testSetMimeTypeFilters()
+    public function testSetMimeTypeFilters(): void
     {
         $config = array(
             'filters' => array(
@@ -305,7 +305,7 @@ class AssetManagerTest extends TestCase
         $this->assertEquals($minified, $response->getBody());
     }
 
-    public function testCustomFilters()
+    public function testCustomFilters(): void
     {
         $config = array(
             'filters' => array(
@@ -333,7 +333,7 @@ class AssetManagerTest extends TestCase
         $this->assertEquals('called', $response->getBody());
     }
 
-    public function testSetEmptyFilters()
+    public function testSetEmptyFilters(): void
     {
         $config = array(
             'filters' => array(
@@ -358,19 +358,17 @@ class AssetManagerTest extends TestCase
         $this->assertEquals(file_get_contents(__DIR__ . '/../../_files/require-jquery.js'), $response->getBody());
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\RuntimeException
-     */
-    public function testSetFalseClassFilter()
+    public function testSetFalseClassFilter(): void
     {
+        $this->expectException(\AssetManager\Exception\RuntimeException::class);
         $config = array(
-            'filters' => array(
-                'asset-path' => array(
-                    array(
-                        'filter' => 'Bacon',
-                    ),
-                ),
-            ),
+           'filters' => array(
+               'asset-path' => array(
+                   array(
+                       'filter' => 'Bacon',
+                   ),
+               ),
+           ),
         );
 
         $assetFilterManager = new AssetFilterManager($config['filters']);
@@ -387,7 +385,7 @@ class AssetManagerTest extends TestCase
         $assetManager->setAssetOnResponse($response);
     }
 
-    public function testSetAssetOnResponse()
+    public function testSetAssetOnResponse(): void
     {
         $assetFilterManager = new AssetFilterManager();
         $assetCacheManager  = $this->getAssetCacheManagerMock();
@@ -403,7 +401,7 @@ class AssetManagerTest extends TestCase
         $this->assertSame(file_get_contents(__FILE__), $response->getContent());
     }
 
-    public function testAssetSetOnResponse()
+    public function testAssetSetOnResponse(): void
     {
         $assetManager = new AssetManager($this->getResolver());
         $assetCacheManager = $this->getAssetCacheManagerMock();
@@ -419,18 +417,16 @@ class AssetManagerTest extends TestCase
         $this->assertTrue($assetManager->assetSetOnResponse());
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\RuntimeException
-     */
-    public function testSetAssetOnResponseNoMimeType()
+    public function testSetAssetOnResponseNoMimeType(): void
     {
+        $this->expectException(\AssetManager\Exception\RuntimeException::class);
         $asset    = new Asset\FileAsset(__FILE__);
         $resolver = $this->createMock(ResolverInterface::class);
         $resolver
-            ->expects($this->once())
-            ->method('resolve')
-            ->with('asset-path')
-            ->will($this->returnValue($asset));
+           ->expects($this->once())
+           ->method('resolve')
+           ->with('asset-path')
+           ->will($this->returnValue($asset));
 
         $assetManager = new AssetManager($resolver);
         $request      = $this->getRequest();
@@ -439,7 +435,7 @@ class AssetManagerTest extends TestCase
         $assetManager->setAssetOnResponse(new Response);
     }
 
-    public function testResponseHeadersForAsset()
+    public function testResponseHeadersForAsset(): void
     {
         $mimeResolver       = new MimeResolver;
         $assetFilterManager = new AssetFilterManager();
@@ -468,18 +464,16 @@ class AssetManagerTest extends TestCase
         $this->assertSame($headers, $response->getHeaders()->toString());
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\RuntimeException
-     */
-    public function testSetAssetOnReponseFailsWhenNotResolved()
+    public function testSetAssetOnReponseFailsWhenNotResolved(): void
     {
+        $this->expectException(\AssetManager\Exception\RuntimeException::class);
         $resolver     = $this->createMock(ResolverInterface::class);
         $assetManager = new AssetManager($resolver);
 
         $assetManager->setAssetOnResponse(new Response);
     }
 
-    public function testResolvesToAssetNotFound()
+    public function testResolvesToAssetNotFound(): void
     {
         $resolver        = $this->createMock(ResolverInterface::class);
         $assetManager    = new AssetManager($resolver);
@@ -488,7 +482,7 @@ class AssetManagerTest extends TestCase
         $this->assertFalse($resolvesToAsset);
     }
 
-    public function testClearOutputBufferInSetAssetOnResponse()
+    public function testClearOutputBufferInSetAssetOnResponse(): void
     {
         $this->expectOutputString(file_get_contents(__FILE__));
 

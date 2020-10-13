@@ -101,7 +101,6 @@ class ConsoleController extends AbstractActionController
         }
 
         foreach ($this->appConfig['asset_manager']['caching'] as $configName => $config) {
-
             if (empty($config['options']['dir'])) {
                 continue;
             }

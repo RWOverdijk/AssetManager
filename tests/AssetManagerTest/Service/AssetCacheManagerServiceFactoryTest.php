@@ -9,7 +9,7 @@ use Laminas\ServiceManager\ServiceManager;
 
 class AssetCacheManagerServiceFactoryTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(

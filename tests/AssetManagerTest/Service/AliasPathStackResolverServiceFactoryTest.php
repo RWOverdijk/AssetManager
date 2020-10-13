@@ -17,7 +17,7 @@ class AliasPathStackResolverServiceFactoryTest extends TestCase
      *
      * @covers \AssetManager\Service\AliasPathStackResolverServiceFactory
      */
-    public function testCreateService()
+    public function testCreateService(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -57,7 +57,7 @@ class AliasPathStackResolverServiceFactoryTest extends TestCase
      *
      * @covers \AssetManager\Service\AliasPathStackResolverServiceFactory
      */
-    public function testCreateServiceWithNoConfig()
+    public function testCreateServiceWithNoConfig(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('config', array());

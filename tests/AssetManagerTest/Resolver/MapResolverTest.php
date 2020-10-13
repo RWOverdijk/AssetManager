@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 
 class MapResolverTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $resolver = new MapResolver(
             array(
@@ -28,13 +28,13 @@ class MapResolverTest extends TestCase
         );
     }
 
-    public function testGetMimeResolver()
+    public function testGetMimeResolver(): void
     {
         $resolver = new MapResolver;
         $this->assertNull($resolver->getMimeResolver());
     }
 
-    public function testSetMapSuccess()
+    public function testSetMapSuccess(): void
     {
         $resolver = new MapResolver;
         $resolver->setMap(new MapIterable);
@@ -64,28 +64,26 @@ class MapResolverTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\InvalidArgumentException
-     */
-    public function testSetMapFails()
+    public function testSetMapFails(): void
     {
+        $this->expectException(\AssetManager\Exception\InvalidArgumentException::class);
         $resolver = new MapResolver;
         $resolver->setMap(new \stdClass);
     }
 
-    public function testGetMap()
+    public function testGetMap(): void
     {
         $resolver = new MapResolver;
         $this->assertSame(array(), $resolver->getMap());
     }
 
-    public function testResolveNull()
+    public function testResolveNull(): void
     {
         $resolver = new MapResolver;
         $this->assertNull($resolver->resolve('bacon'));
     }
 
-    public function testResolveAssetFail()
+    public function testResolveAssetFail(): void
     {
         $resolver = new MapResolver;
 
@@ -96,7 +94,7 @@ class MapResolverTest extends TestCase
         $this->assertNull($resolver->setMap($asset1));
     }
 
-    public function testResolveAssetSuccess()
+    public function testResolveAssetSuccess(): void
     {
         $resolver = new MapResolver;
 
@@ -120,7 +118,7 @@ class MapResolverTest extends TestCase
         $this->assertEquals($asset->dump(), file_get_contents(__FILE__));
     }
 
-    public function testResolveHttpAssetSuccess()
+    public function testResolveHttpAssetSuccess(): void
     {
         $resolver     = new MapResolver;
         $mimeResolver = $this->createMock(MimeResolver::class);
@@ -149,7 +147,7 @@ class MapResolverTest extends TestCase
      *
      * @covers \AssetManager\Resolver\MapResolver::collect
      */
-    public function testCollect()
+    public function testCollect(): void
     {
         $map = array(
             'foo' => 'bar',

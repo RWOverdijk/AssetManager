@@ -14,12 +14,12 @@ class AssetFilterManagerTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         require_once __DIR__ . '/../../_files/CustomFilter.php';
     }
 
-    public function testNulledValuesAreSkipped()
+    public function testNulledValuesAreSkipped(): void
     {
         $assetFilterManager = new AssetFilterManager(array(
         'test/path.test' => array(
@@ -34,7 +34,7 @@ class AssetFilterManagerTest extends TestCase
         $this->assertEquals('Herp Derp', $asset->dump());
     }
 
-    public function testensureByService()
+    public function testensureByService(): void
     {
         $assetFilterManager = new AssetFilterManager(array(
             'test/path.test' => array(
@@ -55,17 +55,15 @@ class AssetFilterManagerTest extends TestCase
         $this->assertEquals('called', $asset->dump());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testensureByServiceInvalid()
+    public function testensureByServiceInvalid(): void
     {
+        $this->expectException(\RuntimeException::class);
         $assetFilterManager = new AssetFilterManager(array(
-            'test/path.test' => array(
-                array(
-                    'service' => 9,
-                ),
-            ),
+           'test/path.test' => array(
+               array(
+                   'service' => 9,
+               ),
+           ),
         ));
 
         $serviceManager = new ServiceManager();
@@ -79,16 +77,14 @@ class AssetFilterManagerTest extends TestCase
         $this->assertEquals('called', $asset->dump());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testensureByInvalid()
+    public function testensureByInvalid(): void
     {
+        $this->expectException(\RuntimeException::class);
         $assetFilterManager = new AssetFilterManager(array(
-            'test/path.test' => array(
-                array(
-                ),
-            ),
+           'test/path.test' => array(
+               array(
+               ),
+           ),
         ));
 
         $asset = new StringAsset('Herp derp');
@@ -96,7 +92,7 @@ class AssetFilterManagerTest extends TestCase
         $assetFilterManager->setFilters('test/path.test', $asset);
     }
     
-    public function testFiltersAreInstantiatedOnce()
+    public function testFiltersAreInstantiatedOnce(): void
     {
         $assetFilterManager = new AssetFilterManager(array(
             'test/path.test' => array(
@@ -107,7 +103,7 @@ class AssetFilterManagerTest extends TestCase
         ));
         
         $filterInstance = null;
-        
+
         $asset = $this->createMock(AssetInterface::class);
         $asset
             ->expects($this->any())

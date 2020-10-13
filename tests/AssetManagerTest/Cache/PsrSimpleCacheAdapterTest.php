@@ -12,7 +12,7 @@ use Psr\SimpleCache\CacheInterface;
  */
 class PsrSimpleCacheAdapterTest extends \PHPUnit\Framework\TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $mockPsrCache = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
@@ -23,7 +23,7 @@ class PsrSimpleCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(PsrSimpleCacheAdapter::class, $adapter);
     }
 
-    public function testHasMethodCallsPsrCacheHas()
+    public function testHasMethodCallsPsrCacheHas(): void
     {
         $mockLaminasCache = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
@@ -36,7 +36,7 @@ class PsrSimpleCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $adapter->has('SomeKey');
     }
 
-    public function testGetMethodCallsPsrCacheGet()
+    public function testGetMethodCallsPsrCacheGet(): void
     {
         $mockLaminasCache = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
@@ -50,7 +50,7 @@ class PsrSimpleCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $adapter->get('SomeKey');
     }
 
-    public function testSetMethodCallsPsrCacheSet()
+    public function testSetMethodCallsPsrCacheSet(): void
     {
         $mockLaminasCache = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
@@ -64,7 +64,7 @@ class PsrSimpleCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $adapter->set('SomeKey', array());
     }
 
-    public function testSetMethodCallsPsrCacheSetWithTTL()
+    public function testSetMethodCallsPsrCacheSetWithTTL(): void
     {
         $mockLaminasCache = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()
@@ -78,7 +78,7 @@ class PsrSimpleCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $adapter->set('SomeKey', array());
     }
 
-    public function testRemoveMethodCallsPsrCacheRemove()
+    public function testRemoveMethodCallsPsrCacheRemove(): void
     {
         $mockLaminasCache = $this->getMockBuilder(CacheInterface::class)
             ->disableOriginalConstructor()

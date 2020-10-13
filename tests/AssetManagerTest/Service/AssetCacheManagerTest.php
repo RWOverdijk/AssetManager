@@ -21,7 +21,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::setCache
      */
-    public function testSetCache()
+    public function testSetCache(): void
     {
         $serviceManager = new ServiceManager();
 
@@ -47,7 +47,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::setCache
      */
-    public function testSetCacheNoProviderFound()
+    public function testSetCacheNoProviderFound(): void
     {
         $serviceManager = new ServiceManager();
         $config = array(
@@ -71,7 +71,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::getProvider
      */
-    public function testGetProvider()
+    public function testGetProvider(): void
     {
         $serviceManager = new ServiceManager();
 
@@ -96,7 +96,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::getProvider
      */
-    public function testGetProviderUsingDefaultConfiguration()
+    public function testGetProviderUsingDefaultConfiguration(): void
     {
         $serviceManager = new ServiceManager();
         $config = array(
@@ -120,7 +120,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::getProvider
      */
-    public function testGetProviderWithDefinedService()
+    public function testGetProviderWithDefinedService(): void
     {
         $serviceManager = new ServiceManager();
 
@@ -152,7 +152,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::getProvider
      */
-    public function testGetProviderWithCacheOptions()
+    public function testGetProviderWithCacheOptions(): void
     {
         $serviceManager = new ServiceManager();
 
@@ -192,7 +192,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::getProvider
      */
-    public function testGetProviderWithMultipleDefinition()
+    public function testGetProviderWithMultipleDefinition(): void
     {
         $serviceManager = new ServiceManager();
         $config = array(
@@ -242,7 +242,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::getProvider
      */
-    public function testGetProviderWithNoCacheConfig()
+    public function testGetProviderWithNoCacheConfig(): void
     {
         $serviceManager = new ServiceManager();
 
@@ -260,7 +260,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::getCacheProviderConfig
      */
-    public function testGetCacheProviderConfig()
+    public function testGetCacheProviderConfig(): void
     {
         $expected = array(
             'cache' => FilePathCache::class,
@@ -288,7 +288,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::getCacheProviderConfig
      */
-    public function testGetCacheProviderConfigReturnsDefaultCache()
+    public function testGetCacheProviderConfigReturnsDefaultCache(): void
     {
         $expected = array(
             'cache' => FilePathCache::class,
@@ -319,7 +319,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::classMapper
      */
-    public function testClassMapperResolvesFilesystemCache()
+    public function testClassMapperResolvesFilesystemCache(): void
     {
         $serviceManager = new ServiceManager();
 
@@ -337,7 +337,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::classMapper
      */
-    public function testClassMapperResolvesFilePathCache()
+    public function testClassMapperResolvesFilePathCache(): void
     {
         $serviceManager = new ServiceManager();
 
@@ -356,7 +356,7 @@ class AssetCacheManagerTest extends TestCase
     /**
      * @covers \AssetManager\Service\AssetCacheManager::classMapper
      */
-    public function testClassMapperResolvesShorthandClassAlias()
+    public function testClassMapperResolvesShorthandClassAlias(): void
     {
         $serviceManager = new ServiceManager();
 

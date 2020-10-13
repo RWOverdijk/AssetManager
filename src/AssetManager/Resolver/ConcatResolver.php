@@ -128,7 +128,6 @@ class ConcatResolver implements
         $resolvedAssets = array();
 
         foreach ((array) $this->concats[$name] as $assetName) {
-
             $resolvedAsset = $this->getAggregateResolver()->resolve((string) $assetName);
 
             if (!$resolvedAsset instanceof AssetInterface) {

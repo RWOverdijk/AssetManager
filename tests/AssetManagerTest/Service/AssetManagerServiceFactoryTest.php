@@ -13,7 +13,7 @@ use Laminas\ServiceManager\ServiceManager;
 
 class AssetManagerServiceFactoryTest extends TestCase
 {
-    public function testCreateService()
+    public function testCreateService(): void
     {
         $assetFilterManager = new AssetFilterManager();
         $assetCacheManager = $this->getMockBuilder(AssetCacheManager::class)

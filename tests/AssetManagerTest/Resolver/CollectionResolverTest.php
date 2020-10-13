@@ -26,7 +26,7 @@ class CollectionsResolverTest extends TestCase
         return $resolver;
     }
 
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $resolver = new CollectionResolver;
 
@@ -50,7 +50,7 @@ class CollectionsResolverTest extends TestCase
         );
     }
 
-    public function testSetCollections()
+    public function testSetCollections(): void
     {
         $resolver = new CollectionResolver;
         $collArr  = array(
@@ -106,27 +106,23 @@ class CollectionsResolverTest extends TestCase
         $this->assertEquals($collArr, $resolver->getCollections());
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\InvalidArgumentException
-     */
-    public function testSetCollectionFailsObject()
+    public function testSetCollectionFailsObject(): void
     {
+        $this->expectException(\AssetManager\Exception\InvalidArgumentException::class);
         $resolver = new CollectionResolver;
 
         $resolver->setCollections(new \stdClass);
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\InvalidArgumentException
-     */
-    public function testSetCollectionFailsString()
+    public function testSetCollectionFailsString(): void
     {
+        $this->expectException(\AssetManager\Exception\InvalidArgumentException::class);
         $resolver = new CollectionResolver;
 
         $resolver->setCollections('invalid');
     }
 
-    public function testSetGetAggregateResolver()
+    public function testSetGetAggregateResolver(): void
     {
         $resolver = new CollectionResolver;
 
@@ -142,11 +138,9 @@ class CollectionsResolverTest extends TestCase
         $this->assertEquals('world', $resolver->getAggregateResolver()->resolve('say'));
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\Error\Error
-     */
-    public function testSetAggregateResolverFails()
+    public function testSetAggregateResolverFails(): void
     {
+        $this->expectError();
         if (PHP_MAJOR_VERSION >= 7) {
             $this->expectException('\TypeError');
         }
@@ -159,50 +153,43 @@ class CollectionsResolverTest extends TestCase
     /**
      * Resolve
      */
-    public function testResolveNoArgsEqualsNull()
+    public function testResolveNoArgsEqualsNull(): void
     {
         $resolver = new CollectionResolver;
 
         $this->assertNull($resolver->resolve('bacon'));
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\RuntimeException
-     */
-    public function testResolveNonArrayCollectionException()
+    public function testResolveNonArrayCollectionException(): void
     {
+        $this->expectException(\AssetManager\Exception\RuntimeException::class);
         $resolver = new CollectionResolver(array('bacon'=>'bueno'));
 
         $resolver->resolve('bacon');
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\RuntimeException
-     */
-    public function testCollectionItemNonString()
+    public function testCollectionItemNonString(): void
     {
+        $this->expectException(\AssetManager\Exception\RuntimeException::class);
         $resolver = new CollectionResolver(array(
-            'bacon' => array(new \stdClass())
+           'bacon' => array(new \stdClass())
         ));
 
         $resolver->resolve('bacon');
-
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\RuntimeException
-     */
-    public function testCouldNotResolve()
+    public function testCouldNotResolve(): void
     {
+        $this->expectException(\AssetManager\Exception\RuntimeException::class);
         $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
-            ->expects($this->once())
-            ->method('resolve')
-            ->with('bacon')
-            ->will($this->returnValue(null));
+           ->expects($this->once())
+           ->method('resolve')
+           ->with('bacon')
+           ->will($this->returnValue(null));
 
         $resolver = new CollectionResolver(array(
-            'myCollection' => array('bacon')
+           'myCollection' => array('bacon')
         ));
 
         $resolver->setAggregateResolver($aggregateResolver);
@@ -210,20 +197,18 @@ class CollectionsResolverTest extends TestCase
         $resolver->resolve('myCollection');
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\RuntimeException
-     */
-    public function testResolvesToNonAsset()
+    public function testResolvesToNonAsset(): void
     {
+        $this->expectException(\AssetManager\Exception\RuntimeException::class);
         $aggregateResolver = $this->createMock(ResolverInterface::class);
         $aggregateResolver
-            ->expects($this->once())
-            ->method('resolve')
-            ->with('bacon')
-            ->will($this->returnValue('invalid'));
+           ->expects($this->once())
+           ->method('resolve')
+           ->with('bacon')
+           ->will($this->returnValue('invalid'));
 
         $resolver = new CollectionResolver(array(
-            'myCollection' => array('bacon')
+           'myCollection' => array('bacon')
         ));
 
         $resolver->setAggregateResolver($aggregateResolver);
@@ -231,11 +216,9 @@ class CollectionsResolverTest extends TestCase
         $resolver->resolve('myCollection');
     }
 
-    /**
-     * @expectedException \AssetManager\Exception\RuntimeException
-     */
-    public function testMimeTypesDontMatch()
+    public function testMimeTypesDontMatch(): void
     {
+        $this->expectException(\AssetManager\Exception\RuntimeException::class);
         $callbackInvocationCount = 0;
         $callback = function () use (&$callbackInvocationCount) {
 
@@ -252,25 +235,25 @@ class CollectionsResolverTest extends TestCase
             return $$assetName;
         };
 
-        $aggregateResolver = $this->createMock(ResolverInterface::class);
-        $aggregateResolver
+            $aggregateResolver = $this->createMock(ResolverInterface::class);
+            $aggregateResolver
             ->expects($this->exactly(2))
             ->method('resolve')
             ->will($this->returnCallback($callback));
 
-        $assetFilterManager = $this->createMock(AssetFilterManager::class);
-        $assetFilterManager
+            $assetFilterManager = $this->createMock(AssetFilterManager::class);
+            $assetFilterManager
             ->expects($this->once())
             ->method('setFilters')
             ->will($this->returnValue(null));
 
-        $resolver = new CollectionResolver(array(
+            $resolver = new CollectionResolver(array(
             'myCollection' => array(
-                'bacon',
-                'eggs',
-                'mud',
+               'bacon',
+               'eggs',
+               'mud',
             )
-        ));
+            ));
 
         $resolver->setAggregateResolver($aggregateResolver);
         $resolver->setAssetFilterManager($assetFilterManager);
@@ -278,7 +261,7 @@ class CollectionsResolverTest extends TestCase
         $resolver->resolve('myCollection');
     }
 
-    public function testTwoCollectionsHasDifferentCacheKey()
+    public function testTwoCollectionsHasDifferentCacheKey(): void
     {
         $aggregateResolver = $this->createMock(ResolverInterface::class);
 
@@ -349,7 +332,7 @@ class CollectionsResolverTest extends TestCase
         $this->assertNotEquals($cacheKeys[0], $cacheKeys[1]);
     }
 
-    public function testSuccessResolve()
+    public function testSuccessResolve(): void
     {
         $callbackInvocationCount = 0;
         $callback = function () use (&$callbackInvocationCount) {
@@ -401,7 +384,7 @@ class CollectionsResolverTest extends TestCase
      *
      * @covers \AssetManager\Resolver\CollectionResolver::collect
      */
-    public function testCollect()
+    public function testCollect(): void
     {
         $collections = array(
             'myCollection' => array(

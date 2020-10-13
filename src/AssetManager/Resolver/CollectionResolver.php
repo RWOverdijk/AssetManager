@@ -122,7 +122,6 @@ class CollectionResolver implements
         $collection->setTargetPath($name);
 
         foreach ($this->collections[$name] as $asset) {
-
             if (!is_string($asset)) {
                 throw new Exception\RuntimeException(
                     'Asset should be of type string. got ' . gettype($asset)

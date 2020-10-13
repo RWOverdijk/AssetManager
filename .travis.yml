@@ -31,8 +31,9 @@ matrix:
 before_script:
   - travis_retry composer install $COMPOSER_ARGS --ignore-platform-reqs
   - if [[ "$dependencies" == "lowest" ]]; then travis_retry composer update --prefer-dist --prefer-lowest --prefer-stable $COMPOSER_ARGS; fi;
+  - if [[ "$dependencies" == "highest" ]]; then travis_retry composer update --prefer-dist $COMPOSER_ARGS; fi;
   - if [[ "$dependencies" == "highest" ]]; then travis_retry composer require laminas/laminas-mvc-console:^1.1 --prefer-dist $COMPOSER_ARGS; fi;
 
 script:
   - ./vendor/bin/phpunit
-  - ./vendor/bin/phpcs --standard=PSR2 ./src ./tests/AssetManagerTest
+  - if [[ "$CS_CHECK" == "true" ]]; then ./vendor/bin/phpcs --standard=PSR2 ./src ./tests/AssetManagerTest; fi;

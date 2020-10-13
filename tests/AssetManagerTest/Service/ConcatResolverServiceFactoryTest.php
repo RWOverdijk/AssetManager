@@ -13,7 +13,7 @@ class ConcatResolverServiceFactoryTest extends TestCase
     /**
      * Mainly to avoid regressions
      */
-    public function testCreateService()
+    public function testCreateService(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -45,7 +45,7 @@ class ConcatResolverServiceFactoryTest extends TestCase
     /**
      * Mainly to avoid regressions
      */
-    public function testCreateServiceWithNoConfig()
+    public function testCreateServiceWithNoConfig(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('config', array());

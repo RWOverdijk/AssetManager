@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 
 class MimeResolverTest extends TestCase
 {
-    public function testGetMimeType()
+    public function testGetMimeType(): void
     {
         //Fails
         $mimeResolver = new MimeResolver;
@@ -16,7 +16,7 @@ class MimeResolverTest extends TestCase
         $this->assertEquals('application/x-httpd-php', $mimeResolver->getMimeType(strtoupper(__FILE__)));
     }
 
-    public function testGetExtension()
+    public function testGetExtension(): void
     {
         $mimeResolver = new MimeResolver;
 
@@ -24,7 +24,7 @@ class MimeResolverTest extends TestCase
         $this->assertEquals('js', $mimeResolver->getExtension('application/javascript'));
     }
 
-    public function testGetUrlMimeType()
+    public function testGetUrlMimeType(): void
     {
         $mimeResolver = new MimeResolver;
 

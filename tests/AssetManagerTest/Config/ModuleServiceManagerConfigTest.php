@@ -19,7 +19,7 @@ class ModuleServiceManagerConfigTest extends TestCase
      *
      * @coversNothing
      */
-    public function testServiceManagerFactories()
+    public function testServiceManagerFactories(): void
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
@@ -36,7 +36,6 @@ class ModuleServiceManagerConfigTest extends TestCase
 
             $this->assertTrue(is_object($service));
         }
-
     }
 
     /**
@@ -44,7 +43,7 @@ class ModuleServiceManagerConfigTest extends TestCase
      *
      * @coversNothing
      */
-    public function testServiceManagerInvokables()
+    public function testServiceManagerInvokables(): void
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
@@ -68,7 +67,7 @@ class ModuleServiceManagerConfigTest extends TestCase
      *
      * @coversNothing
      */
-    public function testServiceManagerAliases()
+    public function testServiceManagerAliases(): void
     {
         $config = include __DIR__.'/../../../config/module.config.php';
 
