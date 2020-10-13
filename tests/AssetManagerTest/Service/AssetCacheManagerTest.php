@@ -212,10 +212,6 @@ class AssetCacheManagerTest extends TestCase
                     'dir' => 'somewhere',
                 )
             ),
-
-            'my_bc_check.tmp' => array(
-                'cache' => 'Filesystem',
-            ),
         );
 
         $serviceManager->setFactory(
@@ -241,9 +237,6 @@ class AssetCacheManagerTest extends TestCase
 
         $provider = $reflectionMethod->invoke($assetManager, 'my_provided_class.tmp');
         $this->assertTrue($provider instanceof FilePathCache);
-
-        $provider = $reflectionMethod->invoke($assetManager, 'my_bc_check.tmp');
-        $this->assertTrue($provider instanceof ApcCache);
     }
 
     /**
