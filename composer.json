@@ -30,7 +30,7 @@
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
         "laminas/laminas-mvc": "^2.7.9 || ^3.0.2",
         "kriswallsmith/assetic": "^1.4.0",
-        "laminas/laminas-dependency-plugin": "^1.0"
+        "laminas/laminas-dependency-plugin": "^2.0"
     },
     "require-dev": {
         "laminas/laminas-http": "^2.5.4",
