@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class ConcatResolverTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $resolver = new ConcatResolver(
             array(
@@ -42,7 +42,7 @@ class ConcatResolverTest extends TestCase
         );
     }
 
-    public function testSetGetAggregateResolver()
+    public function testSetGetAggregateResolver(): void
     {
         $resolver = new ConcatResolver;
 
@@ -58,11 +58,9 @@ class ConcatResolverTest extends TestCase
         $this->assertEquals('world', $resolver->getAggregateResolver()->resolve('say'));
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\Error\Error
-     */
-    public function testSetAggregateResolverFails()
+    public function testSetAggregateResolverFails(): void
     {
+        $this->expectError();
         if (PHP_MAJOR_VERSION >= 7) {
             $this->expectException('\TypeError');
         }
@@ -72,7 +70,7 @@ class ConcatResolverTest extends TestCase
         $resolver->setAggregateResolver(new \stdClass);
     }
 
-    public function testSetConcatSuccess()
+    public function testSetConcatSuccess(): void
     {
         $resolver = new ConcatResolver;
 
@@ -103,28 +101,26 @@ class ConcatResolverTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Laminas\Stdlib\Exception\InvalidArgumentException
-     */
-    public function testSetConcatFails()
+    public function testSetConcatFails(): void
     {
+        $this->expectException(\Laminas\Stdlib\Exception\InvalidArgumentException::class);
         $resolver = new ConcatResolver;
         $resolver->setConcats(new \stdClass);
     }
 
-    public function testGetConcat()
+    public function testGetConcat(): void
     {
         $resolver = new ConcatResolver;
         $this->assertSame(array(), $resolver->getConcats());
     }
 
-    public function testResolveNull()
+    public function testResolveNull(): void
     {
         $resolver = new ConcatResolver;
         $this->assertNull($resolver->resolve('bacon'));
     }
 
-    public function testResolveAssetFail()
+    public function testResolveAssetFail(): void
     {
         $resolver = new ConcatResolver;
 
@@ -135,7 +131,7 @@ class ConcatResolverTest extends TestCase
         $this->assertNull($resolver->setConcats($asset1));
     }
 
-    public function testResolveAssetSuccess()
+    public function testResolveAssetSuccess(): void
     {
         $resolver = new ConcatResolver;
 
@@ -183,7 +179,7 @@ class ConcatResolverTest extends TestCase
      *
      * @covers \AssetManager\Resolver\ConcatResolver::collect
      */
-    public function testCollect()
+    public function testCollect(): void
     {
         $concats = array(
             'myCollection' => array(

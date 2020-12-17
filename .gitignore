@@ -2,3 +2,5 @@ clover.xml
 php-cs-fixer.phar
 vendor
 .idea
+composer.lock
+.phpunit.result.cache

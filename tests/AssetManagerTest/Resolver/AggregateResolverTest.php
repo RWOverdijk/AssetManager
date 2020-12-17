@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 class AggregateResolverTest extends TestCase
 {
-    public function testResolve()
+    public function testResolve(): void
     {
         $resolver = new AggregateResolver();
 
@@ -44,7 +44,7 @@ class AggregateResolverTest extends TestCase
         $this->assertSame('second', $resolver->resolve('to-be-resolved'));
     }
 
-    public function testCollectWithCollectMethod()
+    public function testCollectWithCollectMethod(): void
     {
         $resolver    = new AggregateResolver();
         $lowPriority = $this->getMockBuilder(ResolverInterface::class)
@@ -76,7 +76,7 @@ class AggregateResolverTest extends TestCase
         $this->assertCount(3, $collection);
     }
 
-    public function testCollectWithoutCollectMethod()
+    public function testCollectWithoutCollectMethod(): void
     {
         $resolver    = new AggregateResolver();
         $lowPriority = $this->createMock(ResolverInterface::class);

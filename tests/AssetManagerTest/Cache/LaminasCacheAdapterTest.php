@@ -12,7 +12,7 @@ use Laminas\Cache\Storage\Adapter\Memory;
  */
 class LaminasCacheAdapterTest extends \PHPUnit\Framework\TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $mockLaminasCache = $this->getMockBuilder(Memory::class)
             ->disableOriginalConstructor()
@@ -23,11 +23,9 @@ class LaminasCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(LaminasCacheAdapter::class, $adapter);
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\Error\Error
-     */
-    public function testConstructorOnlyAcceptsALaminasCacheStorageInterface()
+    public function testConstructorOnlyAcceptsALaminasCacheStorageInterface(): void
     {
+        $this->expectError();
         if (PHP_MAJOR_VERSION >= 7) {
             $this->expectException('\TypeError');
         }
@@ -35,7 +33,7 @@ class LaminasCacheAdapterTest extends \PHPUnit\Framework\TestCase
         new LaminasCacheAdapter(new \DateTime());
     }
 
-    public function testHasMethodCallsLaminasCacheHasItem()
+    public function testHasMethodCallsLaminasCacheHasItem(): void
     {
         $mockLaminasCache = $this->getMockBuilder(Memory::class)
             ->disableOriginalConstructor()
@@ -48,7 +46,7 @@ class LaminasCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $adapter->has('SomeKey');
     }
 
-    public function testGetMethodCallsLaminasCacheGetItem()
+    public function testGetMethodCallsLaminasCacheGetItem(): void
     {
         $mockLaminasCache = $this->getMockBuilder(Memory::class)
             ->disableOriginalConstructor()
@@ -61,7 +59,7 @@ class LaminasCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $adapter->get('SomeKey');
     }
 
-    public function testSetMethodCallsLaminasCacheSetItem()
+    public function testSetMethodCallsLaminasCacheSetItem(): void
     {
         $mockLaminasCache = $this->getMockBuilder(Memory::class)
             ->disableOriginalConstructor()
@@ -74,7 +72,7 @@ class LaminasCacheAdapterTest extends \PHPUnit\Framework\TestCase
         $adapter->set('SomeKey', array());
     }
 
-    public function testRemoveMethodCallsLaminasCacheRemoveItem()
+    public function testRemoveMethodCallsLaminasCacheRemoveItem(): void
     {
         $mockLaminasCache = $this->getMockBuilder(Memory::class)
             ->disableOriginalConstructor()

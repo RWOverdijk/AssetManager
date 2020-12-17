@@ -2,31 +2,36 @@
 
 namespace AssetManagerTest\Cache;
 
-use Assetic\Cache\CacheInterface;
+use Assetic\Contracts\Cache\CacheInterface;
 use AssetManager\Cache\FilePathCache;
 use PHPUnit\Framework\TestCase;
 
 class FilePathCacheTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $cache = new FilePathCache('/imagination', 'bacon.porn');
         $this->assertTrue($cache instanceof CacheInterface);
 
-        $this->assertAttributeEquals(
+        $refClass = new \ReflectionClass(FilePathCache::class);
+        $dirProp = $refClass->getProperty('dir');
+        $dirProp->setAccessible(true);
+
+        $filenameProp = $refClass->getProperty('filename');
+        $filenameProp->setAccessible(true);
+
+        $this->assertSame(
             '/imagination',
-            'dir',
-            $cache
+            $dirProp->getValue($cache)
         );
 
-        $this->assertAttributeEquals(
+        $this->assertSame(
             'bacon.porn',
-            'filename',
-            $cache
+            $filenameProp->getValue($cache)
         );
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         // Check fail
         $cache = new FilePathCache('/imagination', 'bacon.porn');
@@ -37,31 +42,26 @@ class FilePathCacheTest extends TestCase
         $this->assertTrue($cache->has('bacon'));
     }
 
-    /**
-     * @expectedException \RunTimeException
-     *
-     */
-    public function testGetException()
+    public function testGetException(): void
     {
+        $this->expectException(\RuntimeException::class);
         $cache = new FilePathCache('/imagination', 'bacon.porn');
         $cache->get('bacon');
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $cache = new FilePathCache('', __FILE__);
         $this->assertEquals(file_get_contents(__FILE__), $cache->get('bacon'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testSetMayNotWriteFile()
+    public function testSetMayNotWriteFile(): void
     {
+        $this->expectException(\RuntimeException::class);
         restore_error_handler(); // Previous test fails, so doesn't unset.
         $time = time();
         $sentence = 'I am, what I am. Cached data, please don\'t hate, '
-            . 'for we are all equals. Except you, you\'re a dick.';
+           . 'for we are all equals. Except you, you\'re a dick.';
         $base = '/tmp/_cachetest.' . $time . '/';
         mkdir($base, 0777);
         mkdir($base.'readonly', 0400, true);
@@ -70,33 +70,28 @@ class FilePathCacheTest extends TestCase
         $cache->set('bacon', $sentence);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testSetMayNotWriteDir()
+    public function testSetMayNotWriteDir(): void
     {
+        $this->expectException(\RuntimeException::class);
         restore_error_handler(); // Previous test fails, so doesn't unset.
         $time = time()+1;
         $sentence = 'I am, what I am. Cached data, please don\'t hate, '
-            . 'for we are all equals. Except you, you\'re a dick.';
+           . 'for we are all equals. Except you, you\'re a dick.';
         $base = '/tmp/_cachetest.' . $time . '/';
         mkdir($base, 0400, true);
 
         $cache = new FilePathCache($base.'readonly', 'bacon.'.$time.'.hammertime');
 
         $cache->set('bacon', $sentence);
-
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testSetCanNotWriteToFileThatExists()
+    public function testSetCanNotWriteToFileThatExists(): void
     {
+        $this->expectException(\RuntimeException::class);
         restore_error_handler(); // Previous test fails, so doesn't unset.
         $time = time()+333;
         $sentence = 'I am, what I am. Cached data, please don\'t hate, '
-            . 'for we are all equals. Except you, you\'re a dick.';
+           . 'for we are all equals. Except you, you\'re a dick.';
         $base = '/tmp/_cachetest.' . $time . '/';
         mkdir($base, 0777);
 
@@ -110,7 +105,7 @@ class FilePathCacheTest extends TestCase
         $cache->set('bacon', $sentence);
     }
 
-    public function testSetSuccess()
+    public function testSetSuccess(): void
     {
         $time       = time();
         $sentence = 'I am, what I am. Cached data, please don\'t hate, '
@@ -122,17 +117,15 @@ class FilePathCacheTest extends TestCase
         $this->assertEquals($sentence, file_get_contents($base.'bacon.'.$time));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testRemoveFails()
+    public function testRemoveFails(): void
     {
+        $this->expectException(\RuntimeException::class);
         $cache = new FilePathCache('/dev', 'null');
 
         $cache->remove('bacon');
     }
 
-    public function testRemoveSuccess()
+    public function testRemoveSuccess(): void
     {
         $time       = time();
         $sentence = 'I am, what I am. Cached data, please don\'t hate, '
@@ -145,7 +138,7 @@ class FilePathCacheTest extends TestCase
         $this->assertTrue($cache->remove('bacon'));
     }
 
-    public function testCachedFile()
+    public function testCachedFile(): void
     {
         $method = new \ReflectionMethod(FilePathCache::class, 'cachedFile');
 

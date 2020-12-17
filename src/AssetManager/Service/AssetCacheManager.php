@@ -3,8 +3,8 @@
 namespace AssetManager\Service;
 
 use Assetic\Asset\AssetCache;
-use Assetic\Asset\AssetInterface;
-use Assetic\Cache\CacheInterface;
+use Assetic\Contracts\Asset\AssetInterface;
+use Assetic\Contracts\Cache\CacheInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -138,9 +138,6 @@ class AssetCacheManager
         $classToCheck .= (substr($class, -5) === 'Cache') ? '' : 'Cache';
 
         switch ($classToCheck) {
-            case 'ApcCache':
-                $class = 'Assetic\Cache\ApcCache';
-                break;
             case 'FilesystemCache':
                 $class = 'Assetic\Cache\FilesystemCache';
                 break;

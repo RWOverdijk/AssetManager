@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 
 class PrioritizedPathsResolverTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $this->assertEmpty($resolver->getPaths()->toArray());
@@ -22,7 +22,7 @@ class PrioritizedPathsResolverTest extends TestCase
         $this->assertTrue($resolver instanceof ResolverInterface);
     }
 
-    public function testClearPaths()
+    public function testClearPaths(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->addPath('someDir');
@@ -36,7 +36,7 @@ class PrioritizedPathsResolverTest extends TestCase
         $this->assertEquals(array(), $resolver->getPaths()->toArray());
     }
 
-    public function testSetPaths()
+    public function testSetPaths(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->setPaths(array(
@@ -73,7 +73,7 @@ class PrioritizedPathsResolverTest extends TestCase
         $resolver->setPaths('invalid');
     }
 
-    public function testAddPaths()
+    public function testAddPaths(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->setPaths(array(
@@ -118,7 +118,7 @@ class PrioritizedPathsResolverTest extends TestCase
         );
     }
 
-    public function testAddPath()
+    public function testAddPath(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->setPaths(array(
@@ -158,7 +158,7 @@ class PrioritizedPathsResolverTest extends TestCase
         );
     }
 
-    public function testSetPathsAllowsStringPaths()
+    public function testSetPathsAllowsStringPaths(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->setPaths(array('dir1', 'dir2', 'dir3'));
@@ -168,17 +168,16 @@ class PrioritizedPathsResolverTest extends TestCase
         $this->assertContains('dir1' . DIRECTORY_SEPARATOR, $paths);
         $this->assertContains('dir2' . DIRECTORY_SEPARATOR, $paths);
         $this->assertContains('dir3' . DIRECTORY_SEPARATOR, $paths);
-
     }
 
-    public function testWillValidateGivenPathArray()
+    public function testWillValidateGivenPathArray(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $this->expectException(InvalidArgumentException::class);
         $resolver->addPath(array('invalid'));
     }
 
-    public function testResolve()
+    public function testResolve(): void
     {
         $resolver = new PrioritizedPathsResolver;
         $resolver->setMimeResolver(new MimeResolver);
@@ -188,7 +187,7 @@ class PrioritizedPathsResolverTest extends TestCase
         $this->assertNull($resolver->resolve('i-do-not-exist.php'));
     }
 
-    public function testWillNotResolveDirectories()
+    public function testWillNotResolveDirectories(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->addPath(__DIR__ . '/..');
@@ -196,7 +195,7 @@ class PrioritizedPathsResolverTest extends TestCase
         $this->assertNull($resolver->resolve(basename(__DIR__)));
     }
 
-    public function testLfiProtection()
+    public function testLfiProtection(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->setMimeResolver(new MimeResolver);
@@ -218,7 +217,7 @@ class PrioritizedPathsResolverTest extends TestCase
         );
     }
 
-    public function testWillRefuseInvalidPath()
+    public function testWillRefuseInvalidPath(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $this->expectException(InvalidArgumentException::class);
@@ -230,7 +229,7 @@ class PrioritizedPathsResolverTest extends TestCase
      *
      * @covers \AssetManager\Resolver\PrioritizedPathsResolver::collect
      */
-    public function testCollect()
+    public function testCollect(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->addPath(__DIR__);
@@ -244,7 +243,7 @@ class PrioritizedPathsResolverTest extends TestCase
      *
      * @covers \AssetManager\Resolver\PrioritizedPathsResolver::collect
      */
-    public function testCollectDirectory()
+    public function testCollectDirectory(): void
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->addPath(realpath(__DIR__ . '/../'));

@@ -33,7 +33,6 @@ class AggregateResolverServiceFactory implements FactoryInterface
         }
 
         foreach ($config['resolvers'] as $resolverService => $priority) {
-
             $resolverService = $container->get($resolverService);
 
             if (!$resolverService instanceof ResolverInterface) {

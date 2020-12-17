@@ -2,7 +2,7 @@
 
 namespace AssetManager\Resolver;
 
-use Assetic\Asset\AssetInterface;
+use Assetic\Contracts\Asset\AssetInterface;
 use AssetManager\Asset\AggregateAsset;
 use AssetManager\Exception;
 use AssetManager\Service\AssetFilterManager;
@@ -128,14 +128,13 @@ class ConcatResolver implements
         $resolvedAssets = array();
 
         foreach ((array) $this->concats[$name] as $assetName) {
-
             $resolvedAsset = $this->getAggregateResolver()->resolve((string) $assetName);
 
             if (!$resolvedAsset instanceof AssetInterface) {
                 throw new Exception\RuntimeException(
                     sprintf(
                         'Asset "%s" from collection "%s" can\'t be resolved '
-                        .'to an Asset implementing Assetic\Asset\AssetInterface.',
+                        .'to an Asset implementing Assetic\Contracts\Asset\AssetInterface.',
                         $assetName,
                         $name
                     )

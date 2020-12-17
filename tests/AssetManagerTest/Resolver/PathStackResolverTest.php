@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class PathStackResolverTest extends TestCase
 {
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $resolver = new PathStackResolver();
         $this->assertEmpty($resolver->getPaths()->toArray());
@@ -33,11 +33,10 @@ class PathStackResolverTest extends TestCase
         $this->assertEquals($mimeResolver, $resolver->getMimeResolver());
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\Error\Error
-     */
-    public function testSetMimeResolverFailObject()
+    public function testSetMimeResolverFailObject(): void
     {
+        $this->expectError();
+        $this->expectError();
         if (PHP_MAJOR_VERSION >= 7) {
             $this->expectException('\TypeError');
         }
@@ -46,11 +45,9 @@ class PathStackResolverTest extends TestCase
         $resolver->setMimeResolver(new \stdClass());
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\Error\Error
-     */
-    public function testSetMimeResolverFailString()
+    public function testSetMimeResolverFailString(): void
     {
+        $this->expectError();
         if (PHP_MAJOR_VERSION >= 7) {
             $this->expectException('\TypeError');
         }
@@ -59,7 +56,7 @@ class PathStackResolverTest extends TestCase
         $resolver->setMimeResolver('invalid');
     }
 
-    public function testSetPaths()
+    public function testSetPaths(): void
     {
         $resolver = new PathStackResolver();
         $resolver->setPaths(array('dir2', 'dir1'));
@@ -81,10 +78,9 @@ class PathStackResolverTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
         $resolver->setPaths('invalid');
-
     }
 
-    public function testResolve()
+    public function testResolve(): void
     {
         $resolver = new PathStackResolver();
         $this->assertTrue($resolver instanceof PathStackResolver);
@@ -101,7 +97,7 @@ class PathStackResolverTest extends TestCase
         $this->assertNull($resolver->resolve('i-do-not-exist.php'));
     }
 
-    public function testWillNotResolveDirectories()
+    public function testWillNotResolveDirectories(): void
     {
         $resolver = new PathStackResolver();
         $resolver->addPath(__DIR__ . '/..');
@@ -109,7 +105,7 @@ class PathStackResolverTest extends TestCase
         $this->assertNull($resolver->resolve(basename(__DIR__)));
     }
 
-    public function testLfiProtection()
+    public function testLfiProtection(): void
     {
         $mimeResolver = new MimeResolver;
         $resolver = new PathStackResolver;
@@ -133,7 +129,7 @@ class PathStackResolverTest extends TestCase
         );
     }
 
-    public function testWillRefuseInvalidPath()
+    public function testWillRefuseInvalidPath(): void
     {
         $resolver = new PathStackResolver();
         $this->expectException(InvalidArgumentException::class);
@@ -145,7 +141,7 @@ class PathStackResolverTest extends TestCase
      *
      * @covers \AssetManager\Resolver\PathStackResolver::collect
      */
-    public function testCollect()
+    public function testCollect(): void
     {
         $resolver = new PathStackResolver();
         $resolver->addPath(__DIR__);
@@ -159,7 +155,7 @@ class PathStackResolverTest extends TestCase
      *
      * @covers \AssetManager\Resolver\PathStackResolver::collect
      */
-    public function testCollectDirectory()
+    public function testCollectDirectory(): void
     {
         $resolver = new PathStackResolver();
         $resolver->addPath(realpath(__DIR__ . '/../'));

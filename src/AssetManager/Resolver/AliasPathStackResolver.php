@@ -16,7 +16,7 @@ use Laminas\Stdlib\SplStack;
 class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInterface
 {
     /**
-     * @var Array
+     * @var array
      */
     protected $aliases = array();
 

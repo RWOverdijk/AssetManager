@@ -14,12 +14,12 @@ class AggregateResolverServiceFactoryTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    public function setUp(): void
     {
         require_once __DIR__ . '/../../_files/InterfaceTestResolver.php';
     }
 
-    public function testWillInstantiateEmptyResolver()
+    public function testWillInstantiateEmptyResolver(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService('config', array());
@@ -31,7 +31,7 @@ class AggregateResolverServiceFactoryTest extends TestCase
         $this->assertNull($resolver->resolve('/some-path'));
     }
 
-    public function testWillAttachResolver()
+    public function testWillAttachResolver(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -60,20 +60,18 @@ class AggregateResolverServiceFactoryTest extends TestCase
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testInvalidCustomResolverFails()
+    public function testInvalidCustomResolverFails(): void
     {
+        $this->expectException(\RuntimeException::class);
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'config',
             array(
-                'asset_manager' => array(
-                    'resolvers' => array(
-                        'My\Resolver' => 1234,
-                    ),
-                ),
+               'asset_manager' => array(
+                   'resolvers' => array(
+                       'My\Resolver' => 1234,
+                   ),
+               ),
             )
         );
         $serviceManager->setService(
@@ -85,7 +83,7 @@ class AggregateResolverServiceFactoryTest extends TestCase
         $factory->createService($serviceManager);
     }
 
-    public function testWillPrioritizeResolversCorrectly()
+    public function testWillPrioritizeResolversCorrectly(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -121,7 +119,7 @@ class AggregateResolverServiceFactoryTest extends TestCase
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
 
-    public function testWillFallbackToLowerPriorityRoutes()
+    public function testWillFallbackToLowerPriorityRoutes(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
@@ -159,7 +157,7 @@ class AggregateResolverServiceFactoryTest extends TestCase
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
 
-    public function testWillSetForInterfaces()
+    public function testWillSetForInterfaces(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(

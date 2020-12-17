@@ -1,17 +1,16 @@
-<?xml version="1.0"?>
-<!-- works fine with PHPUnit-3.6.10 -->
-<phpunit
-        bootstrap="./tests/Bootstrap.php"
-        colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
-        verbose="true"
-        stopOnFailure="false"
-        processIsolation="false"
-        backupGlobals="false"
-        syntaxCheck="true"
-        >
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="./tests/Bootstrap.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         verbose="true"
+         stopOnFailure="false"
+         processIsolation="false"
+         backupGlobals="false"
+         >
     <testsuite name="AssetManager tests">
         <directory>./tests/AssetManagerTest</directory>
     </testsuite>

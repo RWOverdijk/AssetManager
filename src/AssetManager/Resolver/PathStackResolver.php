@@ -176,7 +176,6 @@ class PathStackResolver implements ResolverInterface, MimeResolverAwareInterface
         }
 
         foreach ($this->getPaths() as $path) {
-
             $file = new SplFileInfo($path . $name);
 
             if ($file->isReadable() && !$file->isDir()) {

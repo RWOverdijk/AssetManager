@@ -10,7 +10,7 @@ use Laminas\ServiceManager\ServiceManager;
 
 class AssetFilterManagerServiceFactoryTest extends TestCase
 {
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $serviceManager = new ServiceManager();
         $serviceManager->setService(

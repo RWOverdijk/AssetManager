@@ -23,24 +23,34 @@ class ModuleTest extends TestCase
 {
     use EventListenerIntrospectionTrait;
 
-    public function testGetAutoloaderConfig()
+    public static function setUpBeforeClass(): void
     {
-        $module = new Module();
-        // just testing ZF specification requirements
-        $this->assertInternalType('array', $module->getAutoloaderConfig());
+        if (! class_exists(\PHPUnit_Framework_Assert::class)) {
+            class_alias(\PHPUnit\Framework\Assert::class, \PHPUnit_Framework_Assert::class);
+        }
+
+        parent::setUpBeforeClass();
     }
 
-    public function testGetConfig()
+
+    public function testGetAutoloaderConfig(): void
     {
         $module = new Module();
         // just testing ZF specification requirements
-        $this->assertInternalType('array', $module->getConfig());
+        $this->assertIsArray($module->getAutoloaderConfig());
+    }
+
+    public function testGetConfig(): void
+    {
+        $module = new Module();
+        // just testing ZF specification requirements
+        $this->assertIsArray($module->getConfig());
     }
 
     /**
      * Verifies that dispatch listener does nothing on other repsponse codes
      */
-    public function testDispatchListenerIgnoresOtherResponseCodes()
+    public function testDispatchListenerIgnoresOtherResponseCodes(): void
     {
         $event      = new MvcEvent();
         $response   = new Response();
@@ -54,7 +64,7 @@ class ModuleTest extends TestCase
         $this->assertNull($response);
     }
 
-    public function testOnDispatchDoesntResolveToAsset()
+    public function testOnDispatchDoesntResolveToAsset(): void
     {
         $resolver     = $this->createMock(ResolverInterface::class);
         $assetManager = $this->createMock(
@@ -94,7 +104,7 @@ class ModuleTest extends TestCase
         $this->assertNull($return);
     }
 
-    public function testOnDispatchStatus200()
+    public function testOnDispatchStatus200(): void
     {
         $resolver     = $this->createMock(ResolverInterface::class);
         $assetManager = $this->createMock(
@@ -146,7 +156,7 @@ class ModuleTest extends TestCase
     /**
      * @covers \AssetManager\Module::onDispatch
      */
-    public function testWillIgnoreInvalidResponseType()
+    public function testWillIgnoreInvalidResponseType(): void
     {
         $cliResponse = $this->createMock(ConsoleResponse::class, array(), array(), '', false);
         $mvcEvent   = $this->createMock(MvcEvent::class);
@@ -158,7 +168,7 @@ class ModuleTest extends TestCase
         $this->assertNull($module->onDispatch($mvcEvent));
     }
 
-    public function testOnBootstrap()
+    public function testOnBootstrap(): void
     {
         $applicationEventManager = new EventManager();
 
