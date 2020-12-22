@@ -1,5 +1,5 @@
 # AssetManager
-By [Wesley Overdijk](http://blog.spoonx.nl/) and [Marco Pivetta](http://ocramius.github.com/)
+By [Wesley Overdijk](https://spoonx.studio/) and [Marco Pivetta](http://ocramius.github.com/)
 
 [![Build Status](https://secure.travis-ci.org/RWOverdijk/AssetManager.png?branch=master)](http://travis-ci.org/RWOverdijk/AssetManager)
 [![Latest Stable Version](https://poser.pugx.org/RWOverdijk/AssetManager/v/stable.png)](https://packagist.org/packages/RWOverdijk/AssetManager)
