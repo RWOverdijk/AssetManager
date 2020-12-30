@@ -247,7 +247,7 @@ class PrioritizedPathsResolverTest extends TestCase
     {
         $resolver = new PrioritizedPathsResolver();
         $resolver->addPath(realpath(__DIR__ . '/../'));
-        $dir = substr(__DIR__, strrpos(__DIR__, '/', 0) + 1);
+        $dir = substr(__DIR__, strrpos(__DIR__, DIRECTORY_SEPARATOR, 0) + 1);
 
         $this->assertContains($dir . DIRECTORY_SEPARATOR . basename(__FILE__), $resolver->collect());
         $this->assertNotContains($dir . DIRECTORY_SEPARATOR . 'i-do-not-exist.php', $resolver->collect());

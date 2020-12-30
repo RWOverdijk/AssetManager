@@ -147,7 +147,7 @@ class AliasPathStackResolver implements ResolverInterface, MimeResolverAwareInte
 
             if ($file->isReadable() && !$file->isDir()) {
                 $filePath = $file->getRealPath();
-                $mimeType = $this->getMimeResolver()->getMimeType($filePath);
+                $mimeType = $this->getMimeResolver()->getMimeType($name);
                 $asset    = new FileAsset($filePath);
 
                 $asset->mimetype = $mimeType;
