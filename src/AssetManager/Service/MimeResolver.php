@@ -568,6 +568,14 @@ class MimeResolver
         if (isset($this->mimeTypes[$extension])) {
             return $this->mimeTypes[$extension];
         }
+        
+        if (file_exists($filename)) {
+            $mimetype = mime_content_type($filename);
+            if ($mimetype != "") {
+                return $mimetype;
+            }
+        }
+        
 
         return 'text/plain';
     }
