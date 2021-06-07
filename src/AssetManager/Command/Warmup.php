@@ -128,7 +128,7 @@ class Warmup extends AbstractParamAwareCommand
             }
         } elseif (is_file($node)) {
             $output->writeln(sprintf("unlinking %s...", $node));
-            //unlink($node);
+            unlink($node);
         }
     }
 }
