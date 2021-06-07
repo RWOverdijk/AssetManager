@@ -2,6 +2,7 @@
 return [
     'service_manager' => [
         'factories'  => [
+            AssetManager\Command\Warmup::class                    => AssetManager\Command\WarmupFactory::class,
             AssetManager\Service\AssetManager::class              => AssetManager\Service\AssetManagerServiceFactory::class,
             AssetManager\Service\AssetFilterManager::class        => AssetManager\Service\AssetFilterManagerServiceFactory::class,
             AssetManager\Service\AssetCacheManager::class         => AssetManager\Service\AssetCacheManagerServiceFactory::class,
@@ -38,11 +39,6 @@ return [
             'cache'            => null,
         ],
     ],
-    'controllers'     => [
-        'factories' => [
-            'AssetManager\Controller\Console' => AssetManager\Controller\ConsoleControllerFactory::class,
-        ],
-    ],
     'view_helpers'    => [
         'factories' => [
             AssetManager\View\Helper\Asset::class => AssetManager\Service\AssetViewHelperFactory::class
@@ -51,19 +47,9 @@ return [
             'asset' => AssetManager\View\Helper\Asset::class
         ]
     ],
-    'console'         => [
-        'router' => [
-            'routes' => [
-                'AssetManager-warmup' => [
-                    'options' => [
-                        'route'    => 'assetmanager warmup [--purge] [--verbose|-v]',
-                        'defaults' => [
-                            'controller' => 'AssetManager\Controller\Console',
-                            'action'     => 'warmup',
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
+    'laminas-cli' => [
+        'commands' => [
+            'AssetManager:warmup' => AssetManager\Command\Warmup::class
+        ]
+    ]
 ];
