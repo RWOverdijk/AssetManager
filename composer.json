@@ -29,7 +29,7 @@
         "laminas/laminas-loader": "^2.5.1",
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
         "laminas/laminas-mvc": "^2.7.9 || ^3.0.2",
-        "assetic/framework": "dev-develop",
+        "assetic/framework": "dev-fix-require",
         "laminas/laminas-dependency-plugin": "^2.0"
     },
     "require-dev": {
@@ -49,5 +49,12 @@
         "psr-0": {
             "AssetManagerTest": "tests"
         }
+    },
+    "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/fabiankoestring/assetic",
+      "no-api": true
     }
+  ]
 }
