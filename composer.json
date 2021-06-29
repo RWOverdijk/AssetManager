@@ -49,12 +49,5 @@
         "psr-0": {
             "AssetManagerTest": "tests"
         }
-    },
-    "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/fabiankoestring/assetic",
-      "no-api": true
     }
-  ]
 }
