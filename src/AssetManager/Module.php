@@ -82,20 +82,4 @@ class Module implements
         $eventManager->attach(MvcEvent::EVENT_DISPATCH, $callback, $priority);
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, $callback, $priority);
     }
-
-    /**
-     * @param \Laminas\Console\Adapter\AdapterInterface $console
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getConsoleUsage(AdapterInterface $console)
-    {
-        return array(
-            'Warmup',
-            'assetmanager warmup [--purge] [--verbose|-v]' => 'Warm AssetManager up',
-            array('--purge', '(optional) forces cache flushing'),
-            array('--verbose | -v', '(optional) verbose mode'),
-        );
-    }
 }

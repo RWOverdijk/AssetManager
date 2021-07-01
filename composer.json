@@ -36,12 +36,9 @@
         "laminas/laminas-http": "^2.5.4",
         "laminas/laminas-view": "^2.8.1",
         "laminas/laminas-cache": "^2.7.1",
-        "laminas/laminas-console": "^2.6",
+        "laminas/laminas-cli": "~1.1.1",
         "squizlabs/php_codesniffer": "^3.5.6",
         "phpunit/phpunit": "^8.5.8 || ^9.1"
-    },
-    "suggest": {
-        "laminas/laminas-mvc-console": "laminas-mvc-console provides the ability to expose laminas-mvc as a console application"
     },
     "autoload": {
         "psr-0": {
