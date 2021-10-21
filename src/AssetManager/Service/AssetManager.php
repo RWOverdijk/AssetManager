@@ -192,7 +192,7 @@ class AssetManager implements
         /* @var $uri \Laminas\Uri\UriInterface */
         $uri        = $request->getUri();
         $fullPath   = $uri->getPath();
-        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
+        $path       = rawurldecode(substr($fullPath, strlen($request->getBasePath()) + 1));
         $this->path = $path;
         $asset      = $this->getResolver()->resolve($path);
 
