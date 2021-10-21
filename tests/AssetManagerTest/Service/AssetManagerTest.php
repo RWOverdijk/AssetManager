@@ -508,7 +508,7 @@ class AssetManagerTest extends TestCase
     /**
      * @dataProvider urlencodedDataProvider
      */
-    public function testUrlEncodedStringsWillBeDecoded($urlEncodedString, $urlDecodedString): void
+    public function testUrlEncodedStringsWillBeDecoded(string $urlEncodedString, string $urlDecodedString): void
     {
         $resolver = $this->createMock(ResolverInterface::class);
         $resolver
@@ -523,7 +523,7 @@ class AssetManagerTest extends TestCase
         $assetManager->resolvesToAsset($request);
     }
 
-    public function urlencodedDataProvider()
+    public function urlencodedDataProvider(): \Generator
     {
         yield ['sprite%402x.png', 'sprite@2x.png'];
         yield ['some/folder/sprite%402x.png', 'some/folder/sprite@2x.png'];
