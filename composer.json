@@ -29,7 +29,7 @@
         "laminas/laminas-loader": "^2.5.1",
         "laminas/laminas-eventmanager": "^2.6.3 || ^3.0.1",
         "laminas/laminas-mvc": "^2.7.9 || ^3.0.2",
-        "assetic/framework": "^2.0",
+        "assetic/framework": "~2.0.0",
         "laminas/laminas-dependency-plugin": "^2.0"
     },
     "require-dev": {
