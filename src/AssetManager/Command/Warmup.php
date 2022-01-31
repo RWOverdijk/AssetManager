@@ -70,7 +70,6 @@ class Warmup extends AbstractParamAwareCommand
             );
 
             foreach ($collection as $path) {
-                var_dump($path);
                 $asset = $this->assetManager->getResolver()->resolve($path);
                 $this->assetManager->getAssetFilterManager()->setFilters($path, $asset);
                 $this->assetManager->getAssetCacheManager()->setCache($path, $asset)->dump();
