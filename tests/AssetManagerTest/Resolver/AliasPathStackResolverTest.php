@@ -328,7 +328,7 @@ class AliasPathStackResolverTest extends TestCase
     {
         $alias    = 'my/alias/';
         $resolver = new AliasPathStackResolver(array($alias => realpath(__DIR__ . '/../')));
-        $dir      = substr(__DIR__, strrpos(__DIR__, '/', 0) + 1);
+        $dir      = substr(__DIR__, strrpos(__DIR__, DIRECTORY_SEPARATOR, 0) + 1);
 
         $this->assertContains($alias . $dir . DIRECTORY_SEPARATOR . basename(__FILE__), $resolver->collect());
         $this->assertNotContains($alias . $dir . DIRECTORY_SEPARATOR . 'i-do-not-exist.php', $resolver->collect());
