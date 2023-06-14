@@ -4,6 +4,12 @@ By [Wesley Overdijk](https://spoonx.studio/) and [Marco Pivetta](http://ocramius
 [![Build Status](https://secure.travis-ci.org/RWOverdijk/AssetManager.png?branch=master)](http://travis-ci.org/RWOverdijk/AssetManager)
 [![Latest Stable Version](https://poser.pugx.org/RWOverdijk/AssetManager/v/stable.png)](https://packagist.org/packages/RWOverdijk/AssetManager)
 
+## ⚠️ No longer maintained
+
+Every now and then a PR might be merged, but it's probably for the best to use a fork.
+
+PRs without enough reputable approvals will not be merged.
+
 ## Introduction
 This module is intended for usage with a default directory structure of a
 [LaminasSkeletonApplication](https://github.com/laminas/laminas-mvc-skeleton/). It provides functionality to load
