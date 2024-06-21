@@ -7,7 +7,7 @@ use Assetic\Factory\Resource\DirectoryResource;
 use AssetManager\Exception;
 use AssetManager\Service\MimeResolver;
 use SplFileInfo;
-use Laminas\Db\TableGateway\Exception\RuntimeException;
+use AssetManager\Exception\RuntimeException;
 use Laminas\Stdlib\SplStack;
 
 /**
