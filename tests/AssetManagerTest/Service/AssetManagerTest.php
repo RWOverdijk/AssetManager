@@ -257,12 +257,12 @@ class AssetManagerTest extends TestCase
         $mimeResolver       = new MimeResolver;
         $assetFilterManager->setMimeResolver($mimeResolver);
         $resolver->setAssetFilterManager($assetFilterManager);
-        
+
         $response     = new Response;
         $request      = $this->getRequest();
         // Have to change uri because asset-path would cause an infinite loop
         $request->setUri('http://localhost/base-path/blah.js');
-        
+
         $assetCacheManager = $this->getAssetCacheManagerMock();
         $assetManager      = new AssetManager($resolver->getAggregateResolver(), $config);
         $assetManager->setAssetCacheManager($assetCacheManager);
@@ -503,6 +503,33 @@ class AssetManagerTest extends TestCase
         $response = $assetManager->setAssetOnResponse(new Response);
 
         echo $response->getContent();
+    }
+
+    /**
+     * @dataProvider urlencodedDataProvider
+     */
+    public function testUrlEncodedStringsWillBeDecoded(string $urlEncodedString, string $urlDecodedString): void
+    {
+        $resolver = $this->createMock(ResolverInterface::class);
+        $resolver
+            ->expects($this->once())
+            ->method('resolve')
+            ->with($urlDecodedString);
+
+        $request = new Request();
+        $request->setUri('http://localhost/' . $urlEncodedString);
+
+        $assetManager    = new AssetManager($resolver);
+        $assetManager->resolvesToAsset($request);
+    }
+
+    public function urlencodedDataProvider(): \Generator
+    {
+        yield ['sprite%402x.png', 'sprite@2x.png'];
+        yield ['some/folder/sprite%402x.png', 'some/folder/sprite@2x.png'];
+
+        yield ['sprite@2x.png', 'sprite@2x.png'];
+        yield ['some/folder/sprite@2x.png', 'some/folder/sprite@2x.png'];
     }
 
     /**
