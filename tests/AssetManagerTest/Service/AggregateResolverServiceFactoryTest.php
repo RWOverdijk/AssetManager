@@ -2,6 +2,7 @@
 
 namespace AssetManagerTest\Service;
 
+use AssetManager\Resolver\AggregateResolver;
 use AssetManager\Resolver\ResolverInterface;
 use AssetManager\Service\AggregateResolverServiceFactory;
 use AssetManager\Service\AssetFilterManager;
@@ -55,7 +56,7 @@ class AggregateResolverServiceFactoryTest extends TestCase
         $serviceManager->setService(MimeResolver::class, new MimeResolver);
 
         $factory = new AggregateResolverServiceFactory();
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory->__invoke($serviceManager, AggregateResolver::class);
 
         $this->assertSame('test-resolved-path', $resolver->resolve('test-path'));
     }
@@ -80,7 +81,7 @@ class AggregateResolverServiceFactoryTest extends TestCase
         );
 
         $factory = new AggregateResolverServiceFactory();
-        $factory->createService($serviceManager);
+        $factory->__invoke($serviceManager, AggregateResolver::class);
     }
 
     public function testWillPrioritizeResolversCorrectly(): void

@@ -2,18 +2,14 @@
 
 namespace AssetManager\Service;
 
-use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class AssetFilterManagerServiceFactory implements FactoryInterface
 {
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AssetFilterManager
     {
-        $filters = array();
+        $filters = [];
         $config  = $container->get('config');
 
         if (!empty($config['asset_manager']['filters'])) {
@@ -26,15 +22,5 @@ class AssetFilterManagerServiceFactory implements FactoryInterface
         $assetFilterManager->setMimeResolver($container->get(MimeResolver::class));
 
         return $assetFilterManager;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return AssetFilterManager
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, AssetFilterManager::class);
     }
 }

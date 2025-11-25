@@ -3,9 +3,8 @@
 namespace AssetManager\Service;
 
 use AssetManager\Resolver\AggregateResolver;
-use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
  * Factory class for AssetManagerService
@@ -15,13 +14,10 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
  */
 class AssetManagerServiceFactory implements FactoryInterface
 {
-    /**
-     * @inheritDoc
-     */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AssetManager
     {
         $config             = $container->get('config');
-        $assetManagerConfig = array();
+        $assetManagerConfig = [];
 
         if (!empty($config['asset_manager'])) {
             $assetManagerConfig = $config['asset_manager'];
@@ -29,27 +25,17 @@ class AssetManagerServiceFactory implements FactoryInterface
 
         $assetManager = new AssetManager(
             $container->get(AggregateResolver::class),
-            $assetManagerConfig
+            $assetManagerConfig,
         );
 
         $assetManager->setAssetFilterManager(
-            $container->get(AssetFilterManager::class)
+            $container->get(AssetFilterManager::class),
         );
 
         $assetManager->setAssetCacheManager(
-            $container->get(AssetCacheManager::class)
+            $container->get(AssetCacheManager::class),
         );
 
         return $assetManager;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return AssetManager
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, AssetManager::class);
     }
 }

@@ -5,37 +5,32 @@ namespace AssetManager\Service;
 use Assetic\Asset\AssetCache;
 use Assetic\Contracts\Asset\AssetInterface;
 use Assetic\Contracts\Cache\CacheInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Asset Cache Manager.  Sets asset cache based on configuration.
  */
 class AssetCacheManager
 {
-    /**
-     * @var \Laminas\ServiceManager\ServiceLocatorInterface
-     */
-    protected $serviceLocator;
+    protected ContainerInterface $serviceLocator;
 
     /**
      * @var array Cache configuration.
      */
-    protected $config = array();
+    protected $config = [];
 
     /**
      * Construct the AssetCacheManager
      *
-     * @param   ServiceLocatorInterface $serviceLocator
-     * @param   array                   $config
-     *
-     * @return  AssetCacheManager
+     * @param ContainerInterface $serviceLocator
+     * @param array              $config
      */
     public function __construct(
-        ServiceLocatorInterface $serviceLocator,
-        $config
+        ContainerInterface $serviceLocator,
+        $config,
     ) {
         $this->serviceLocator = $serviceLocator;
-        $this->config = $config;
+        $this->config         = $config;
     }
 
     /**
@@ -44,7 +39,7 @@ class AssetCacheManager
      * @param string         $path  Path to asset
      * @param AssetInterface $asset Assetic Asset Interface
      *
-     * @return  AssetCache
+     * @return  AssetCache|AssetInterface
      */
     public function setCache($path, AssetInterface $asset)
     {
@@ -54,8 +49,8 @@ class AssetCacheManager
             return $asset;
         }
 
-        $assetCache             = new AssetCache($asset, $provider);
-        $assetCache->mimetype   = $asset->mimetype;
+        $assetCache           = new AssetCache($asset, $provider);
+        $assetCache->mimetype = $asset->mimetype;
 
         return $assetCache;
     }
@@ -88,7 +83,7 @@ class AssetCacheManager
             return call_user_func($cacheProvider['cache'], $path);
         }
 
-        $dir = '';
+        $dir   = '';
         $class = $cacheProvider['cache'];
 
         if (!empty($cacheProvider['options']['dir'])) {
@@ -96,6 +91,7 @@ class AssetCacheManager
         }
 
         $class = $this->classMapper($class);
+
         return new $class($dir, $path);
     }
 

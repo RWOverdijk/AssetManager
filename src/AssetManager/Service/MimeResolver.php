@@ -1,4 +1,5 @@
 <?php
+
 namespace AssetManager\Service;
 
 /**
@@ -11,17 +12,17 @@ class MimeResolver
      *
      * @var array
      */
-    protected $mainMimeTypes = array(
-        'css'       => 'text/css',
-        'js'        => 'application/javascript',
-    );
+    protected $mainMimeTypes = [
+        'css' => 'text/css',
+        'js'  => 'application/javascript',
+    ];
 
     /**
      * Map between file extensions and mime types.
      *
      * @var array
      */
-    protected $mimeTypes = array(
+    protected $mimeTypes = [
         '%'        => 'application/x-trash',
         '3gp'      => 'video/3gpp',
         '7z'       => 'application/x-7z-compressed',
@@ -553,12 +554,13 @@ class MimeResolver
         'zmt'      => 'chemical/x-mopac-input',
         '~'        => 'application/x-trash',
         '323'      => 'text/h323',
-    );
+    ];
 
     /**
      * Get the mime type from a file extension.
      *
-     * @param  string $filename
+     * @param string $filename
+     *
      * @return string The mime type found. Falls back to text/plain.
      */
     public function getMimeType($filename)
@@ -575,7 +577,8 @@ class MimeResolver
     /**
      * Get the extension that matches given mimetype.
      *
-     * @param  string $mimetype
+     * @param string $mimetype
+     *
      * @return mixed  null when not found, extension (string) when found.
      */
     public function getExtension($mimetype)

@@ -6,7 +6,7 @@ use Assetic\Contracts\Asset\AssetInterface;
 use Assetic\Contracts\Filter\FilterInterface;
 use AssetManager\Exception;
 use AssetManager\Resolver\MimeResolverAwareInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Psr\Container\ContainerInterface;
 
 class AssetFilterManager implements MimeResolverAwareInterface
 {
@@ -16,7 +16,7 @@ class AssetFilterManager implements MimeResolverAwareInterface
     protected $config;
 
     /**
-     * @var ServiceLocatorInterface
+     * @var ContainerInterface
      */
     protected $serviceLocator;
 
@@ -24,19 +24,18 @@ class AssetFilterManager implements MimeResolverAwareInterface
      * @var MimeResolver
      */
     protected $mimeResolver;
-    
+
     /**
      * @var FilterInterface[] Filters already instantiated
      */
-    protected $filterInstances = array();
-    
+    protected $filterInstances = [];
+
     /**
      * Construct the AssetFilterManager
      *
-     * @param   array $config
-     * @return  AssetFilterManager
+     * @param array $config
      */
-    public function __construct(array $config = array())
+    public function __construct(array $config = [])
     {
         $this->setConfig($config);
     }
@@ -64,8 +63,8 @@ class AssetFilterManager implements MimeResolverAwareInterface
     /**
      * See if there are filters for the asset, and if so, set them.
      *
-     * @param   string          $path
-     * @param   AssetInterface  $asset
+     * @param string         $path
+     * @param AssetInterface $asset
      *
      * @throws Exception\RuntimeException on invalid filters
      */
@@ -96,7 +95,7 @@ class AssetFilterManager implements MimeResolverAwareInterface
                 $this->ensureByService($asset, $filter['service']);
             } else {
                 throw new Exception\RuntimeException(
-                    'Invalid filter supplied. Expected Filter or Service.'
+                    'Invalid filter supplied. Expected Filter or Service.',
                 );
             }
         }
@@ -105,8 +104,9 @@ class AssetFilterManager implements MimeResolverAwareInterface
     /**
      * Ensure that the filters as service are set.
      *
-     * @param   AssetInterface  $asset
-     * @param   string          $service    A valid service name.
+     * @param AssetInterface $asset
+     * @param string         $service A valid service name.
+     *
      * @throws  Exception\RuntimeException
      */
     protected function ensureByService(AssetInterface $asset, $service)
@@ -115,7 +115,7 @@ class AssetFilterManager implements MimeResolverAwareInterface
             $this->ensureByFilter($asset, $this->getServiceLocator()->get($service));
         } else {
             throw new Exception\RuntimeException(
-                'Unexpected service provided. Expected string or callback.'
+                'Unexpected service provided. Expected string or callback.',
             );
         }
     }
@@ -123,8 +123,9 @@ class AssetFilterManager implements MimeResolverAwareInterface
     /**
      * Ensure that the filters as filter are set.
      *
-     * @param   AssetInterface  $asset
-     * @param   mixed           $filter    Either an instance of FilterInterface or a classname.
+     * @param AssetInterface $asset
+     * @param mixed          $filter Either an instance of FilterInterface or a classname.
+     *
      * @throws  Exception\RuntimeException
      */
     protected function ensureByFilter(AssetInterface $asset, $filter)
@@ -140,12 +141,12 @@ class AssetFilterManager implements MimeResolverAwareInterface
 
         if (!is_subclass_of($filterClass, 'Assetic\Contracts\Filter\FilterInterface', true)) {
             $filterClass .= (substr($filterClass, -6) === 'Filter') ? '' : 'Filter';
-            $filterClass  = 'Assetic\Filter\\' . $filterClass;
+            $filterClass = 'Assetic\Filter\\' . $filterClass;
         }
 
         if (!class_exists($filterClass)) {
             throw new Exception\RuntimeException(
-                'No filter found for ' . $filter
+                'No filter found for ' . $filter,
             );
         }
 
@@ -185,7 +186,7 @@ class AssetFilterManager implements MimeResolverAwareInterface
     /**
      * {@inheritDoc}
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    public function setServiceLocator(ContainerInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
     }

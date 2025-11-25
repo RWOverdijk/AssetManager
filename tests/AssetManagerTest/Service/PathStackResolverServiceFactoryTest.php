@@ -4,8 +4,8 @@ namespace AssetManagerTest\Service;
 
 use AssetManager\Resolver\PathStackResolver;
 use AssetManager\Service\PathStackResolverServiceFactory;
-use PHPUnit\Framework\TestCase;
 use Laminas\ServiceManager\ServiceManager;
+use PHPUnit\Framework\TestCase;
 
 class PathStackResolverServiceFactoryTest extends TestCase
 {
@@ -17,27 +17,27 @@ class PathStackResolverServiceFactoryTest extends TestCase
         $serviceManager = new ServiceManager();
         $serviceManager->setService(
             'config',
-            array(
-                'asset_manager' => array(
-                    'resolver_configs' => array(
-                        'paths' => array(
-                            'path1/',
-                            'path2/',
-                        ),
-                    ),
-                ),
-            )
+            [
+                'asset_manager' => [
+                    'resolver_configs' => [
+                        'paths' => [
+                            'path1' . DIRECTORY_SEPARATOR,
+                            'path2' . DIRECTORY_SEPARATOR,
+                        ],
+                    ],
+                ],
+            ],
         );
 
         $factory = new PathStackResolverServiceFactory();
         /* @var $resolver PathStackResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory->__invoke($serviceManager, \AssetManager\Resolver\PathStackResolver::class);
         $this->assertSame(
-            array(
-                'path2/',
-                'path1/',
-            ),
-            $resolver->getPaths()->toArray()
+            [
+                'path2' . DIRECTORY_SEPARATOR,
+                'path1' . DIRECTORY_SEPARATOR,
+            ],
+            $resolver->getPaths()->toArray(),
         );
     }
 
@@ -47,11 +47,11 @@ class PathStackResolverServiceFactoryTest extends TestCase
     public function testCreateServiceWithNoConfig(): void
     {
         $serviceManager = new ServiceManager();
-        $serviceManager->setService('config', array());
+        $serviceManager->setService('config', []);
 
         $factory = new PathStackResolverServiceFactory();
         /* @var $resolver PathStackResolver */
-        $resolver = $factory->createService($serviceManager);
+        $resolver = $factory->__invoke($serviceManager, \AssetManager\Resolver\PathStackResolver::class);
         $this->assertEmpty($resolver->getPaths()->toArray());
     }
 }

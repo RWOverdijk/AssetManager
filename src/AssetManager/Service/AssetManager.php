@@ -3,11 +3,11 @@
 namespace AssetManager\Service;
 
 use Assetic\Contracts\Asset\AssetInterface;
-use AssetManager\Exception;
+use AssetManager\Exception\RuntimeException;
 use AssetManager\Resolver\ResolverInterface;
-use Laminas\Http\PhpEnvironment\Request;
-use Laminas\Stdlib\RequestInterface;
-use Laminas\Stdlib\ResponseInterface;
+use Laminas\Diactoros\StreamFactory;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @category    AssetManager
@@ -50,20 +50,21 @@ class AssetManager implements
     /**
      * @var bool Whether this instance has at least one asset successfully set on response
      */
-    protected $assetSetOnResponse = false;
+    protected bool $assetSetOnResponse = false;
+
+    private StreamFactory $streamFactory;
 
     /**
      * Constructor
      *
      * @param ResolverInterface $resolver
      * @param array             $config
-     *
-     * @return AssetManager
      */
-    public function __construct($resolver, $config = array())
+    public function __construct($resolver, $config = [])
     {
         $this->setResolver($resolver);
         $this->setConfig($config);
+        $this->streamFactory = new StreamFactory();
     }
 
     /**
@@ -79,24 +80,20 @@ class AssetManager implements
     /**
      * Check if the request resolves to an asset.
      *
-     * @param    RequestInterface $request
-     * @return   boolean
      */
-    public function resolvesToAsset(RequestInterface $request)
+    public function resolvesToAsset(RequestInterface $request): bool
     {
         if (null === $this->asset) {
             $this->asset = $this->resolve($request);
         }
 
-        return (bool)$this->asset;
+        return (bool) $this->asset;
     }
 
     /**
      * Returns true if this instance of asset manager has at least one asset successfully set on response
-     *
-     * @return bool
      */
-    public function assetSetOnResponse()
+    public function assetSetOnResponse(): bool
     {
         return $this->assetSetOnResponse;
     }
@@ -106,7 +103,7 @@ class AssetManager implements
      *
      * @param ResolverInterface $resolver
      */
-    public function setResolver(ResolverInterface $resolver)
+    public function setResolver(ResolverInterface $resolver): void
     {
         $this->resolver = $resolver;
     }
@@ -124,36 +121,26 @@ class AssetManager implements
     /**
      * Set the asset on the response, including headers and content.
      *
-     * @param    ResponseInterface $response
-     * @return   ResponseInterface
-     * @throws   Exception\RuntimeException
+     * @throws   RuntimeException
      */
-    public function setAssetOnResponse(ResponseInterface $response)
+    public function setAssetOnResponse(ResponseInterface $response): ResponseInterface
     {
         if (!$this->asset instanceof AssetInterface) {
-            throw new Exception\RuntimeException(
-                'Unable to set asset on response. Request has not been resolved to an asset.'
+            throw new RuntimeException(
+                'Unable to set asset on response. Request has not been resolved to an asset.',
             );
         }
 
         // @todo: Create Asset wrapper for mimetypes
         if (empty($this->asset->mimetype)) {
-            throw new Exception\RuntimeException('Expected property "mimetype" on asset.');
+            throw new RuntimeException('Expected property "mimetype" on asset.');
         }
 
         $this->getAssetFilterManager()->setFilters($this->path, $this->asset);
 
-        $this->asset    = $this->getAssetCacheManager()->setCache($this->path, $this->asset);
-        $mimeType       = $this->asset->mimetype;
-        $assetContents  = $this->asset->dump();
-
-        // @codeCoverageIgnoreStart
-        if (function_exists('mb_strlen')) {
-            $contentLength = mb_strlen($assetContents, '8bit');
-        } else {
-            $contentLength = strlen($assetContents);
-        }
-        // @codeCoverageIgnoreEnd
+        $this->asset   = $this->getAssetCacheManager()->setCache($this->path, $this->asset);
+        $mimeType      = $this->asset->mimetype;
+        $assetContents = $this->asset->dump();
 
         if (!empty($this->config['clear_output_buffer']) && $this->config['clear_output_buffer']) {
             // Only clean the output buffer if it's turned on and something
@@ -163,12 +150,10 @@ class AssetManager implements
             }
         }
 
-        $response->getHeaders()
-                 ->addHeaderLine('Content-Transfer-Encoding', 'binary')
-                 ->addHeaderLine('Content-Type', $mimeType)
-                 ->addHeaderLine('Content-Length', $contentLength);
-
-        $response->setContent($assetContents);
+        $response = $response
+            ->withBody($this->streamFactory->createStream($assetContents))
+            ->withAddedHeader('Content-Transfer-Encoding', 'binary')
+            ->withAddedHeader('Content-Type', $mimeType);
 
         $this->assetSetOnResponse = true;
 
@@ -178,21 +163,16 @@ class AssetManager implements
     /**
      * Resolve the request to a file.
      *
-     * @param RequestInterface $request
-     *
      * @return mixed false when not found, AssetInterface when resolved.
      */
     protected function resolve(RequestInterface $request)
     {
-        if (!$request instanceof Request) {
-            return false;
-        }
+        $uri = $request->getUri();
 
-        /* @var $request Request */
-        /* @var $uri \Laminas\Uri\UriInterface */
-        $uri        = $request->getUri();
-        $fullPath   = $uri->getPath();
-        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
+//        $fullPath   = $uri->getPath();
+//        $path       = substr($fullPath, strlen($request->getBasePath()) + 1);
+        $path       = $uri->getPath();
+        $path       = ltrim($path, '/');
         $this->path = $path;
         $asset      = $this->getResolver()->resolve($path);
 
@@ -208,7 +188,7 @@ class AssetManager implements
      *
      * @param AssetFilterManager $filterManager
      */
-    public function setAssetFilterManager(AssetFilterManager $filterManager)
+    public function setAssetFilterManager(AssetFilterManager $filterManager): void
     {
         $this->filterManager = $filterManager;
     }
@@ -228,7 +208,7 @@ class AssetManager implements
      *
      * @param AssetCacheManager $cacheManager
      */
-    public function setAssetCacheManager(AssetCacheManager $cacheManager)
+    public function setAssetCacheManager(AssetCacheManager $cacheManager): void
     {
         $this->cacheManager = $cacheManager;
     }

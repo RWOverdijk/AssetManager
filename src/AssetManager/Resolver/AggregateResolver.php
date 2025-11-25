@@ -13,7 +13,7 @@ class AggregateResolver implements ResolverInterface
     /**
      * @var PriorityQueue|ResolverInterface[]
      */
-    protected $queue;
+    protected PriorityQueue $queue;
 
     /**
      * Constructor

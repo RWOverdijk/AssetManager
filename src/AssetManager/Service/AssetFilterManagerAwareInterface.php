@@ -6,8 +6,6 @@ interface AssetFilterManagerAwareInterface
 {
     /**
      * Set the AssetFilterManager.
-     *
-     * @param AssetFilterManager $filterManager
      */
     public function setAssetFilterManager(AssetFilterManager $filterManager);
 
